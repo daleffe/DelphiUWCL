@@ -121,7 +121,6 @@ type
     buttonFullScreen: TUQuickButton;
     Panel1: TPanel;
     buttonRunning: TButton;
-    TrackBar1: TTrackBar;
     buttonWithImage: TUButton;
     buttonAniToLeft: TButton;
     buttonAniToRight: TButton;
