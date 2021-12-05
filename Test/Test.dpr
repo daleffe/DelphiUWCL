@@ -1,8 +1,10 @@
 program Test;
 
+{$IF CompilerVersion > 29}
+  {$LEGACYIFEND ON}
+{$IFEND}
+
 uses
-  madListHardware,
-  madListProcesses,
   madExcept,
   madLinkDisAsm,
   madListModules,
@@ -11,6 +13,11 @@ uses
   Unit2 in 'Unit2.pas' {Form2};
 
 {$R *.res}
+{$IF CompilerVersion < 30}
+  {$R 'UCLPackage_D2010Resource.res'}
+{$ELSE}
+  {$R 'UCLPackage.dres'}
+{$IFEND}
 
 begin
   Application.Initialize;
