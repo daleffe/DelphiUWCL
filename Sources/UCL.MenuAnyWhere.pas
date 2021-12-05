@@ -10,8 +10,13 @@ uses
   Messages,
   Types,
   Graphics,
-  ComCtrls,
-  UITypes;
+  ComCtrls
+{$IF CompilerVersion > 29}
+  ,UITypes
+{$ELSE}
+  ,ImgList
+{$IFEND}
+  ;
 
 type
   TMenuTriggerMode = (mtmUnknown, mtmMouse, mtmKeyboard);
@@ -193,7 +198,7 @@ type
 
 function GetTimeStamp: String;
 begin
-  DateTimeToString(Result, {FormatSettings.ShortDateFormat + ' ' + }FormatSettings.LongTimeFormat + '.zzz', Now);
+  DateTimeToString(Result, {FormatSettings.ShortDateFormat + ' ' + }{$IF CompilerVersion > 29}FormatSettings.{$IFEND}LongTimeFormat + '.zzz', Now);
   Result := Result + ' - ';
 end;
 

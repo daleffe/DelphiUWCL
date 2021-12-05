@@ -90,7 +90,9 @@ type
 implementation
 
 uses
+{$IF CompilerVersion > 29}
   UITypes,
+{$IFEND}
   UCL.ThemeManager,
   UCL.Graphics;
 

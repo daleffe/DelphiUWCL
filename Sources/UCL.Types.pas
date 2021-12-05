@@ -7,6 +7,10 @@ interface
 {$IFEND}
 
 uses
+{$IF CompilerVersion <= 30}
+  Windows,
+  Forms,
+{$IFEND}
   Types;
 
 //type

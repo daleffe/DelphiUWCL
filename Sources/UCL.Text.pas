@@ -54,7 +54,9 @@ implementation
 uses
   SysUtils,
   Graphics,
+{$IF CompilerVersion > 29}
   UITypes,
+{$IFEND}
   UCL.Utils,
   UCL.Colors;
 

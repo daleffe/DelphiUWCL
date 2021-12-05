@@ -311,7 +311,9 @@ type
     property TextHint;
     property Touch;
     property Visible;
-    property StyleElements;
+    {$IF CompilerVersion > 29}
+      property StyleElements;
+    {$IFEND}
     //
     property OnChange;
     property OnClick;
@@ -429,6 +431,11 @@ type
   end;
 
 implementation
+
+{$IF CompilerVersion < 30}
+uses
+  Windows;
+{$IFEND}
 
 { TUCustomControl }
 

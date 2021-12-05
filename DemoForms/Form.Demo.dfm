@@ -246,10 +246,9 @@ object formDemo: TformDemo
     BevelEdges = []
     BevelInner = bvNone
     BevelOuter = bvNone
-    Color = 3355443
+    Color = 14342874
     ParentColor = False
     TabOrder = 1
-    StyleElements = []
     AniSet.AniKind = akOut
     AniSet.AniFunctionKind = afkQuartic
     AniSet.DelayStartTime = 0
@@ -534,7 +533,7 @@ object formDemo: TformDemo
     object textEntry: TUText
       Left = 390
       Top = 80
-      Width = 74
+      Width = 73
       Height = 17
       Caption = 'This is entry'
       Font.Charset = DEFAULT_CHARSET
@@ -561,7 +560,7 @@ object formDemo: TformDemo
     object textDescription: TUText
       Left = 390
       Top = 120
-      Width = 94
+      Width = 95
       Height = 15
       Caption = 'This is description'
       Font.Charset = DEFAULT_CHARSET
@@ -1473,7 +1472,7 @@ object formDemo: TformDemo
     Anchors = [akLeft, akTop, akBottom]
     FullRepaint = False
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWhite
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Segoe UI'
     Font.Style = []
@@ -1649,7 +1648,6 @@ object formDemo: TformDemo
     Padding.Bottom = 15
     ParentColor = False
     TabOrder = 3
-    StyleElements = []
     AniSet.AniKind = akOut
     AniSet.AniFunctionKind = afkCubic
     AniSet.DelayStartTime = 0
@@ -1898,7 +1896,7 @@ object formDemo: TformDemo
       ParentFont = False
       WordWrap = True
       TextKind = tkDescription
-      ExplicitWidth = 186
+      ExplicitWidth = 187
     end
     object headingAbout: TUText
       AlignWithMargins = True
@@ -2189,7 +2187,7 @@ object formDemo: TformDemo
       Align = alTop
       Caption = 'Select custom accent color'
       Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWhite
+      Font.Color = clBlack
       Font.Height = -13
       Font.Name = 'Segoe UI'
       Font.Style = []

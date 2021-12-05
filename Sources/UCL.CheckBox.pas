@@ -108,11 +108,17 @@ implementation
 
 uses
   SysUtils,
+{$IF CompilerVersion > 29}
   UITypes,
+{$IFEND}
   Forms,
   UCL.ThemeManager,
   UCL.Colors,
-  UCL.FontIcons;
+  UCL.FontIcons
+{$IF CompilerVersion < 30}
+  ,UCL.TYpes
+{$IFEND}
+  ;
 
 { TUCheckBox }
 
@@ -466,7 +472,7 @@ begin
   if not Enabled then
     Exit;
   //
-  if PtInRect(IconRect, Msg.Pos) then
+  if PtInRect(IconRect, {$IF CompilerVersion < 30}SmallPointToPoint(Msg.Pos){$ELSE}Msg.Pos{$IFEND}) then
     Toggle;
   inherited;
 end;

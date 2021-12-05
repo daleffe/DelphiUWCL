@@ -16,6 +16,7 @@ uses
   Graphics,
   UCL.Classes,
   UCL.Colors,
+  UCL.Types,
 //  UCL.Utils,
 //  UCL.SystemSettings,
   UCL.ThemeManager,
@@ -137,7 +138,6 @@ uses
   Themes,
   Dwmapi,
   UCL.SystemSettings,
-  UCL.Types,
   UCL.Utils,
   UCL.CaptionBar;
 

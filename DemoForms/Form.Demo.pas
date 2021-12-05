@@ -51,8 +51,7 @@ uses
   UCL.QuickButton,
   UCL.PopupMenu,
   UCL.RadioButton,
-  UCL.Shadow,
-  Vcl.ComCtrls;
+  UCL.Shadow;
 
 type
   TformDemo = class(TUForm)

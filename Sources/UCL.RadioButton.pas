@@ -104,7 +104,9 @@ implementation
 uses
   SysUtils,
   Forms,
+{$IF CompilerVersion > 29}
   UITypes,
+{$IFEND}
 //  Themes,
 //  UxTheme,
 //  DwmApi,
@@ -480,7 +482,7 @@ begin
   if not Enabled then
     Exit;
   //
-  if PtInRect(IconRect, Msg.Pos) then
+  if PtInRect(IconRect, {$IF CompilerVersion < 30}SmallPointToPoint(Msg.Pos){$ELSE}Msg.Pos{$IFEND}) then
     Checked := True;
   inherited;
 end;

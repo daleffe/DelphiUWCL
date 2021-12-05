@@ -93,7 +93,9 @@ implementation
 
 uses
   SysUtils,
+{$IF CompilerVersion > 29}
   UITypes,
+{$IFEND}
   UCL.ThemeManager;
 
 { TUGraphicSlider }
