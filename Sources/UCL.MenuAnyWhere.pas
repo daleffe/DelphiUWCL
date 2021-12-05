@@ -500,8 +500,10 @@ begin
   if (FControl = Nil) or not (csAcceptsControls in FControl.ControlStyle) then
     raise EUMenuAnyWhere.Create('Control not set or does not accept other controls as child controls!');
   //
-  FControl.ControlStyle := FControl.ControlStyle + [csCaptureMouse, csClickEvents, csDoubleClicks, csMenuEvents{, csSetCaption}, csGestures];
-  TWinControlAccess(FControl).RecreateWnd;
+  if not (csDesigning in FControl.ComponentState) then begin
+    FControl.ControlStyle := FControl.ControlStyle + [csCaptureMouse, csClickEvents, csDoubleClicks, csMenuEvents{, csSetCaption}, csGestures];
+    TWinControlAccess(FControl).RecreateWnd;
+  end;
   if Assigned(FMenu) then
     DestroyButtons;
   //
@@ -1249,7 +1251,9 @@ begin
   try
     for i:=0 to FButtons.Count - 1 do begin
       btn := Buttons[i];
-      size := canvas.TextWidth(btn.MenuItem.Caption);
+      size := 0;
+      if (btn <> Nil) and (btn.MenuItem <> Nil) then
+        size := canvas.TextWidth(btn.MenuItem.Caption);
       if size > AWidth then
         AWidth := size;
     end;
@@ -1359,8 +1363,10 @@ begin
   pos := 4;
   for i:=0 to FButtons.Count - 1 do begin
     btn := Buttons[i];
+    if btn = Nil then
+      Continue;
     btn.Visible := False; // hide button
-    if not btn.MenuItem.Visible then
+    if (btn.MenuItem = Nil) or not btn.MenuItem.Visible then
       Continue;
     //
     btn.SetBounds(PosX + pos, PosY, FButtonWidth, FButtonHeight);
@@ -1372,18 +1378,22 @@ end;
 procedure TUMenuAnyWhere.UpdateButtons(RemakeShortCuts: Boolean);
 var
   i: Integer;
+  menuItem: TMenuItem;
 begin
+  if RemakeShortCuts and (FMenu.AutoHotkeys = maAutomatic) then begin
+    FMenu.Items.RethinkHotkeys;
+    FMenu.Items.RethinkLines;
+  end;
   for i:=0 to ButtonCount - 1 do begin
     if RemakeShortCuts then begin
-      if FMenu.AutoHotkeys = maAutomatic then begin
-        FMenu.Items.RethinkHotkeys;
-        FMenu.Items.RethinkLines;
+      if Buttons[i].MenuItem <> Nil then begin
         Buttons[i].MenuItem.AutoHotkeys := maAutomatic;
-        Buttons[i].MenuItem := FMenu.Items[i];
-      end
-      else
-        Buttons[i].MenuItem.AutoHotkeys := maManual;
-    end;
+        menuItem := FMenu.Items.Find(Buttons[i].MenuItem.Caption);
+        Buttons[i].MenuItem := menuItem;
+      end;
+    end
+    else if Buttons[i].MenuItem <> Nil then
+      Buttons[i].MenuItem.AutoHotkeys := maManual;
     Buttons[i].Invalidate;
   end;
 end;
