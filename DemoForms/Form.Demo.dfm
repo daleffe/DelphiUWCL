@@ -655,7 +655,7 @@ object formDemo: TformDemo
       Top = 338
       Width = 25
       Height = 70
-      TabOrder = 29
+      TabOrder = 30
       TabStop = True
       BackColor.Enabled = False
       BackColor.LightColor = 10066329
@@ -687,7 +687,7 @@ object formDemo: TformDemo
       Top = 326
       Width = 140
       Enabled = False
-      TabOrder = 30
+      TabOrder = 24
       TabStop = True
       BackColor.Enabled = False
       BackColor.LightColor = 10066329
@@ -720,7 +720,7 @@ object formDemo: TformDemo
       Width = 140
       ParentShowHint = False
       ShowHint = False
-      TabOrder = 31
+      TabOrder = 25
       TabStop = True
       BackColor.Enabled = False
       BackColor.LightColor = 10066329
@@ -754,16 +754,6 @@ object formDemo: TformDemo
       Hint = 'ABC'
       Caption = 'Here we go'
       TabOrder = 0
-    end
-    object TrackBar1: TTrackBar
-      Left = 555
-      Top = 320
-      Width = 150
-      Height = 31
-      ShowSelRange = False
-      TabOrder = 16
-      TickMarks = tmBoth
-      TickStyle = tsNone
     end
     object buttonWithImage: TUButton
       Tag = 6
@@ -834,7 +824,7 @@ object formDemo: TformDemo
       Hint = 'This is tooltip'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 17
+      TabOrder = 28
       OnClick = buttonRandomProgressClick
       BackColors.Enabled = False
       BackColors.LightColor = 13421772
@@ -1270,7 +1260,7 @@ object formDemo: TformDemo
       Top = 419
       Width = 250
       ParentColor = False
-      TabOrder = 18
+      TabOrder = 27
       AniSet.AniKind = akOut
       AniSet.AniFunctionKind = afkQuartic
       AniSet.DelayStartTime = 0
@@ -1292,7 +1282,7 @@ object formDemo: TformDemo
       Top = 399
       Width = 250
       ParentColor = False
-      TabOrder = 19
+      TabOrder = 26
       AniSet.AniKind = akOut
       AniSet.AniFunctionKind = afkQuartic
       AniSet.DelayStartTime = 0
@@ -1315,7 +1305,7 @@ object formDemo: TformDemo
       Width = 5
       Height = 70
       ParentColor = False
-      TabOrder = 20
+      TabOrder = 29
       AniSet.AniKind = akOut
       AniSet.AniFunctionKind = afkQuartic
       AniSet.DelayStartTime = 0
@@ -1341,7 +1331,7 @@ object formDemo: TformDemo
       Margins.Right = 0
       Margins.Bottom = 0
       AutoSize = True
-      TabOrder = 21
+      TabOrder = 20
       IconFont.Charset = DEFAULT_CHARSET
       IconFont.Color = clWindowText
       IconFont.Height = -20
@@ -1359,7 +1349,7 @@ object formDemo: TformDemo
       Margins.Right = 0
       Margins.Bottom = 0
       AutoSize = True
-      TabOrder = 22
+      TabOrder = 19
       IconFont.Charset = DEFAULT_CHARSET
       IconFont.Color = clWindowText
       IconFont.Height = -20
@@ -1378,7 +1368,7 @@ object formDemo: TformDemo
       Margins.Bottom = 0
       AutoSize = True
       Enabled = False
-      TabOrder = 23
+      TabOrder = 18
       IconFont.Charset = DEFAULT_CHARSET
       IconFont.Color = clWindowText
       IconFont.Height = -20
@@ -1396,7 +1386,7 @@ object formDemo: TformDemo
       Margins.Right = 0
       Margins.Bottom = 0
       AutoSize = True
-      TabOrder = 24
+      TabOrder = 17
       IconFont.Charset = DEFAULT_CHARSET
       IconFont.Color = clWindowText
       IconFont.Height = -20
@@ -1414,7 +1404,7 @@ object formDemo: TformDemo
       Margins.Right = 0
       Margins.Bottom = 0
       AutoSize = True
-      TabOrder = 25
+      TabOrder = 16
       IconFont.Charset = DEFAULT_CHARSET
       IconFont.Color = clWindowText
       IconFont.Height = -20
@@ -1428,7 +1418,7 @@ object formDemo: TformDemo
       Top = 278
       Width = 129
       AutoSize = True
-      TabOrder = 26
+      TabOrder = 23
       IconFont.Charset = DEFAULT_CHARSET
       IconFont.Color = clWindowText
       IconFont.Height = -20
@@ -1443,7 +1433,7 @@ object formDemo: TformDemo
       Top = 250
       Width = 129
       AutoSize = True
-      TabOrder = 27
+      TabOrder = 22
       IconFont.Charset = DEFAULT_CHARSET
       IconFont.Color = clWindowText
       IconFont.Height = -20
@@ -1462,7 +1452,7 @@ object formDemo: TformDemo
       Margins.Top = 0
       Margins.Right = 0
       Margins.Bottom = 0
-      TabOrder = 28
+      TabOrder = 21
       IconFont.Charset = DEFAULT_CHARSET
       IconFont.Color = clWindowText
       IconFont.Height = -20
