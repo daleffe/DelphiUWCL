@@ -1405,7 +1405,9 @@ var
   FromIndex, ToIndex: Integer;
 begin
   if AControl is TUMenuButton then
-    TUMenuButton(AControl).FMenuController := Self;
+    TUMenuButton(AControl).FMenuController := Self
+  else
+    Exit;
   if not (csLoading in AControl.ComponentState) then begin
     FromIndex := FButtons.IndexOf(AControl);
     if FromIndex >= 0 then
@@ -1423,11 +1425,11 @@ procedure TUMenuAnyWhere.RemoveButton(AControl: TControl);
 var
   i: Integer;
 begin
-  i := FButtons.IndexOf(AControl);
-  if i >= 0 then begin
-    if AControl is TUMenuButton then
-      TUMenuButton(AControl).FMenuController := Nil;
-    FButtons.Remove(AControl);
+  if AControl is TUMenuButton then begin
+    TUMenuButton(AControl).FMenuController := Nil;
+    i := FButtons.IndexOf(AControl);
+    if i >= 0 then
+      FButtons.Remove(AControl);
   end;
 end;
 
