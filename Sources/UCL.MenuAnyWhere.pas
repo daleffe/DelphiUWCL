@@ -500,7 +500,8 @@ begin
   if (FControl = Nil) or not (csAcceptsControls in FControl.ControlStyle) then
     raise EUMenuAnyWhere.Create('Control not set or does not accept other controls as child controls!');
   //
-  if not (csDesigning in FControl.ComponentState) then begin
+  if not (csDesigning in FControl.ComponentState) and not (csLoading in FControl.ComponentState) then begin
+    OutputDebugString(PChar(GetTimeStamp + 'SetMenu (RecreateWnd)'));
     FControl.ControlStyle := FControl.ControlStyle + [csCaptureMouse, csClickEvents, csDoubleClicks, csMenuEvents{, csSetCaption}, csGestures];
     TWinControlAccess(FControl).RecreateWnd;
   end;
@@ -1351,6 +1352,7 @@ procedure TUMenuAnyWhere.DestroyButtons;
 var
   i: Integer;
 begin
+  OutputDebugString(PChar(GetTimeStamp + 'DestroyButtons (ButtonCount: ' + IntToStr(ButtonCount) + ')'));
   for i:=ButtonCount - 1 downto 0 do
     Buttons[i].Free;
 end;
