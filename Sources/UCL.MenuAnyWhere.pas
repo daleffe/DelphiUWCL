@@ -651,7 +651,9 @@ begin
         OutputDebugString(PChar(GetTimeStamp + 'MenuGetMsgHook - WM_MENUSELECT (StillModal: ' + BoolToStr(StillModal, True) + ')'));
         if (HiWord(Msg.WParam) = $FFFF) and (Msg.LParam = 0) then begin
           if not StillModal then
-            MenuController.CancelMenu;
+            MenuController.CancelMenu
+          else
+            StillModal := False;
           Exit;
         end
         else
@@ -1029,6 +1031,10 @@ var
   Button: TUMenuButton;
   Form: TCustomForm;
 begin
+  if FMenu = Nil then begin
+    DefaultProc;
+    Exit;
+  end;
   case Message.Msg of
     WM_GETDLGCODE: begin
       OutputDebugString(PChar(GetTimeStamp + 'WM_GETDLGCODE'));
@@ -1365,7 +1371,7 @@ begin
   pos := 4;
   for i:=0 to FButtons.Count - 1 do begin
     btn := Buttons[i];
-    if btn = Nil then
+    if (btn = Nil) or not (btn is TUMenuButton) then
       Continue;
     btn.Visible := False; // hide button
     if (btn.MenuItem = Nil) or not btn.MenuItem.Visible then
@@ -1381,22 +1387,26 @@ procedure TUMenuAnyWhere.UpdateButtons(RemakeShortCuts: Boolean);
 var
   i: Integer;
   menuItem: TMenuItem;
+  btn: TUMenuButton;
 begin
   if RemakeShortCuts and (FMenu.AutoHotkeys = maAutomatic) then begin
     FMenu.Items.RethinkHotkeys;
     FMenu.Items.RethinkLines;
   end;
   for i:=0 to ButtonCount - 1 do begin
+    btn := Buttons[i];
+    if (btn = Nil) or not (btn is TUMenuButton) then
+      Continue;
     if RemakeShortCuts then begin
-      if Buttons[i].MenuItem <> Nil then begin
-        Buttons[i].MenuItem.AutoHotkeys := maAutomatic;
-        menuItem := FMenu.Items.Find(Buttons[i].MenuItem.Caption);
-        Buttons[i].MenuItem := menuItem;
+      if btn.MenuItem <> Nil then begin
+        btn.MenuItem.AutoHotkeys := maAutomatic;
+        menuItem := FMenu.Items.Find(btn.MenuItem.Caption);
+        btn.MenuItem := menuItem;
       end;
     end
-    else if Buttons[i].MenuItem <> Nil then
-      Buttons[i].MenuItem.AutoHotkeys := maManual;
-    Buttons[i].Invalidate;
+    else if btn.MenuItem <> Nil then
+      btn.MenuItem.AutoHotkeys := maManual;
+    btn.Invalidate;
   end;
 end;
 
