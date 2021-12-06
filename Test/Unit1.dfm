@@ -78,6 +78,7 @@ object Form1: TForm1
     Left = 248
     Top = 128
     object File1: TMenuItem
+      AutoHotkeys = maManual
       Caption = 'File'
       object Open1: TMenuItem
         Caption = 'Open file'
@@ -93,6 +94,7 @@ object Form1: TForm1
       end
     end
     object Edit1: TMenuItem
+      AutoHotkeys = maManual
       Caption = 'Edit'
       object Cut1: TMenuItem
         Caption = 'Cut'
@@ -114,6 +116,7 @@ object Form1: TForm1
       end
     end
     object Search1: TMenuItem
+      AutoHotkeys = maManual
       Caption = 'Search'
       object Find1: TMenuItem
         Caption = 'Find'
@@ -129,6 +132,7 @@ object Form1: TForm1
       end
     end
     object View1: TMenuItem
+      AutoHotkeys = maManual
       Caption = 'View'
       object Source1: TMenuItem
         Caption = 'Source'
@@ -141,6 +145,7 @@ object Form1: TForm1
       end
     end
     object Help1: TMenuItem
+      AutoHotkeys = maManual
       Caption = 'Help'
       object About1: TMenuItem
         Caption = 'About'

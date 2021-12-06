@@ -500,7 +500,7 @@ begin
   if (FControl = Nil) or not (csAcceptsControls in FControl.ControlStyle) then
     raise EUMenuAnyWhere.Create('Control not set or does not accept other controls as child controls!');
   //
-  if not (csDesigning in FControl.ComponentState) and not (csLoading in FControl.ComponentState) then begin
+  if not (csDesigning in FControl.ComponentState) then begin
     OutputDebugString(PChar(GetTimeStamp + 'SetMenu (RecreateWnd)'));
     FControl.ControlStyle := FControl.ControlStyle + [csCaptureMouse, csClickEvents, csDoubleClicks, csMenuEvents{, csSetCaption}, csGestures];
     TWinControlAccess(FControl).RecreateWnd;
@@ -651,9 +651,9 @@ begin
         OutputDebugString(PChar(GetTimeStamp + 'MenuGetMsgHook - WM_MENUSELECT (StillModal: ' + BoolToStr(StillModal, True) + ')'));
         if (HiWord(Msg.WParam) = $FFFF) and (Msg.LParam = 0) then begin
           if not StillModal then
-            MenuController.CancelMenu
-          else
-            StillModal := False;
+            MenuController.CancelMenu;
+//          else
+//            StillModal := False;
           Exit;
         end
         else
@@ -1169,6 +1169,9 @@ begin
         end;
       end;
     end;
+//    CM_DIALOGKEY: begin
+//      OutputDebugString(PChar(GetTimeStamp + 'CM_DIALOGKEY'));
+//    end;
     CM_DIALOGCHAR: begin
       OutputDebugString(PChar(GetTimeStamp + 'CM_DIALOGCHAR'));
       if FControl.Enabled and FControl.Showing and ContainsActiveControl then begin
