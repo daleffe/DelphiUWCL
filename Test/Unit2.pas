@@ -3,8 +3,19 @@ unit Unit2;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, UCL.Classes, UCL.CaptionBar, UCL.ScrollBox;
+  Windows,
+  Messages,
+  SysUtils,
+  Variants,
+  Classes,
+  Graphics,
+  Controls,
+  Forms,
+  Dialogs,
+  ExtCtrls,
+  UCL.Classes,
+  UCL.CaptionBar,
+  UCL.ScrollBox;
 
 type
   TForm2 = class(TForm)

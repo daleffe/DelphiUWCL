@@ -207,6 +207,7 @@ procedure TformDemo.FormCreate(Sender: TObject);
 var
   TM: TUCustomThemeManager;
 begin
+  RoundedCorners := rctOff;
   CaptionBar := captionBarMain;
   TM := SelectThemeManager(Self);
   TM.OnBeforeUpdate := AppThemeBeforeUpdate;

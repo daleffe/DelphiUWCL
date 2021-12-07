@@ -14,7 +14,34 @@ function IsAppsUseDarkTheme: Boolean;
 function IsSystemUseDarkTheme: Boolean;
 function IsTransparencyEnabled: Boolean;
 
+type
+  TWindowRoundedCornerType = (
+    rctDefault, // Windows default or global app setting
+    rctOff,     // disabled
+    rctOn,      // active
+    rctSmall    // active small size
+  );
+
+// More information:
+//   https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/apply-rounded-corners
+//   https://docs.microsoft.com/en-us/windows/win32/api/dwmapi/ne-dwmapi-dwmwindowattribute
+//   https://docs.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmsetwindowattribute
+const
+  DWMWCP_DEFAULT    = 0; // Let the system decide whether or not to round window corners
+  DWMWCP_DONOTROUND = 1; // Never round window corners
+  DWMWCP_ROUND      = 2; // Round the corners if appropriate
+  DWMWCP_ROUNDSMALL = 3; // Round the corners if appropriate, with a small radius
+
+  DWMWA_WINDOW_CORNER_PREFERENCE = 33; // [set] WINDOW_CORNER_PREFERENCE, Controls the policy that rounds top-level window corners
+
+function  GetWindowRoundedCornerPreference(const Value: TWindowRoundedCornerType): Cardinal;
+//function  GetWindowRoundedCornerDefaultPreference(const Wnd: HWND): Cardinal;
+procedure SetWindowRoundedCorner(const Wnd: HWND; const WindowCornerType: TWindowRoundedCornerType);
+
 implementation
+
+uses
+  Dwmapi;
 
 function GetAccentColor: TColor;
 var
@@ -124,6 +151,31 @@ begin
   finally
     R.Free;
   end;
+end;
+
+function  GetWindowRoundedCornerPreference(const Value: TWindowRoundedCornerType): Cardinal;
+begin
+  case Value of
+    rctOff  : Result := DWMWCP_DONOTROUND;
+    rctOn   : Result := DWMWCP_ROUND;
+    rctSmall: Result := DWMWCP_ROUNDSMALL;
+  else
+    Result := DWMWCP_DEFAULT;
+  end;
+end;
+
+procedure SetWindowRoundedCorner(const Wnd: HWND; const WindowCornerType: TWindowRoundedCornerType);
+var
+  DWM_WINDOW_CORNER_PREFERENCE: Cardinal;
+begin
+  case WindowCornerType of
+    rctOff  : DWM_WINDOW_CORNER_PREFERENCE := DWMWCP_DONOTROUND;
+    rctOn   : DWM_WINDOW_CORNER_PREFERENCE := DWMWCP_ROUND;
+    rctSmall: DWM_WINDOW_CORNER_PREFERENCE := DWMWCP_ROUNDSMALL;
+  else
+    DWM_WINDOW_CORNER_PREFERENCE := DWMWCP_DEFAULT;
+  end;
+  Dwmapi.DwmSetWindowAttribute(Wnd, DWMWA_WINDOW_CORNER_PREFERENCE, @DWM_WINDOW_CORNER_PREFERENCE, SizeOf(DWM_WINDOW_CORNER_PREFERENCE));
 end;
 
 end.

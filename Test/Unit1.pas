@@ -8,7 +8,17 @@ uses
   Graphics,
   Controls,
   Forms,
-  UCL.Form, UCL.ThemeManager, Vcl.ExtCtrls, UCL.CaptionBar, UCL.QuickButton, Vcl.StdCtrls, UCL.Button, UCL.SymbolButton, UCL.Separator, UCL.ScrollBox, Vcl.Menus;
+  UCL.Form,
+  UCL.ThemeManager,
+  ExtCtrls,
+  UCL.CaptionBar,
+  UCL.QuickButton,
+  StdCtrls,
+  UCL.Button,
+  UCL.SymbolButton,
+  UCL.Separator,
+  UCL.ScrollBox,
+  Menus;
 
 type
   TForm1 = class(TUForm)
@@ -39,6 +49,7 @@ type
     About1: TMenuItem;
     N4: TMenuItem;
     Fullscreen1: TMenuItem;
+    procedure FormCreate(Sender: TObject);
   private
   public
   end;
@@ -49,5 +60,18 @@ var
 implementation
 
 {$R *.dfm}
+
+uses
+  UCL.SystemSettings;
+
+procedure TForm1.FormCreate(Sender: TObject);
+var
+  TM: TUCustomThemeManager;
+begin
+  RoundedCorners := rctOff;
+//  CaptionBar := UCaptionBar1;
+  TM := SelectThemeManager(Self);
+  TM.UseColorOnBorder := True;
+end;
 
 end.

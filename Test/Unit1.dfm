@@ -12,6 +12,7 @@ object Form1: TForm1
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object UCaptionBar1: TUCaptionBar
@@ -54,7 +55,6 @@ object Form1: TForm1
     Color = 3355443
     ParentColor = False
     TabOrder = 1
-    StyleElements = []
     ThemeManager = UThemeManager1
     AniSet.AniKind = akOut
     AniSet.AniFunctionKind = afkQuartic

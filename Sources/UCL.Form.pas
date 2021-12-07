@@ -18,7 +18,7 @@ uses
   UCL.Colors,
   UCL.Types,
 //  UCL.Utils,
-//  UCL.SystemSettings,
+  UCL.SystemSettings,
   UCL.ThemeManager,
   UCL.Tooltip,
   UCL.FormOverlay;
@@ -41,6 +41,7 @@ type
     FBackColor: TUThemeControlColorSet;
     FCaptionBar: TControl;
     FOverlay: TUFormOverlay;
+    FRoundedCorners: TWindowRoundedCornerType;
 
     FPPI: Integer;
     FIsActive: Boolean;
@@ -53,6 +54,7 @@ type
     procedure SetThemeManager(const Value: TUThemeManager);
     procedure SetFullScreen(const Value: Boolean);
     procedure SetOverlayType(const Value: TUOverlayType);
+    procedure SetRoundedCorners(const Value: TWindowRoundedCornerType);
 
     // Child events
     procedure BackColor_OnChange(Sender: TObject);
@@ -73,6 +75,7 @@ type
     procedure WMNCPaint(var Msg: TWMNCPaint); message WM_NCPAINT;
     procedure WMNCCalcSize(var Msg: TWMNCCalcSize); message WM_NCCALCSIZE;
     procedure WMNCHitTest(var Msg: TWMNCHitTest); message WM_NCHITTEST;
+    //procedure WMNCMouseLeave(var Msg : TMessage); message WM_NCMOUSELEAVE;
 
   protected
     // Internal
@@ -82,6 +85,7 @@ type
     function HasBorder: Boolean; virtual;
     function GetBorderSpace(const Side: TBorderSide): Integer; virtual;
     function GetBorderSpaceWin7(const Side: TBorderSide): Integer; virtual;
+    procedure SetWindowsCorners; virtual;
 
     function CanDrawBorder: Boolean; virtual;
     procedure UpdateBorderColor; virtual;
@@ -95,9 +99,12 @@ type
     function GetParentCurrentDpi: Integer; virtual;
   {$IFEND}
     procedure CreateParams(var Params: TCreateParams); override;
+    procedure CreateWnd; override;
+    function  GetClientRect: TRect; override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure Init;
     procedure Paint; override;
+    procedure PaintWindow(DC: HDC); override;
     procedure Resize; override;
 
   public
@@ -125,6 +132,7 @@ type
     property OverlayType: TUOverlayType read FOverlayType write SetOverlayType default otNone;
     property FitDesktopSize: Boolean read FFitDesktopSize write FFitDesktopSize default True;
     property FullScreen: Boolean read FFullScreen write SetFullScreen default False;
+    property RoundedCorners: TWindowRoundedCornerType read FRoundedCorners write SetRoundedCorners default rctDefault;
 
     property Padding stored False;
   end;
@@ -137,7 +145,6 @@ uses
   UxTheme,
   Themes,
   Dwmapi,
-  UCL.SystemSettings,
   UCL.Utils,
   UCL.CaptionBar;
 
@@ -339,11 +346,11 @@ begin
   Canvas.Pen.Color := BorderColor;
   Canvas.MoveTo(0, 0);
 //  Canvas.LineTo(ClientWidth, 0);
-  Canvas.LineTo(Width, 0);  //  Paint top border
+  Canvas.LineTo(Width - 1, 0);  //  Paint top border
   if IsLEWin7 then begin // paint other borders
-    Canvas.MoveTo(Width - 1, 0);
-    Canvas.LineTo(Width - 1, Height);
-    Canvas.MoveTo(Width - 1, Height - 1);
+    //Canvas.MoveTo(Width, 0);
+    Canvas.LineTo(Width - 1, Height - 1);
+    //Canvas.MoveTo(Width - 1, Height - 1);
     Canvas.LineTo(0, Height - 1);
     Canvas.LineTo(0, 0);
   end;
@@ -393,6 +400,20 @@ begin
   end;
 end;
 
+procedure TUForm.SetRoundedCorners(const Value: TWindowRoundedCornerType);
+begin
+  if FRoundedCorners <> Value then begin
+    FRoundedCorners := Value;
+    SetWindowsCorners;
+  end;
+end;
+
+procedure TUForm.SetWindowsCorners;
+begin
+  if HandleAllocated then
+    SetWindowRoundedCorner(Handle, FRoundedCorners);
+end;
+
 //  CUSTOM METHODS
 
 procedure TUForm.CreateParams(var Params: TCreateParams);
@@ -407,6 +428,28 @@ begin
 {.$IFEND}
   //
   Params.WindowClass.style := Params.WindowClass.style and not (CS_HREDRAW or CS_VREDRAW);
+end;
+
+procedure TUForm.CreateWnd;
+begin
+  inherited;
+  SetWindowsCorners;
+end;
+
+function TUForm.GetClientRect: TRect;
+begin
+  if (Menu <> Nil) then begin
+    SetRect(Result, 0, 0, 0, 0);
+    AdjustWindowRectEx(Result, GetWindowLong(Handle, GWL_STYLE), Menu <> Nil, GetWindowLong(Handle, GWL_EXSTYLE));
+    SetRect(Result, 1, 1, Width - Result.Right + Result.Left, Height - Result.Bottom + Result.Top);
+  end
+  else if IsIconic(Handle) then begin
+    SetRect(Result, 1, 1, Width - 1, Height - 1);
+    //AdjustWindowRectEx(Result, GetWindowLong(Handle, GWL_STYLE), Menu <> nil, GetWindowLong(Handle, GWL_EXSTYLE));
+    //SetRect(Result, 0, 0, Width - Result.Right + Result.Left, Height - Result.Bottom + Result.Top);
+  end
+  else
+    Windows.GetClientRect(Handle, Result);
 end;
 
 procedure TUForm.Init;
@@ -430,6 +473,7 @@ begin
   FOverlayType := otNone;
   FFitDesktopSize := True;
   FFullScreen := False;
+  FRoundedCorners := rctDefault;
 
   //  Common props
   Font.Name := 'Segoe UI';
@@ -468,8 +512,19 @@ procedure TUForm.Paint;
 begin
   inherited;
 
-  if CanDrawBorder and not IsLEWin7 then
+  if CanDrawBorder{ and not IsLEWin7} then
     DoDrawBorder;
+
+  Canvas.Brush.Style := bsSolid;
+  Canvas.Brush.Color := Self.Color;
+  Canvas.FillRect(ClientRect);
+end;
+
+procedure TUForm.PaintWindow(DC: HDC);
+begin
+//  with GetClientRect do
+//    ExcludeClipRect(DC, Left, Top, Right, Bottom);
+  inherited;
 end;
 
 procedure TUForm.Resize;
@@ -479,7 +534,7 @@ var
 begin
   inherited;
 
-  if CanDrawBorder and not IsLEWin7 then begin
+  if CanDrawBorder{ and not IsLEWin7} then begin
     if Padding.Top = 0 then begin
       Padding.Top := 1;
       if IsLEWin7 then begin
@@ -598,6 +653,10 @@ begin
       SC_MOVE,
       SC_RESTORE: Exit;
     end;
+  end
+  else if (CaptionBar <> Nil) and not IsDesigning and TUThemeManager.IsThemingAvailable(CaptionBar) then begin
+    if Msg.CmdType and $FFF0 = SC_RESTORE then
+      (CaptionBar as IUThemedComponent).UpdateTheme;
   end;
 
   inherited;
@@ -609,7 +668,7 @@ begin
   FIsActive := (Msg.Active <> WA_INACTIVE);
 
   //  Redraw border
-  if CanDrawBorder and not IsLEWin7 then
+  if CanDrawBorder{ and not IsLEWin7} then
     DoDrawBorder;
 
   //  Update cation bar
@@ -647,27 +706,33 @@ var
   DC: HDC;
   R: TRect;
   WindowStyle: Integer;
+  TM: TUCustomThemeManager;
 begin
   inherited;
+  TM := SelectThemeManager(Self);
   //
+  if CanDrawBorder{ and not IsLEWin7} then
+    DoDrawBorder;
   if IsLEWin7 then begin
     DC := GetWindowDC(Handle);
     try
       R := ClientRect;
-      OffsetRect(R, 1, 1);
+//      Brush.Color := Self.Color;
+//      FillRect(DC, R, Brush.Handle);
+      //OffsetRect(R, 1, 1);
       ExcludeClipRect(DC, R.Left, R.Top, R.Right, R.Bottom);
       WindowStyle := GetWindowLong(Handle, GWL_STYLE);
       if WindowStyle and WS_VSCROLL <> 0 then
         ExcludeClipRect(DC, R.Right, R.Top, R.Right + GetSystemMetrics(SM_CXVSCROLL), R.Bottom);
       if WindowStyle and WS_HSCROLL <> 0 then
         ExcludeClipRect(DC, R.Left, R.Bottom, R.Right, R.Bottom + GetSystemMetrics(SM_CXHSCROLL));
-      SetRect(R, 0, 0, Width + BorderWidth, Height + BorderWidth);
-      if IsColorOnBorderEnabled then begin
+      if TM.UseColorOnBorder then begin
         UpdateBorderColor;
         Brush.Color := BorderColor;
       end
       else
         Brush.Color := Self.Color;
+      SetRect(R, 0, 0, Width + BorderWidth, Height + BorderWidth);
       FillRect(DC, R, Brush.Handle);
     finally
       ReleaseDC(Handle, DC);
@@ -707,6 +772,7 @@ begin
 
   CaptionBarHeight := GetSystemMetrics(SM_CYCAPTION);
   defMargin:=0;
+  // for Win 7 and less leave 1 pixel border to be filled by NCPaint to simulate Win10 look
 {$IF CompilerVersion < 30}
   if ThemeServices.ThemesEnabled and DwmCompositionEnabled and IsLEWin7 then
 {$ELSE}
