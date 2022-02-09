@@ -35,7 +35,6 @@ object formLoginDialog: TformLoginDialog
     Padding.Bottom = 50
     ParentColor = False
     TabOrder = 0
-    StyleElements = []
     AniSet.AniKind = akOut
     AniSet.AniFunctionKind = afkQuartic
     AniSet.DelayStartTime = 0

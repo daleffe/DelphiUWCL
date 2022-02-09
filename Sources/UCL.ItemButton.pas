@@ -18,6 +18,8 @@ uses
 type
   TUItemButton = class;
 
+  TUItemButtonCheckType = (ctCheckBox, ctRadioBtn);
+
   TUItemObjectKind = (iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon);
   TUItemButtonObjects = set of TUItemObjectKind;
 
@@ -46,10 +48,10 @@ type
     FObjectsVisible: TUItemButtonObjects;
 
     FIsChecked: Boolean;
-    FLeftIcon: string;
-    FText: string;
-    FDetail: string;
-    FRightIcon: string;
+    FLeftIcon: String;
+    FText: String;
+    FDetail: String;
+    FRightIcon: String;
 
     FAlignSpace: Integer;
 
@@ -63,6 +65,9 @@ type
     FIsToggled: Boolean;
     FCanToggleEvent: TUItemButtonCanToggleEvent;
     FToggleEvent: TUItemButtonToggleEvent;
+    FAcceptControls: Boolean;
+    FCheckType: TUItemButtonCheckType;
+    FRadioGroup: String;
 
     // Internal
     procedure UpdateColors;
@@ -71,6 +76,8 @@ type
     procedure DoToggle;
 
     // Setters
+    procedure SetAcceptControls(const Value: Boolean);
+    procedure SetCheckType(const Value: TUItemButtonCheckType);
     procedure SetBorderThickness(Value: Integer);
     procedure SetButtonState(const Value: TUControlState);
     procedure SetImageLeftIndex(const Value: Integer);
@@ -80,10 +87,10 @@ type
     procedure SetObjectWidth(const Index: Integer; const Value: Integer);
 
     procedure SetIsChecked(const Value: Boolean);
-    procedure SetLeftIcon(const Value: string);
-    procedure SetText(const Value: string);
-    procedure SetDetail(const Value: string);
-    procedure SetRightIcon(Const Value: string);
+    procedure SetLeftIcon(const Value: String);
+    procedure SetText(const Value: String);
+    procedure SetDetail(const Value: String);
+    procedure SetRightIcon(Const Value: String);
 
     procedure SetAlignSpace(const Value: Integer);
     procedure SetCustomActiveColor(const Value: TColor);
@@ -128,6 +135,8 @@ type
     property ObjectSelected: TUItemObjectKind read FObjectSelected default iokNone;
 
   published
+    property AcceptControls: Boolean read FAcceptControls write SetAcceptControls default False;
+
     property BorderThickness: Integer read FBorderThickness write SetBorderThickness default -1;
     property ButtonState: TUControlState read FButtonState write SetButtonState default csNone;
 
@@ -145,7 +154,7 @@ type
       default [iokNone, iokLeftIcon, iokText, iokDetail];
 
     // Objects property
-    property IsChecked: Boolean read FIsChecked write SetIsChecked default false;
+    property IsChecked: Boolean read FIsChecked write SetIsChecked default False;
     property LeftIcon: string read FLeftIcon write SetLeftIcon;
     property Text: string read FText write SetText;
     property Detail: string read FDetail write SetDetail;
@@ -159,11 +168,13 @@ type
     // Additional
     property AlignSpace: Integer read FAlignSpace write SetAlignSpace default 5;
     property CustomActiveColor: TColor read FCustomActiveColor write SetCustomActiveColor;
-    property Transparent: Boolean read FTransparent write SetTransparent default false;
+    property Transparent: Boolean read FTransparent write SetTransparent default False;
     property LeftIconKind: TUImageKind read FLeftIconKind write SetLeftIconKind default ikFontIcon;
     property RightIconKind: TUImageKind read FRightIconKind write SetRightIconKind default ikFontIcon;
-    property IsToggleButton: Boolean read FIsToggleButton write FIsToggleButton default false;
-    property IsToggled: Boolean read FIsToggled write SetIsToggled default false;
+    property IsToggleButton: Boolean read FIsToggleButton write FIsToggleButton default False;
+    property IsToggled: Boolean read FIsToggled write SetIsToggled default False;
+    property CheckType: TUItemButtonCheckType read FCheckType write SetCheckType default ctCheckBox;
+    property RadioGroup: String read FRadioGroup write FRadioGroup;
 
     property Caption;
 //    property Color;
@@ -192,6 +203,7 @@ begin
   inherited Create(AOwner);
   ControlStyle := ControlStyle - [csDoubleClicks];
 
+  FAcceptControls := False;
   FBorderThickness := -1;
 
   DragCursor:=crDefault;
@@ -242,6 +254,7 @@ begin
   Width := 250;
 
   InitBumpMap;
+  UpdateTheme;
 end;
 
 destructor TUItemButton.Destroy;
@@ -310,10 +323,15 @@ var
 begin
   TM:=SelectThemeManager(Self);
 
-  //  Transparent enabled
-  if (ButtonState = csNone) and Transparent then begin
-    ParentColor := true;
+  if Transparent then begin
+    ParentColor := True;
     BackColor := Color;
+  end
+  else
+    BackColor := BUTTON_BACK.GetColor(TM.ThemeUsed, ButtonState);
+
+  //  Transparent enabled
+  if ButtonState = csNone then begin
     TextColor := GetTextColorFromBackground(Color);
     DetailColor := $808080;
   end
@@ -326,6 +344,10 @@ begin
   else if (ButtonState = csPress) and (csPrintClient in ControlState) then begin
     BackColor := TM.AccentColor;
     TextColor := GetTextColorFromBackground(BackColor);
+    DetailColor := clSilver;
+  end
+  else if ButtonState = csDisabled then begin
+    TextColor := clGray;
     DetailColor := clSilver;
   end
   //  Default colors
@@ -441,6 +463,19 @@ end;
 
 //  SETTERS
 
+procedure TUItemButton.SetAcceptControls(const Value: Boolean);
+begin
+  if FAcceptControls <> Value then begin
+    FAcceptControls := Value;
+    if Value then
+      ControlStyle := ControlStyle + [csAcceptsControls]
+    else
+      ControlStyle := ControlStyle - [csAcceptsControls];
+    if HandleAllocated then
+      RecreateWnd;
+  end;
+end;
+
 procedure TUItemButton.SetBorderThickness(Value: Integer);
 begin
   if FBorderThickness <> Value then begin
@@ -509,9 +544,27 @@ begin
 end;
 
 procedure TUItemButton.SetIsChecked(const Value: Boolean);
+
+  procedure TurnSiblingsOff;
+  var
+    I: Integer;
+    Sibling: TControl;
+  begin
+    if Parent <> Nil then begin
+      for I:= 0 to Parent.ControlCount - 1 do begin
+        Sibling := Parent.Controls[I];
+        if (Sibling <> Self) and (Sibling is TUItemButton) and (TUItemButton(Sibling).RadioGroup = RadioGroup) then
+          TUItemButton(Sibling).SetIsChecked(False);
+      end;
+    end;
+  end;
+
 begin
   if Value <> FIsChecked then begin
     FIsChecked := Value;
+    //  Uncheck all items with the same group
+    if (CheckType = ctRadioBtn) and Value then
+      TurnSiblingsOff;
     Repaint;
   end;
 end;
@@ -553,6 +606,14 @@ begin
   if Value <> FAlignSpace then begin
     FAlignSpace := Value;
     UpdateRects;
+    Repaint;
+  end;
+end;
+
+procedure TUItemButton.SetCheckType(const Value: TUItemButtonCheckType);
+begin
+  if FCheckType <> Value then begin
+    FCheckType := Value;
     Repaint;
   end;
 end;
@@ -632,19 +693,32 @@ begin
     // Draw border
     DrawBorder(bmp.Canvas, Rect(0, 0, Width, Height), BorderColor, SelectControlBorderThickness(TM, FBorderThickness, mulScale));
 
-    if Enabled and MouseInClient and not (csPaintCopy in ControlState) then
+    if Enabled and MouseInClient and not (csPaintCopy in ControlState) and not IsDesigning then
 //      DrawBumpMap(bmp.Canvas, P.X, Height div 2, TM.ThemeUsed = utDark);
       DrawBumpMap(bmp.Canvas, P.X, P.Y, TM.ThemeUsed = utDark);
 
-    //  Paint checkbox
+    //  Paint checkbox / radio button
     if iokCheckBox in ObjectsVisible then begin
+      if Enabled then
+        bmp.Canvas.Font.Color := ActiveColor
+      else
+        bmp.Canvas.Font.Color := TextColor;
       if IsChecked then begin
-        bmp.Canvas.Font.Color := ActiveColor;
-        DrawTextRect(bmp.Canvas, taCenter, taVerticalCenter, CheckBoxRect, UF_CHECKBOX_CHECKED, False, False);
+        //bmp.Canvas.Font.Color := ActiveColor;
+        if CheckType = ctCheckBox then
+          DrawTextRect(bmp.Canvas, taCenter, taVerticalCenter, CheckBoxRect, UF_CHECKBOX_CHECKED, False, False)
+        else begin
+          DrawTextRect(bmp.Canvas, taCenter, taVerticalCenter, CheckBoxRect, UF_RADIO_OUTLINE, False, False);
+          //bmp.Canvas.Font.Color := TextColor;
+          DrawTextRect(bmp.Canvas, taCenter, taVerticalCenter, CheckBoxRect, UF_RADIO_SMALL, False, False);
+        end;
       end
       else begin
-        bmp.Canvas.Font.Color := TextColor;
-        DrawTextRect(bmp.Canvas, taCenter, taVerticalCenter, CheckBoxRect, UF_CHECKBOX_OUTLINE, False, False);
+        //bmp.Canvas.Font.Color := ActiveColor;
+        if CheckType = ctCheckBox then
+          DrawTextRect(bmp.Canvas, taCenter, taVerticalCenter, CheckBoxRect, UF_CHECKBOX_OUTLINE, False, False)
+        else
+          DrawTextRect(bmp.Canvas, taCenter, taVerticalCenter, CheckBoxRect, UF_RADIO_OUTLINE, False, False);
       end;
     end;
 
@@ -656,7 +730,7 @@ begin
         DrawTextRect(bmp.Canvas, taCenter, taVerticalCenter, LeftIconRect, LeftIcon, False, False)
       else if Images <> Nil then begin
         GetCenterPos(Images.Width, Images.Height, LeftIconRect, ImgX, ImgY);
-        Images.Draw(bmp.Canvas, ImgX, ImgY, ImageLeftIndex, Enabled);
+        Images.Draw(ImageLeftIndex, bmp.Canvas, ImgX, ImgY, dsTransparent, itImage, Enabled);
       end;
     end;
 
@@ -666,7 +740,7 @@ begin
         DrawTextRect(bmp.Canvas, taCenter, taVerticalCenter, RightIconRect, RightIcon, False, False)
       else if Images <> Nil then begin
         GetCenterPos(Images.Width, Images.Height, RightIconRect, ImgX, ImgY);
-        Images.Draw(bmp.Canvas, ImgX, ImgY, ImageRightIndex, Enabled);
+        Images.Draw(ImageRightIndex, bmp.Canvas, ImgX, ImgY, dsTransparent, itImage, Enabled);
       end;
     end;
 

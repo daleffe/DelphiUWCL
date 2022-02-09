@@ -11,6 +11,9 @@ uses
   Windows,
   Forms,
 {$IFEND}
+  Controls,
+  Graphics,
+  ImgList,
   Types;
 
 //type
@@ -138,12 +141,20 @@ type
   PQuadColor = ^TQuadColor;
   PPQuadColor = ^PQuadColor;
 
+  TCustomImageListHelper = class helper for TCustomImageList
+  public
+    procedure Draw(Index: Integer; Canvas: TCanvas; X, Y: Integer; Enabled: Boolean = True); overload;
+    procedure Draw(Index: Integer; Canvas: TCanvas; X, Y: Integer; Style: Cardinal; Enabled: Boolean = True); overload;
+    procedure Draw(Index: Integer; Canvas: TCanvas; X, Y: Integer; ADrawingStyle: TDrawingStyle; AImageType: TImageType; Enabled: Boolean = True); overload;
+  end;
+
 implementation
 
 {$REGION 'Older Delphi versions'}
 {$IF CompilerVersion <= 30}
 uses
   SysUtils,
+  CommCtrl,
   UCL.ShellUIScaling;
 
 { TMonitorHelper }
@@ -334,5 +345,57 @@ end;
 
 {$IFEND}
 {$ENDREGION}
+
+{ TCustomImageListHelper }
+
+procedure TCustomImageListHelper.Draw(Index: Integer; Canvas: TCanvas; X, Y: Integer; Enabled: Boolean);
+begin
+  Draw(Index, Canvas, X, Y, DrawingStyle, ImageType, Enabled);
+end;
+
+procedure TCustomImageListHelper.Draw(Index: Integer; Canvas: TCanvas; X, Y: Integer; Style: Cardinal; Enabled: Boolean);
+
+  function GetRGBColor(Value: TColor): Cardinal;
+  begin
+    Result := ColorToRGB(Value);
+    case Result of
+      clNone: Result := CLR_NONE;
+      clDefault: Result := CLR_DEFAULT;
+    end;
+  end;
+
+var
+  Options: TImageListDrawParams;
+begin
+  if Enabled or (ColorDepth <> cd32Bit) then
+    Draw(Canvas, X, Y, Index, Enabled)
+  else if HandleAllocated then begin
+    FillChar(Options, SizeOf(Options), 0);
+    Options.cbSize := SizeOf(Options);
+    Options.himl := Self.Handle;
+    Options.i := Index;
+    Options.hdcDst := Canvas.Handle;
+    Options.x := X;
+    Options.y := Y;
+    Options.cx := 0;
+    Options.cy := 0;
+    Options.xBitmap := 0;
+    Options.yBitmap := 0;
+    Options.rgbBk := GetRGBColor(BkColor);
+    Options.rgbFg := GetRGBColor(BlendColor);
+    Options.fStyle := Style;
+    Options.fState := ILS_SATURATE; // Grayscale for 32bit images
+
+    ImageList_DrawIndirect(@Options);
+  end;
+end;
+
+procedure TCustomImageListHelper.Draw(Index: Integer; Canvas: TCanvas; X, Y: Integer; ADrawingStyle: TDrawingStyle; AImageType: TImageType; Enabled: Boolean);
+const
+  DrawingStyles: Array[TDrawingStyle] of Longint = (ILD_FOCUS, ILD_SELECTED, ILD_NORMAL, ILD_TRANSPARENT);
+  Images: Array[TImageType] of Longint = (0, ILD_MASK);
+begin
+  Draw(Index, Canvas, X, Y, DrawingStyles[ADrawingStyle] or Images[AImageType], Enabled);
+end;
 
 end.

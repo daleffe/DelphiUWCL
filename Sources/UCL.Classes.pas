@@ -35,6 +35,48 @@ type
     property DragFloating: Boolean read GetDragFloating;
   end;
 *)
+{$REGION 'TUCustomComponent'}
+  TUCustomComponent = class(TComponent, IUThemedComponent, IUIDEAware)
+  protected
+    FThemeManager: TUThemeManager;
+    mulScale: Integer;
+  {$IF CompilerVersion < 30}
+    FCurrentPPI: Integer;
+    FIsScaling: Boolean;
+    //
+    function GetDesignDpi: Integer; virtual;
+    function GetParentCurrentDpi: Integer; virtual;
+  {$IFEND}
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND}); virtual;
+    procedure DoChangeScale(M, D: Integer); virtual;
+    procedure UpdateScale(var Scale: Integer; M, D: Integer); virtual;
+    //
+    procedure SetThemeManager(const Value: TUThemeManager); virtual;
+    // IUThemedComponent
+    procedure UpdateTheme; virtual;
+    function IsCustomThemed: Boolean; virtual;
+    function CustomThemeManager: TUCustomThemeManager; virtual;
+    // IUIDEAware
+    function IsCreating: Boolean; inline;
+    function IsDestroying: Boolean; inline;
+    function IsLoading: Boolean; inline;
+    function IsDesigning: Boolean; inline;
+
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    //
+    procedure AfterConstruction; override;
+  {$IF CompilerVersion < 30}
+    procedure ScaleForPPI(NewPPI: Integer); virtual;
+  {$IFEND}
+
+  published
+    property ThemeManager: TUThemeManager read FThemeManager write SetThemeManager;
+  end;
+{$ENDREGION}
+{$REGION 'TUCustomControl'}
   TUCustomControl = class(TCustomControl, IUThemedComponent, IUIDEAware)
   protected
     FThemeManager: TUThemeManager;
@@ -124,7 +166,8 @@ type
     property OnMouseUp;
     property OnResize;
   end;
-
+{$ENDREGION}
+{$REGION 'TUGraphicControl'}
   TUGraphicControl = class(TGraphicControl, IUThemedComponent, IUIDEAware)
   private
     procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
@@ -213,11 +256,106 @@ type
     property OnMouseUp;
     property OnResize;
   end;
+{$ENDREGION}
+{$REGION 'TUCustomPanel'}
+  TUCustomPanel = class(TCustomPanel, IUThemedComponent, IUIDEAware)
+  private
+    procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
 
-//  TUCustomCheckBox = class(TCustomCheckBox, IUThemedComponent)
-//
-//  end;
+  protected
+    FThemeManager: TUThemeManager;
+    mulScale: Integer;
+  {$IF CompilerVersion < 30}
+    FCurrentPPI: Integer;
+    FIsScaling: Boolean;
+    //
+    function GetDesignDpi: Integer; virtual;
+    function GetParentCurrentDpi: Integer; virtual;
+  {$IFEND}
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND}); override;
+    procedure DoChangeScale(M, D: Integer); virtual;
+    procedure UpdateScale(var Scale: Integer; M, D: Integer); virtual;
+    //
+    procedure SetThemeManager(const Value: TUThemeManager); virtual;
+    // IUThemedComponent
+    procedure UpdateTheme; virtual;
+    function IsCustomThemed: Boolean; virtual;
+    function CustomThemeManager: TUCustomThemeManager; virtual;
+    // IUIDEAware
+    function IsCreating: Boolean; inline;
+    function IsDestroying: Boolean; inline;
+    function IsLoading: Boolean; inline;
+    function IsDesigning: Boolean; inline;
 
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    //
+    procedure AfterConstruction; override;
+  {$IF CompilerVersion < 30}
+    procedure ScaleForPPI(NewPPI: Integer); virtual;
+  {$IFEND}
+    //
+    property Color;
+    //
+    property OnStartDock;
+    property OnDockDrop;
+    property OnDockOver;
+    property OnEndDock;
+    //
+    property OnStartDrag;
+    property OnDragDrop;
+    property OnDragOver;
+    property OnEndDrag;
+
+  published
+    property ThemeManager: TUThemeManager read FThemeManager write SetThemeManager;
+    //
+    property Align;
+    property Alignment;
+    property Anchors;
+    property Caption;
+    property Constraints;
+    property DoubleBuffered;
+    property Enabled;
+    property FullRepaint;
+    property Font;
+    property Padding;
+    property ParentBackground;
+    property ParentColor;
+    property ParentDoubleBuffered;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property ShowCaption;
+    property TabOrder;
+    property TabStop;
+    property VerticalAlignment;
+    property Visible;
+    //
+    property OnAlignInsertBefore;
+    property OnAlignPosition;
+    property OnCanResize;
+    property OnClick;
+    property OnConstrainedResize;
+    property OnContextPopup;
+    property OnDblClick;
+    property OnEnter;
+    property OnExit;
+    property OnGesture;
+    property OnGetSiteInfo;
+    property OnMouseActivate;
+    property OnMouseDown;
+    property OnMouseEnter;
+    property OnMouseLeave;
+    property OnMouseMove;
+    property OnMouseUp;
+    property OnResize;
+//    property OnUnDock;
+  end;
+{$ENDREGION}
+{$REGION 'TUCustomEdit'}
   TUCustomEdit = class(TCustomEdit, IUThemedComponent, IUIDEAware)
   protected
     FThemeManager: TUThemeManager;
@@ -332,103 +470,11 @@ type
     property OnMouseMove;
     property OnMouseUp;
   end;
+{$ENDREGION}
 
-  TUCustomPanel = class(TCustomPanel, IUThemedComponent, IUIDEAware)
-  private
-    procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
-
-  protected
-    FThemeManager: TUThemeManager;
-    mulScale: Integer;
-  {$IF CompilerVersion < 30}
-    FCurrentPPI: Integer;
-    FIsScaling: Boolean;
-    //
-    function GetDesignDpi: Integer; virtual;
-    function GetParentCurrentDpi: Integer; virtual;
-  {$IFEND}
-    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
-    procedure ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND}); override;
-    procedure DoChangeScale(M, D: Integer); virtual;
-    procedure UpdateScale(var Scale: Integer; M, D: Integer); virtual;
-    //
-    procedure SetThemeManager(const Value: TUThemeManager); virtual;
-    // IUThemedComponent
-    procedure UpdateTheme; virtual;
-    function IsCustomThemed: Boolean; virtual;
-    function CustomThemeManager: TUCustomThemeManager; virtual;
-    // IUIDEAware
-    function IsCreating: Boolean; inline;
-    function IsDestroying: Boolean; inline;
-    function IsLoading: Boolean; inline;
-    function IsDesigning: Boolean; inline;
-
-  public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-    //
-    procedure AfterConstruction; override;
-  {$IF CompilerVersion < 30}
-    procedure ScaleForPPI(NewPPI: Integer); virtual;
-  {$IFEND}
-    //
-    property Color;
-    //
-    property OnStartDock;
-    property OnDockDrop;
-    property OnDockOver;
-    property OnEndDock;
-    //
-    property OnStartDrag;
-    property OnDragDrop;
-    property OnDragOver;
-    property OnEndDrag;
-
-  published
-    property ThemeManager: TUThemeManager read FThemeManager write SetThemeManager;
-    //
-    property Align;
-    property Alignment;
-    property Anchors;
-    property Caption;
-    property Constraints;
-    property DoubleBuffered;
-    property Enabled;
-    property FullRepaint;
-    property Font;
-    property Padding;
-    property ParentBackground;
-    property ParentColor;
-    property ParentDoubleBuffered;
-    property ParentFont;
-    property ParentShowHint;
-    property PopupMenu;
-    property ShowCaption;
-    property TabOrder;
-    property TabStop;
-    property VerticalAlignment;
-    property Visible;
-    //
-    property OnAlignInsertBefore;
-    property OnAlignPosition;
-    property OnCanResize;
-    property OnClick;
-    property OnConstrainedResize;
-    property OnContextPopup;
-    property OnDblClick;
-    property OnEnter;
-    property OnExit;
-    property OnGesture;
-    property OnGetSiteInfo;
-    property OnMouseActivate;
-    property OnMouseDown;
-    property OnMouseEnter;
-    property OnMouseLeave;
-    property OnMouseMove;
-    property OnMouseUp;
-    property OnResize;
-//    property OnUnDock;
-  end;
+//  TUCustomCheckBox = class(TCustomCheckBox, IUThemedComponent)
+//
+//  end;
 
 implementation
 
@@ -436,6 +482,159 @@ implementation
 uses
   Windows;
 {$IFEND}
+
+{ TUCustomComponent }
+
+constructor TUCustomComponent.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FThemeManager := Nil;
+  mulScale := 1;
+end;
+
+destructor TUCustomComponent.Destroy;
+var
+  TM: TUCustomThemeManager;
+begin
+  TM:=SelectThemeManager(Self);
+  TM.Disconnect(Self);
+  inherited;
+end;
+
+procedure TUCustomComponent.AfterConstruction;
+begin
+  inherited;
+  if GetCommonThemeManager <> Nil then
+    GetCommonThemeManager.Connect(Self);
+end;
+
+function TUCustomComponent.IsCreating: Boolean;
+begin
+  Result := (csReading in ComponentState);
+end;
+
+function TUCustomComponent.IsDestroying: Boolean;
+begin
+  Result := (csDestroying in ComponentState);
+end;
+
+function TUCustomComponent.IsLoading: Boolean;
+begin
+  Result := (csLoading in ComponentState);
+end;
+
+function TUCustomComponent.IsDesigning: Boolean;
+begin
+  Result := (csDesigning in ComponentState);
+end;
+
+{$REGION 'Compatibility with older Delphi'}
+{$IF CompilerVersion < 30}
+function TUCustomComponent.GetDesignDpi: Integer;
+var
+  LForm: TCustomForm;
+begin
+  if Owner is TControl then begin
+    LForm := GetParentForm(TControl(Owner));
+
+    if (LForm <> Nil) and (LForm is TForm) then
+      Result := TForm(LForm).PixelsPerInch
+    else
+      Result := Windows.USER_DEFAULT_SCREEN_DPI;
+  end
+  else begin
+    Result := Windows.USER_DEFAULT_SCREEN_DPI;
+  end;
+end;
+
+function TUCustomComponent.GetParentCurrentDpi: Integer;
+begin
+//  if Parent <> nil then
+//    Result := Parent.GetParentCurrentDpi
+//  else
+    Result := FCurrentPPI;
+end;
+
+procedure TUCustomComponent.ScaleForPPI(NewPPI: Integer);
+begin
+  if not FIsScaling and (NewPPI > 0) then begin
+    FIsScaling := True;
+    try
+      if FCurrentPPI = 0 then
+        FCurrentPPI := GetDesignDpi;
+
+      if NewPPI <> FCurrentPPI then begin
+        ChangeScale(NewPPI, FCurrentPPI);
+        FCurrentPPI := NewPPI;
+      end
+    finally
+      FIsScaling := False;
+    end;
+  end;
+end;
+{$IFEND}
+{$ENDREGION}
+
+procedure TUCustomComponent.Notification(AComponent: TComponent; Operation: TOperation);
+begin
+  if (Operation = opRemove) and (AComponent = FThemeManager) then begin
+    ThemeManager:=Nil;
+    Exit;
+  end;
+  inherited Notification(AComponent, Operation);
+end;
+
+procedure TUCustomComponent.ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND});
+begin
+//  inherited ChangeScale(M, D{$IF CompilerVersion > 29}, isDpiChange{$IFEND});
+  DoChangeScale(M, D);
+end;
+
+procedure TUCustomComponent.DoChangeScale(M, D: Integer);
+begin
+  UpdateScale(mulScale, M, D);
+end;
+
+procedure TUCustomComponent.UpdateScale(var Scale: Integer; M, D: Integer);
+begin
+  if M > D then // up size
+    Inc(Scale, (M - D) div 24)
+  else // down size
+    Dec(Scale, (D - M) div 24);
+end;
+
+procedure TUCustomComponent.SetThemeManager(const Value: TUThemeManager);
+begin
+  if (Value <> Nil) and (FThemeManager = Nil) then
+    GetCommonThemeManager.Disconnect(Self);
+
+  if (Value = Nil) and (FThemeManager <> Nil) then
+    FThemeManager.Disconnect(Self);
+
+  FThemeManager := Value;
+
+  if FThemeManager <> Nil then
+    FThemeManager.Connect(Self)
+  else
+    GetCommonThemeManager.Connect(Self);
+
+  UpdateTheme;
+end;
+
+procedure TUCustomComponent.UpdateTheme;
+begin
+// nothing here
+end;
+
+function TUCustomComponent.IsCustomThemed: Boolean;
+begin
+  Result:=(FThemeManager <> Nil);
+end;
+
+function TUCustomComponent.CustomThemeManager: TUCustomThemeManager;
+begin
+  Result:=FThemeManager;
+end;
 
 { TUCustomControl }
 
@@ -730,145 +929,6 @@ begin
   Result:=FThemeManager;
 end;
 
-{ TUCustomEdit }
-
-constructor TUCustomEdit.Create(AOwner: TComponent);
-begin
-  inherited Create(AOwner);
-  FThemeManager := Nil;
-end;
-
-destructor TUCustomEdit.Destroy;
-var
-  TM: TUCustomThemeManager;
-begin
-  TM:=SelectThemeManager(Self);
-  TM.Disconnect(Self);
-  inherited;
-end;
-
-procedure TUCustomEdit.AfterConstruction;
-begin
-  inherited;
-  if GetCommonThemeManager <> Nil then
-    GetCommonThemeManager.Connect(Self);
-end;
-
-function TUCustomEdit.IsCreating: Boolean;
-begin
-  Result := (csCreating in ControlState);
-end;
-
-function TUCustomEdit.IsDestroying: Boolean;
-begin
-  Result := (csDestroying in ComponentState);
-end;
-
-function TUCustomEdit.IsLoading: Boolean;
-begin
-  Result := (csLoading in ComponentState);
-end;
-
-function TUCustomEdit.IsDesigning: Boolean;
-begin
-  Result := (csDesigning in ComponentState);
-end;
-
-{$REGION 'Compatibility with older Delphi'}
-{$IF CompilerVersion < 30}
-function TUCustomEdit.GetDesignDpi: Integer;
-var
-  LForm: TCustomForm;
-begin
-  LForm := GetParentForm(Self);
-
-  if (LForm <> Nil) and (LForm is TForm) then
-    Result := TForm(LForm).PixelsPerInch
-  else
-    Result := Windows.USER_DEFAULT_SCREEN_DPI;
-end;
-
-function TUCustomEdit.GetParentCurrentDpi: Integer;
-begin
-//  if Parent <> nil then
-//    Result := Parent.GetParentCurrentDpi
-//  else
-    Result := FCurrentPPI;
-end;
-
-procedure TUCustomEdit.ScaleForPPI(NewPPI: Integer);
-begin
-  if not FIsScaling and (NewPPI > 0) then begin
-    FIsScaling := True;
-    try
-      if FCurrentPPI = 0 then
-        FCurrentPPI := GetDesignDpi;
-
-      if NewPPI <> FCurrentPPI then begin
-        ChangeScale(NewPPI, FCurrentPPI);
-        FCurrentPPI := NewPPI;
-      end
-    finally
-      FIsScaling := False;
-    end;
-  end;
-end;
-{$IFEND}
-{$ENDREGION}
-
-procedure TUCustomEdit.Notification(AComponent: TComponent; Operation: TOperation);
-begin
-  if (Operation = opRemove) and (AComponent = FThemeManager) then begin
-    ThemeManager:=Nil;
-    Exit;
-  end;
-  inherited Notification(AComponent, Operation);
-end;
-
-procedure TUCustomEdit.ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND});
-begin
-  inherited ChangeScale(M, D{$IF CompilerVersion > 29}, isDpiChange{$IFEND});
-  DoChangeScale(M, D);
-end;
-
-procedure TUCustomEdit.DoChangeScale(M, D: Integer);
-begin
-// nothing here
-end;
-
-procedure TUCustomEdit.SetThemeManager(const Value: TUThemeManager);
-begin
-  if (Value <> Nil) and (FThemeManager = Nil) then
-    GetCommonThemeManager.Disconnect(Self);
-
-  if (Value = Nil) and (FThemeManager <> Nil) then
-    FThemeManager.Disconnect(Self);
-
-  FThemeManager := Value;
-
-  if FThemeManager <> Nil then
-    FThemeManager.Connect(Self)
-  else
-    GetCommonThemeManager.Connect(Self);
-
-  UpdateTheme;
-end;
-
-procedure TUCustomEdit.UpdateTheme;
-begin
-// nothing here
-end;
-
-function TUCustomEdit.IsCustomThemed: Boolean;
-begin
-  Result:=(FThemeManager <> Nil);
-end;
-
-function TUCustomEdit.CustomThemeManager: TUCustomThemeManager;
-begin
-  Result:=FThemeManager;
-end;
-
 { TUCustomPanel }
 
 constructor TUCustomPanel.Create(AOwner: TComponent);
@@ -1021,6 +1081,145 @@ begin
 end;
 
 function TUCustomPanel.CustomThemeManager: TUCustomThemeManager;
+begin
+  Result:=FThemeManager;
+end;
+
+{ TUCustomEdit }
+
+constructor TUCustomEdit.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FThemeManager := Nil;
+end;
+
+destructor TUCustomEdit.Destroy;
+var
+  TM: TUCustomThemeManager;
+begin
+  TM:=SelectThemeManager(Self);
+  TM.Disconnect(Self);
+  inherited;
+end;
+
+procedure TUCustomEdit.AfterConstruction;
+begin
+  inherited;
+  if GetCommonThemeManager <> Nil then
+    GetCommonThemeManager.Connect(Self);
+end;
+
+function TUCustomEdit.IsCreating: Boolean;
+begin
+  Result := (csCreating in ControlState);
+end;
+
+function TUCustomEdit.IsDestroying: Boolean;
+begin
+  Result := (csDestroying in ComponentState);
+end;
+
+function TUCustomEdit.IsLoading: Boolean;
+begin
+  Result := (csLoading in ComponentState);
+end;
+
+function TUCustomEdit.IsDesigning: Boolean;
+begin
+  Result := (csDesigning in ComponentState);
+end;
+
+{$REGION 'Compatibility with older Delphi'}
+{$IF CompilerVersion < 30}
+function TUCustomEdit.GetDesignDpi: Integer;
+var
+  LForm: TCustomForm;
+begin
+  LForm := GetParentForm(Self);
+
+  if (LForm <> Nil) and (LForm is TForm) then
+    Result := TForm(LForm).PixelsPerInch
+  else
+    Result := Windows.USER_DEFAULT_SCREEN_DPI;
+end;
+
+function TUCustomEdit.GetParentCurrentDpi: Integer;
+begin
+//  if Parent <> nil then
+//    Result := Parent.GetParentCurrentDpi
+//  else
+    Result := FCurrentPPI;
+end;
+
+procedure TUCustomEdit.ScaleForPPI(NewPPI: Integer);
+begin
+  if not FIsScaling and (NewPPI > 0) then begin
+    FIsScaling := True;
+    try
+      if FCurrentPPI = 0 then
+        FCurrentPPI := GetDesignDpi;
+
+      if NewPPI <> FCurrentPPI then begin
+        ChangeScale(NewPPI, FCurrentPPI);
+        FCurrentPPI := NewPPI;
+      end
+    finally
+      FIsScaling := False;
+    end;
+  end;
+end;
+{$IFEND}
+{$ENDREGION}
+
+procedure TUCustomEdit.Notification(AComponent: TComponent; Operation: TOperation);
+begin
+  if (Operation = opRemove) and (AComponent = FThemeManager) then begin
+    ThemeManager:=Nil;
+    Exit;
+  end;
+  inherited Notification(AComponent, Operation);
+end;
+
+procedure TUCustomEdit.ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND});
+begin
+  inherited ChangeScale(M, D{$IF CompilerVersion > 29}, isDpiChange{$IFEND});
+  DoChangeScale(M, D);
+end;
+
+procedure TUCustomEdit.DoChangeScale(M, D: Integer);
+begin
+// nothing here
+end;
+
+procedure TUCustomEdit.SetThemeManager(const Value: TUThemeManager);
+begin
+  if (Value <> Nil) and (FThemeManager = Nil) then
+    GetCommonThemeManager.Disconnect(Self);
+
+  if (Value = Nil) and (FThemeManager <> Nil) then
+    FThemeManager.Disconnect(Self);
+
+  FThemeManager := Value;
+
+  if FThemeManager <> Nil then
+    FThemeManager.Connect(Self)
+  else
+    GetCommonThemeManager.Connect(Self);
+
+  UpdateTheme;
+end;
+
+procedure TUCustomEdit.UpdateTheme;
+begin
+// nothing here
+end;
+
+function TUCustomEdit.IsCustomThemed: Boolean;
+begin
+  Result:=(FThemeManager <> Nil);
+end;
+
+function TUCustomEdit.CustomThemeManager: TUCustomThemeManager;
 begin
   Result:=FThemeManager;
 end;

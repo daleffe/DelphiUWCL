@@ -49,6 +49,7 @@ type
     FKeepOrginalColor: Boolean;
     FUpdating: Boolean;
     FToggleEvent: TUSymbolButtonToggleEvent;
+    FAcceptControls: Boolean;
 
     // Internal
     procedure UpdateColors;
@@ -57,6 +58,7 @@ type
     procedure FontsChanged(Sender: TObject);
 
     // Setters
+    procedure SetAcceptControls(const Value: Boolean);
     procedure SetSymbolFont(Value: TFont);
     procedure SetDetailFont(Value: TFont);
     procedure SetButtonState(const Value: TUControlState);
@@ -100,6 +102,8 @@ type
     procedure UpdateTheme; override;
 
   published
+    property AcceptControls: Boolean read FAcceptControls write SetAcceptControls default False;
+
     property SymbolFont: TFont read FSymbolFont write SetSymbolFont;
     property DetailFont: TFont read FDetailFont write SetDetailFont;
 
@@ -150,6 +154,7 @@ begin
   inherited Create(AOwner);
   ControlStyle := ControlStyle - [csDoubleClicks];
 
+  FAcceptControls := False;
   BorderThickness := 1;
 
   FImageIndex := -1;
@@ -341,6 +346,19 @@ begin
   FDetailFont.Assign(Value);
 end;
 
+procedure TUSymbolButton.SetAcceptControls(const Value: Boolean);
+begin
+  if FAcceptControls <> Value then begin
+    FAcceptControls := Value;
+    if Value then
+      ControlStyle := ControlStyle + [csAcceptsControls]
+    else
+      ControlStyle := ControlStyle - [csAcceptsControls];
+    if HandleAllocated then
+      RecreateWnd;
+  end;
+end;
+
 procedure TUSymbolButton.SetButtonState(const Value: TUControlState);
 begin
   if Value <> FButtonState then begin
@@ -492,7 +510,7 @@ begin
     P:=Mouse.CursorPos;
     P:=ScreenToClient(P);
 
-    if Enabled and MouseInClient and not (csPaintCopy in ControlState) then
+    if Enabled and MouseInClient and not (csPaintCopy in ControlState) and not IsDesigning then
       DrawBumpMap(bmp.Canvas, P.X, P.Y, TM.ThemeUsed = utDark);
 
     // Paint icon
@@ -506,7 +524,7 @@ begin
     else begin
       if Images <> Nil then begin
         GetCenterPos(Images.Width, Images.Height, IconRect, ImgX, ImgY);
-        Images.Draw(bmp.Canvas, ImgX, ImgY, ImageIndex, Enabled);
+        Images.Draw(ImageIndex, bmp.Canvas, ImgX, ImgY, Enabled);
       end;
     end;
 

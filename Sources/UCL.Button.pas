@@ -378,7 +378,7 @@ begin
     // Draw border
     DrawBorder(bmp.Canvas, Rect(0, 0, Width, Height), BorderColor, SelectControlBorderThickness(TM, FBorderThickness, mulScale));
 
-    if Enabled and MouseInClient and not (csPaintCopy in ControlState) then
+    if Enabled and MouseInClient and not (csPaintCopy in ControlState) and not IsDesigning then
       DrawBumpMap(bmp.Canvas, P.X, P.Y, TM.ThemeUsed = utDark);
 
     // Paint image

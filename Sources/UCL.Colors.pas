@@ -59,7 +59,39 @@ type
     property DarkColor: TColor index 2 read FDarkColor write SetColor;
   end;
 
-  TUStateColorsSet = packed record
+  TUStateHoveredDisabledColorsSet = packed record
+    Color: TColor;
+    Hover: TColor;
+    Disabled: TColor;
+  end;
+
+  TUThemeControlStateHoveredDisabledColors = class(TUThemeColorSet)
+  private
+    FLightSet: TUStateHoveredDisabledColorsSet;
+    FDarkSet : TUStateHoveredDisabledColorsSet;
+
+  protected
+    procedure SetColor(Index: Integer; const Value: TColor); override;
+
+  public
+    constructor Create; override;
+
+    procedure Assign(Source: TPersistent); override;
+    procedure SetColors; overload; override; // set defaults
+    procedure SetColors(const Theme: TUTheme; Color, Hover, Disabled: TColor); overload;
+    function GetColor(const Theme: TUTheme; State: TUControlState): TColor; overload;
+
+  published
+    property LightColor: TColor index 0 read FLightSet.Color write SetColor;
+    property LightHover: TColor index 1 read FLightSet.Hover write SetColor;
+    property LightDisabled: TColor index 2 read FLightSet.Disabled write SetColor;
+    //
+    property DarkColor: TColor index 3 read FDarkSet.Color write SetColor;
+    property DarkHover: TColor index 4 read FDarkSet.Hover write SetColor;
+    property DarkDisabled: TColor index 5 read FDarkSet.Disabled write SetColor;
+  end;
+
+  TUStateHoverPressColorsSet = packed record
     Color: TColor;
     Hover: TColor;
     Press: TColor;
@@ -70,8 +102,8 @@ type
 
   TUThemeControlStateColors = class(TUThemeColorSet)
   private
-    FLightSet: TUStateColorsSet;
-    FDarkSet : TUStateColorsSet;
+    FLightSet: TUStateHoverPressColorsSet;
+    FDarkSet : TUStateHoverPressColorsSet;
 
   protected
     procedure SetColor(Index: Integer; const Value: TColor); override;
@@ -100,7 +132,7 @@ type
     property DarkSelectedPress: TColor index 11 read FDarkSet.SelectedPress write SetColor;
   end;
 
-  TUControlStateColorSet = packed record
+  TUStateHoverPressDisableFocusColorSet = packed record
     Color: TColor;
     Hover: TColor;
     Press: TColor;
@@ -110,8 +142,8 @@ type
 
   TUThemeFocusableControlStateColors = class(TUThemeColorSet)
   private
-    FLightSet: TUControlStateColorSet;
-    FDarkSet : TUControlStateColorSet;
+    FLightSet: TUStateHoverPressDisableFocusColorSet;
+    FDarkSet : TUStateHoverPressDisableFocusColorSet;
 
   protected
     procedure SetColor(Index: Integer; const Value: TColor); override;
@@ -350,6 +382,120 @@ begin
     else
       Result := DarkColor;
   end;
+end;
+
+{ TUThemeControlStateHoveredDisabledColors }
+
+constructor TUThemeControlStateHoveredDisabledColors.Create;
+begin
+  inherited Create;
+  SetColors;
+end;
+
+procedure TUThemeControlStateHoveredDisabledColors.Assign(Source: TPersistent);
+var
+  SourceObject: TUThemeControlStateHoveredDisabledColors;
+begin
+  if Source is TUThemeControlStateHoveredDisabledColors then begin
+    SourceObject:=TUThemeControlStateHoveredDisabledColors(Source);
+    //
+    FLightSet.Color    := SourceObject.FLightSet.Color;
+    FLightSet.Hover    := SourceObject.FLightSet.Hover;
+    FLightSet.Disabled := SourceObject.FLightSet.Disabled;
+    //
+    FDarkSet.Color    := SourceObject.FDarkSet.Color;
+    FDarkSet.Hover    := SourceObject.FDarkSet.Hover;
+    FDarkSet.Disabled := SourceObject.FDarkSet.Disabled;
+  end;
+  inherited Assign(Source); // must be last - changed is called here
+end;
+
+procedure TUThemeControlStateHoveredDisabledColors.SetColors;
+begin
+  FLightSet.Color    := $00000000;
+  FLightSet.Hover    := $00000000;
+  FLightSet.Disabled := $00000000;
+  //
+  FDarkSet.Color    := $00000000;
+  FDarkSet.Hover    := $00000000;
+  FDarkSet.Disabled := $00000000;
+end;
+
+procedure TUThemeControlStateHoveredDisabledColors.SetColors(const Theme: TUTheme; Color, Hover, Disabled: TColor);
+begin
+  if Theme = utLight then begin
+    FLightSet.Color    := Color;
+    FLightSet.Hover    := Hover;
+    FLightSet.Disabled := Disabled;
+  end
+  else begin
+    FDarkSet.Color    := Color;
+    FDarkSet.Hover    := Hover;
+    FDarkSet.Disabled := Disabled;
+  end;
+end;
+
+procedure TUThemeControlStateHoveredDisabledColors.SetColor(Index: Integer; const Value: TColor);
+begin
+  case Index of
+    0: if Value <> FLightSet.Color then begin
+      FLightSet.Color := Value;
+    end
+    else
+      Exit;
+
+    1: if Value <> FLightSet.Hover then begin
+      FLightSet.Hover := Value;
+    end
+    else
+      Exit;
+
+    2: if Value <> FLightSet.Disabled then begin
+      FLightSet.Disabled := Value;
+    end
+    else
+      Exit;
+
+    ///////////////////////////////////////////////////////////////
+
+    3: if Value <> FDarkSet.Color then begin
+      FDarkSet.Color := Value;
+    end
+    else
+      Exit;
+
+    4: if Value <> FDarkSet.Hover then begin
+      FDarkSet.Hover := Value;
+    end
+    else
+      Exit;
+
+    5: if Value <> FDarkSet.Disabled then begin
+      FDarkSet.Disabled := Value;
+    end
+    else
+      Exit;
+  end;
+  Changed;
+end;
+
+function TUThemeControlStateHoveredDisabledColors.GetColor(const Theme: TUTheme; State: TUControlState): TColor;
+begin
+  Result := clNone; // satisfy compiler
+  if Theme = utLight then begin
+    case State of
+      csNone    : Result := FLightSet.Color;
+      csHover   : Result := FLightSet.Hover;
+      csDisabled: Result := FLightSet.Disabled;
+    end;
+  end
+  else begin
+    case State of
+      csNone    : Result := FDarkSet.Color;
+      csHover   : Result := FDarkSet.Hover;
+      csDisabled: Result := FDarkSet.Disabled;
+    end;
+  end
 end;
 
 { TUThemeControlStateColors }

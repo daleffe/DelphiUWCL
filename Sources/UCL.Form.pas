@@ -66,9 +66,13 @@ type
     function IsDesigning: Boolean; inline;
 
   private
+    procedure DisableWindowPaint(var dwStyle: DWORD);
+    procedure EnableWindowPaint(dwStyle: DWORD);
     // Messages
     procedure WMSysCommand(var Msg: TWMSysCommand); message WM_SYSCOMMAND;
     procedure WMActivate(var Msg: TWMActivate); message WM_ACTIVATE;
+    procedure WMSize(var Msg : TWMSize); message WM_SIZE;
+    procedure WMNCActivate(var Msg: TWMNCActivate); message WM_NCACTIVATE;
     procedure WMDPIChanged(var Msg: TWMDpi); message WM_DPICHANGED;
     procedure WMDWMColorizationColorChanged(var Msg: TMessage); message WM_DWMCOLORIZATIONCOLORCHANGED;
     //procedure WMEraseBkgnd(var Msg: TWMEraseBkgnd); message WM_ERASEBKGND;
@@ -76,6 +80,10 @@ type
     procedure WMNCCalcSize(var Msg: TWMNCCalcSize); message WM_NCCALCSIZE;
     procedure WMNCHitTest(var Msg: TWMNCHitTest); message WM_NCHITTEST;
     //procedure WMNCMouseLeave(var Msg : TMessage); message WM_NCMOUSELEAVE;
+    procedure WMSetText(var Msg: TWMSetText); message WM_SETTEXT;
+    procedure CMMouseEnter(var Msg: TMessage); message CM_MOUSEENTER;
+    procedure CMMouseLeave(var Msg: TMessage); message CM_MOUSELEAVE;
+//    procedure   WM_DWMNCRENDERINGCHANGED
 
   protected
     // Internal
@@ -87,11 +95,13 @@ type
     function GetBorderSpaceWin7(const Side: TBorderSide): Integer; virtual;
     procedure SetWindowsCorners; virtual;
 
+    procedure UpdateBorder; virtual;
     function CanDrawBorder: Boolean; virtual;
     procedure UpdateBorderColor; virtual;
     procedure DoDrawBorder; virtual;
 
   protected
+    mulScale: Integer;
   {$IF CompilerVersion < 30}
     FCurrentPPI: Integer;
     FIsScaling: Boolean;
@@ -100,12 +110,16 @@ type
   {$IFEND}
     procedure CreateParams(var Params: TCreateParams); override;
     procedure CreateWnd; override;
+    procedure ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND}); override;
+    procedure DoChangeScale(M, D: Integer); virtual;
+    procedure UpdateScale(var Scale: Integer; M, D: Integer); virtual;
     function  GetClientRect: TRect; override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure Init;
     procedure Paint; override;
     procedure PaintWindow(DC: HDC); override;
     procedure Resize; override;
+    procedure Resizing(State: TWindowState); override;
 
   public
     constructor Create(AOwner: TComponent); override;
@@ -115,6 +129,7 @@ type
   {$IF CompilerVersion < 30}
     procedure ScaleForPPI(NewPPI: Integer); virtual;
   {$IFEND}
+    procedure FormScale(Value: Integer); // 0 - 4: 0 - 100%; 1 - 125%; 2 - 150%; 3 - 175%; 4 - 200%;
 
     // IUThemedControl
     procedure UpdateTheme; virtual;
@@ -303,6 +318,20 @@ begin
   end;
 end;
 
+procedure TUForm.UpdateBorder;
+begin
+  //  Redraw border
+  if CanDrawBorder{ and not IsLEWin7} then
+    DoDrawBorder;
+
+  //  Update cation bar
+  if CaptionBar <> Nil then begin
+    if not IsDesigning and TUThemeManager.IsThemingAvailable(CaptionBar) then
+      (CaptionBar as IUThemedComponent).UpdateTheme;
+//    CaptionBar.Repaint; // this is important and it must be repaint and not invalidate
+  end;
+end;
+
 function TUForm.CanDrawBorder: Boolean;
 begin
   Result := HasBorder and (WindowState = wsNormal) and not IsBorderless;
@@ -339,6 +368,25 @@ begin
   end;
 end;
 
+procedure TUForm.ChangeScale(M, D: Integer);
+begin
+  inherited ChangeScale(M, D{$IF CompilerVersion > 29}, isDpiChange{$IFEND});
+  DoChangeScale(M, D);
+end;
+
+procedure TUForm.DoChangeScale(M, D: Integer);
+begin
+  UpdateScale(mulScale, M, D);
+end;
+
+procedure TUForm.UpdateScale(var Scale: Integer; M, D: Integer);
+begin
+  if M > D then // up size
+    Inc(Scale, (M - D) div 24)
+  else // down size
+    Dec(Scale, (D - M) div 24);
+end;
+
 procedure TUForm.DoDrawBorder;
 begin
   UpdateBorderColor;
@@ -354,6 +402,38 @@ begin
     Canvas.LineTo(0, Height - 1);
     Canvas.LineTo(0, 0);
   end;
+end;
+
+procedure TUForm.FormScale(Value: Integer);
+var
+  NewPPI: Integer;
+begin
+  // 24 ppi intervals
+  case Value of
+    0: NewPPI :=  96;
+    1: NewPPI := 120;
+    2: NewPPI := 144;
+    3: NewPPI := 168;
+    4: NewPPI := 192;
+    else
+      Exit;
+  end;
+
+  Self.PPI := NewPPI;
+  Self.ScaleForPPI(NewPPI);
+end;
+
+procedure TUForm.DisableWindowPaint(var dwStyle: DWORD);
+begin
+  dwStyle := GetWindowLong(Self.Handle, GWL_STYLE);
+  // turn OFF WS_VISIBLE
+  SetWindowLong(Self.Handle, GWL_STYLE, dwStyle and not WS_VISIBLE);
+end;
+
+procedure TUForm.EnableWindowPaint(dwStyle: DWORD);
+begin
+  // turn ON WS_VISIBLE
+  SetWindowLong(Self.Handle, GWL_STYLE, dwStyle);
 end;
 {$ENDREGION}
 
@@ -460,6 +540,7 @@ var
   TM: TUCustomThemeManager;
 begin
   //  New props
+  mulScale := 1;
   FThemeManager:=Nil;
   FIsActive := True;
 
@@ -498,11 +579,11 @@ begin
 {$ELSE}
   if HandleAllocated and StyleServices.Enabled and DwmCompositionEnabled and IsLEWin7 then begin
 {$IFEND}
-    wta.dwFlags := WTNCA_NODRAWCAPTION or WTNCA_NODRAWICON;
-    wta.dwMask  := WTNCA_NODRAWCAPTION or WTNCA_NODRAWICON;
+    wta.dwFlags := WTNCA_NODRAWCAPTION or WTNCA_NODRAWICON or WTNCA_NOSYSMENU;
+    wta.dwMask  := WTNCA_NODRAWCAPTION or WTNCA_NODRAWICON or WTNCA_NOSYSMENU;
     SetWindowThemeAttribute(Self.Handle, WTA_NONCLIENT, @wta, SizeOf(WTA_OPTIONS));
 
-    Flag := DWMNCRP_ENABLED;
+    Flag := DWMNCRP_DISABLED;
     DwmSetWindowAttribute(Self.Handle, DWMWA_ALLOW_NCPAINT, @Flag, SizeOf(Flag));
     SetWindowPos(Self.Handle, 0, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE or SWP_NOSENDCHANGING or SWP_FRAMECHANGED);
   end;
@@ -585,6 +666,18 @@ begin
   end;
 end;
 
+procedure TUForm.Resizing(State: TWindowState);
+var
+  CurrentScreen: TMonitor;
+begin
+  if State = wsMaximized then begin
+    CurrentScreen := Screen.MonitorFromWindow(Handle);
+    SetBounds(CurrentScreen.Left, CurrentScreen.Top, CurrentScreen.Width, CurrentScreen.Height);
+  end;
+
+  inherited;
+end;
+
 procedure TUForm.SetThemeManager(const Value: TUThemeManager);
 begin
   if (Value <> Nil) and (FThemeManager = Nil) then
@@ -628,6 +721,8 @@ begin
   else
     HintWindowClass := TUDarkTooltip;
 
+  Font.Color := GetTextColorFromBackground(Color);
+
   UpdateBorderColor;
   Invalidate;
 end;
@@ -666,17 +761,25 @@ procedure TUForm.WMActivate(var Msg: TWMActivate);
 begin
   inherited;
   FIsActive := (Msg.Active <> WA_INACTIVE);
+  UpdateBorder;
+end;
 
-  //  Redraw border
-  if CanDrawBorder{ and not IsLEWin7} then
-    DoDrawBorder;
+procedure TUForm.WMSize(var Msg: TWMSize);
+begin
+  inherited;
+end;
 
-  //  Update cation bar
-  if CaptionBar <> Nil then begin
-    if not IsDesigning and TUThemeManager.IsThemingAvailable(CaptionBar) then
-      (CaptionBar as IUThemedComponent).UpdateTheme;
-//    CaptionBar.Repaint; // this is important and it must be repaint and not invalidate
-  end;
+procedure TUForm.WMNCActivate(var Msg: TWMNCActivate);
+var
+  dwStyle: DWORD;
+begin
+  DisableWindowPaint(dwStyle);
+  inherited;
+  EnableWindowPaint(dwStyle);
+//  if Msg.Active then
+
+  UpdateBorder;
+  Msg.Result := 1;
 end;
 
 procedure TUForm.WMDPIChanged(var Msg: TWMDpi);
@@ -786,7 +889,7 @@ begin
   R:=Msg.CalcSize_Params.rgrc[0]; // store values
 
   Dec(R.Top, CaptionBarHeight); //  Hide caption bar
-  if IsLEWin7 then begin
+  if IsLEWin7 and not (WindowState = wsMaximized) then begin
     BorderWidth := GetBorderSpace(bsDefault);
     BorderHeight := GetBorderSpace(bsBottom);
     //
@@ -867,6 +970,30 @@ begin
   end;
   if Msg.Result = HTTRANSPARENT then
     Msg.Result := HTCLIENT;
+end;
+
+procedure TUForm.WMSetText(var Msg: TWMSetText);
+var
+  dwStyle: DWORD;
+begin
+  DisableWindowPaint(dwStyle);
+  inherited;
+  EnableWindowPaint(dwStyle);
+
+  UpdateBorder;
+  Msg.Result := 1;
+end;
+
+procedure TUForm.CMMouseEnter(var Msg: TMessage);
+begin
+  inherited;
+  UpdateBorder;
+end;
+
+procedure TUForm.CMMouseLeave(var Msg: TMessage);
+begin
+  inherited;
+  UpdateBorder;
 end;
 {$ENDREGION}
 

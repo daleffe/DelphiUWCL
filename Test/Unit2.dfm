@@ -18,14 +18,23 @@ object Form2: TForm2
     Left = 0
     Top = 0
     Width = 635
+    Height = 32
     Caption = '                    Caption bar'
+    DoubleBuffered = True
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWhite
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
+    ParentDoubleBuffered = False
     ParentFont = False
     TabOrder = 0
+    BackColors.Enabled = False
+    BackColors.Color = clBlack
+    BackColors.LightColor = 15921906
+    BackColors.DarkColor = 2829099
+    BackColors.FocusedLightColor = 14120960
+    BackColors.FocusedDarkColor = 1525760
     UseSystemCaptionColor = True
   end
   object panelRibbon: TUScrollBox
@@ -39,10 +48,9 @@ object Form2: TForm2
     BevelEdges = []
     BevelInner = bvNone
     BevelOuter = bvNone
-    Color = 3355443
+    Color = 14342874
     ParentColor = False
     TabOrder = 1
-    StyleElements = []
     AniSet.AniKind = akOut
     AniSet.AniFunctionKind = afkQuartic
     AniSet.DelayStartTime = 0
@@ -77,6 +85,5 @@ object Form2: TForm2
     ParentColor = False
     ParentCtl3D = False
     TabOrder = 3
-    StyleElements = []
   end
 end

@@ -32,6 +32,7 @@ type
     FMin: Integer;
     FMax: Integer;
     FValue: Integer;
+    FShowCenter: Boolean;
 
     // Events
     FOnChange: TNotifyEvent;
@@ -49,11 +50,13 @@ type
     procedure SetMin(const Value: Integer);
     procedure SetMax(const Value: Integer);
     procedure SetValue(const Value: Integer);
+    procedure SetShowCenter(const Value: Boolean);
 
     // Messages
     procedure WMSetFocus(var Msg: TWMSetFocus); message WM_SETFOCUS;
     procedure WMKillFocus(var Msg: TWMKillFocus); message WM_KILLFOCUS;
     procedure WMEraseBkgnd(var Msg: TWMEraseBkgnd); message WM_ERASEBKGND;
+    procedure WMNCHitTest(var Msg: TWMNCHitTest); message WM_NCHITTEST;
     procedure WMLButtonDown(var Msg: TWMLButtonDown); message WM_LBUTTONDOWN;
     procedure WMMouseMove(var Msg: TWMMouseMove); message WM_MOUSEMOVE;
     procedure WMLButtonUp(var Msg: TWMLButtonUp); message WM_LBUTTONUP;
@@ -84,6 +87,7 @@ type
     property Min: Integer read FMin write SetMin default 0;
     property Max: Integer read FMax write SetMax default 100;
     property Value: Integer read FValue write SetValue default 0;
+    property ShowCenter: Boolean read FShowCenter write SetShowCenter default False;
 
     // Events
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
@@ -111,7 +115,7 @@ uses
 constructor TUSlider.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  ControlStyle := ControlStyle - [csDoubleClicks{, csOpaque}];
+//  ControlStyle := ControlStyle - [csDoubleClicks{, csOpaque}];
 
   //  New properties
   LCurWidth := 8;
@@ -127,6 +131,7 @@ begin
   FMin := 0;
   FMax := 100;
   FValue := 0;
+  FShowCenter := False;
 
   FBackColor := TUThemeFocusableControlStateColors.Create;
   FBackColor.Assign(SLIDER_BACK);
@@ -294,9 +299,31 @@ begin
   end;
 end;
 
+procedure TUSlider.SetShowCenter(const Value: Boolean);
+begin
+  if Value <> FShowCenter then begin
+    FShowCenter := Value;
+    Repaint;
+  end;
+end;
+
 procedure TUSlider.Paint;
+var
+  LCenter: Integer;
+  LSize: Integer;
 begin
 //  inherited;
+  if Orientation = oHorizontal then begin
+    LCenter := -1 + (Width div 2);
+    LSize := Height div 5;
+  end
+  else begin
+    LCenter := -1 + (Height div 2);
+    LSize := Width div 5;
+  end;
+  if LSize < 2 then
+    LSize := 2;
+
   ParentColor := True;
   // Paint background
   Canvas.Brush.Style := bsSolid;
@@ -310,6 +337,23 @@ begin
   // Paint normal part
   Canvas.Brush.Handle := CreateSolidBrushWithAlpha(LBackColor, 255);
   Canvas.FillRect(LNormalRect);
+
+  // Paint center if enabled
+  if ShowCenter then begin
+    Canvas.Brush.Handle := CreateSolidBrushWithAlpha(GetTextColorFromBackground(Color), 255);
+    if Orientation = oHorizontal then begin
+      Canvas.MoveTo(LCenter, 0); // top
+      Canvas.LineTo(LCenter, LSize);
+      Canvas.MoveTo(LCenter, Height - LSize); // bottom
+      Canvas.LineTo(LCenter, Height);
+    end
+    else begin
+      Canvas.MoveTo(0, LCenter); // left
+      Canvas.LineTo(LSize, LCenter);
+      Canvas.MoveTo(Width - LSize, LCenter); // right
+      Canvas.LineTo(Width, LCenter);
+    end;
+  end;
 
   // Paint cursor
   Canvas.Pen.Color := LCurColor;
@@ -402,6 +446,16 @@ begin
   Msg.Result := 1;
 end;
 
+procedure TUSlider.WMNCHitTest(var Msg: TWMNCHitTest);
+begin
+  inherited;
+  if IsDesigning then
+    Exit;
+
+  if not FIsSliding then
+    Msg.Result := HTTRANSPARENT;  //  Send event to parent
+end;
+
 procedure TUSlider.WMLButtonDown(var Msg: TWMLButtonDown);
 var
   TempValue: Integer;
@@ -444,6 +498,9 @@ procedure TUSlider.WMMouseMove(var Msg: TWMMouseMove);
 var
   TempValue: Integer;
 begin
+  if Assigned(Parent) and (Parent is TUCustomControl) then
+    Parent.Invalidate;
+
   if not Enabled then
     Exit;
 

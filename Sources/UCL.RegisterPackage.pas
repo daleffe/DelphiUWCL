@@ -31,11 +31,15 @@ uses
   UCL.PopupMenu,
   UCL.QuickButton,
   UCL.TitleBar,
-  UCL.Shadow;
+  UCL.Shadow,
+  UCL.MenuAnyWhere;
 
 procedure Register;
 begin
   RegisterClass(TUForm);
+  RegisterClass(TUCaptionBar);
+  //RegisterClass(TUMenuAnyWhere);
+  //RegisterNoIcon([TUMenuAnyWhere]);
   RegisterComponents('Universal CL', [
     TUThemeManager,
     TUForm,

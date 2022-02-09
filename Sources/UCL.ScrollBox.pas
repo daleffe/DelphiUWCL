@@ -85,6 +85,7 @@ type
     function IsLoading: Boolean; inline;
     function IsDesigning: Boolean; inline;
 
+    function CanShowMiniSB(var SB: TControlScrollBar): Boolean; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -327,6 +328,25 @@ end;
 
 //  CUSTOM METHODS
 
+function TUScrollBox.CanShowMiniSB(var SB: TControlScrollBar): Boolean;
+var
+  ControlSize: Integer;
+begin
+  Result := True;
+  //  Get orientation values
+  if ScrollOrientation = oVertical then begin
+    SB := VertScrollBar;
+    ControlSize := Height;
+  end
+  else begin
+    SB := HorzScrollBar;
+    ControlSize := Width;
+  end;
+
+  if (SB.Range = 0) or (SB.Range <= ControlSize) then
+    Result := False;
+end;
+
 procedure TUScrollBox.ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND});
 begin
   inherited;
@@ -348,20 +368,13 @@ var
   ControlSize: Integer;
   ThumbPos, ThumbSize: Integer;
 begin
-  //  Get orientation values
-  if ScrollOrientation = oVertical then begin
-    SB := VertScrollBar;
-    ControlSize := Height;
-  end
-  else begin
-    SB := HorzScrollBar;
-    ControlSize := Width;
-  end;
-
-  if (SB.Range = 0) or (SB.Range < ControlSize) then begin
-    MiniSB.Visible := False;
+  if not CanShowMiniSB(SB) then
     Exit;
-  end;
+
+  if ScrollOrientation = oVertical then
+    ControlSize := Height
+  else
+    ControlSize := Width;
 
   ThumbSize := Round(ControlSize * ControlSize / SB.Range);
   ThumbPos := Round(ControlSize * SB.Position / SB.Range);
@@ -373,11 +386,14 @@ begin
 end;
 
 procedure TUScrollBox.SetMiniSBVisible(IsVisible: Boolean);
+var
+  SB: TControlScrollBar;
 begin
-  MiniSB.Visible := IsVisible;
+  MiniSB.Visible := IsVisible and CanShowMiniSB(SB);
   if IsVisible then begin
     UpdateMiniSB;
-    MiniSB.BringToFront;
+    if MiniSB.Visible then
+      MiniSB.BringToFront;
   end;
 end;
 
@@ -413,7 +429,7 @@ begin
     case Align of
       alTop: begin
         // we need to check top, left and right borders
-        if (P.Y < BorderSpace) or (P.X < BorderSpace) or (Width - P.X < BorderSpace) then begin
+        if (Self.Top + P.Y < BorderSpace) or (Self.Left + P.X < BorderSpace) or (Self.Width - P.X < BorderSpace) then begin
 //          SendLeavingMsg;
           Msg.Result := HTTRANSPARENT;
         end;
@@ -421,7 +437,7 @@ begin
 
       alBottom: begin
         // we need to check bottom, left and right borders
-        if (Height - P.Y < BorderSpace) or (P.X < BorderSpace) or (Width - P.X < BorderSpace) then begin
+        if (Self.Height - P.Y < BorderSpace) or (Self.Left + P.X < BorderSpace) or (Self.Width - P.X < BorderSpace) then begin
 //          SendLeavingMsg;
           Msg.Result := HTTRANSPARENT;
         end;
@@ -429,7 +445,7 @@ begin
 
       alLeft: begin
         // we need to check left, top and bottom borders
-        if (P.X < BorderSpace) or (P.Y < BorderSpace) or (Height - P.Y < BorderSpace) then begin
+        if (Self.Left + P.X < BorderSpace) or (Self.Top + P.Y < BorderSpace) or (Self.Height - P.Y < BorderSpace) then begin
 //          SendLeavingMsg;
           Msg.Result := HTTRANSPARENT;
         end;
@@ -437,7 +453,7 @@ begin
 
       alRight: begin
         // we need to check right, top and bottom borders
-        if (Width - P.X < BorderSpace) or (P.Y < BorderSpace) or (Height - P.Y < BorderSpace) then begin
+        if (Self.Width - P.X < BorderSpace) or (Self.Top + P.Y < BorderSpace) or (Self.Height - P.Y < BorderSpace) then begin
 //          SendLeavingMsg;
           Msg.Result := HTTRANSPARENT;
         end;
@@ -462,7 +478,7 @@ begin
       SetOldSBVisible(False);
     if ScrollBarStyle = sbsMini then
       SetMiniSBVisible(True);
-    FScrollBarTimer.Enabled := True;
+    FScrollBarTimer.Enabled := MiniSB.Visible;
   end;
 
   inherited;
@@ -476,8 +492,8 @@ end;
 }
 procedure TUScrollBox.CMMouseEnter(var Msg: TMessage);
 begin
-  if (Win32MajorVersion <> 10) and CanFocus then
-    SetFocus;
+//  if (Win32MajorVersion <> 10) and CanFocus then
+//    SetFocus;
 
 //  if not FMouseInControl and PtInRect(GetClientRect, ScreenToClient(Mouse.CursorPos)) then
   FMouseInControl := True;
@@ -615,11 +631,18 @@ begin
 end;
 
 procedure TUScrollBox.ScrollBar_OnTimer(Sender: TObject);
+var
+  LForm: TCustomForm;
 begin
-  if FMouseInControl and (ScrollBarStyle = sbsMini) then begin
+  LForm := GetParentForm(Self);
+  if (LForm <> Nil) and (LForm is TUForm) and not TUForm(LForm).IsActive then begin
     FScrollBarTimer.Enabled := False;
-    SetMiniSBVisible(False);
+    Exit;
   end;
+
+  if FMouseInControl and (ScrollBarStyle = sbsMini) and MiniSB.Visible then
+    SetMiniSBVisible(False);
+  FScrollBarTimer.Enabled := False;
 end;
 
 end.

@@ -51,7 +51,8 @@ uses
   UCL.QuickButton,
   UCL.PopupMenu,
   UCL.RadioButton,
-  UCL.Shadow;
+  UCL.Shadow,
+  UCL.GraphicSlider;
 
 type
   TformDemo = class(TUForm)
@@ -158,6 +159,9 @@ type
     linkDisabled: TUHyperLink;
     linkCustomColor: TUHyperLink;
     linkConnected: TUHyperLink;
+    UGraphicSlider1: TUGraphicSlider;
+    UItemButton1: TUItemButton;
+    ImageList1: TImageList;
     procedure buttonReloadSettingsClick(Sender: TObject);
     procedure buttonAniToRightClick(Sender: TObject);
     procedure buttonRandomProgressClick(Sender: TObject);
@@ -472,35 +476,19 @@ begin
 end;
 
 procedure TformDemo.comboAppDPIChange(Sender: TObject);
-var
-  NewPPI: Integer;
 begin
-  // 24 ppi intervals
-  case comboAppDPI.ItemIndex of
-    1: NewPPI := 120;
-    2: NewPPI := 144;
-    3: NewPPI := 168;
-    4: NewPPI := 192;
-    else
-      NewPPI := 96;
-  end;
-
-  Self.PPI := NewPPI;
-  Self.ScaleForPPI(NewPPI);
+  FormScale(comboAppDPI.ItemIndex);
 
   if formAppList <> Nil then begin
-    formAppList.PPI := NewPPI;
-    formAppList.ScaleForPPI(NewPPI);
+    formAppList.FormScale(comboAppDPI.ItemIndex);
   end;
 
   if formLoginDialog <> Nil then begin
-    formLoginDialog.PPI := NewPPI;
-    formLoginDialog.ScaleForPPI(NewPPI);
+    formLoginDialog.FormScale(comboAppDPI.ItemIndex);
   end;
 
   if formImageBackground <> Nil then begin
-    formImageBackground.PPI := NewPPI;
-    formImageBackground.ScaleForPPI(NewPPI);
+    formImageBackground.FormScale(comboAppDPI.ItemIndex);
   end;
 end;
 

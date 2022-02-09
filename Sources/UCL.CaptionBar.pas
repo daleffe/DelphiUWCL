@@ -41,6 +41,7 @@ type
     // Setters
     procedure SetBackColors(Value: TUThemeCaptionBarColorSet);
     procedure SetMenu(Value: TMainMenu);
+    procedure SetMenuController(Value: TUMenuAnyWhere);
     procedure SetMenuOffset(Value: Integer);
     procedure SetShowMenu(Value: Boolean);
     procedure SetCaptionHeight(Value: Integer);
@@ -83,6 +84,7 @@ type
   published
     property BackColors: TUThemeCaptionBarColorSet read FBackColors write SetBackColors;
     property Menu: TMainMenu read FMenu write SetMenu;
+    property MenuController: TUMenuAnyWhere read FMenuController write SetMenuController stored True;
     property MenuOffset: Integer read FMenuOffset write SetMenuOffset default 0;
 
     property Collapsed: Boolean read FCollapsed write SetCollapsed default False;
@@ -123,6 +125,7 @@ type
 constructor TUCaptionBar.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  ControlStyle := ControlStyle + [csMenuEvents];
   //
   FMenu := Nil;
   FOldWidth := -1;
@@ -137,7 +140,7 @@ begin
   FBackColors.Assign(CAPTIONBAR_BACK);
   FBackColors.OnChange := BackColor_OnChange;
 
-  FMenuController := TUMenuAnyWhere.Create(Self);
+  FMenuController := TUMenuAnyWhere.Create; // (Self);
   FMenuController.Control := Self;
 
   Align := alTop;
@@ -365,6 +368,11 @@ begin
     FMenu := Value;
     FMenuController.Menu := Value;
   end;
+end;
+
+procedure TUCaptionBar.SetMenuController(Value: TUMenuAnyWhere);
+begin
+  FMenuController.Assign(Value);
 end;
 
 procedure TUCaptionBar.SetMenuOffset(Value: Integer);

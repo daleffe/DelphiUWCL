@@ -28,7 +28,7 @@ type
     FAutoSize: Boolean;
     //FButtonState: TUControlState;
     FChecked: Boolean;
-    FGroup: string;
+    FGroup: String;
     FCustomActiveColor: TColor;
     FMultiline,
     FTransparent,
@@ -84,7 +84,7 @@ type
     property AutoSize: Boolean read FAutoSize write SetAutoSize default False;
     //property ButtonState: TUControlState read FButtonState write SetButtonState default csNone;
     property Checked: Boolean read FChecked write SetChecked default False;
-    property Group: string read FGroup write FGroup;
+    property Group: String read FGroup write FGroup;
     property CustomActiveColor: TColor read FCustomActiveColor write FCustomActiveColor default clDefault;
     property Multiline: Boolean read FMultiline write SetMultiline default False;
     property Transparent: Boolean read FTransparent write SetTransparent default True;
@@ -92,7 +92,7 @@ type
     //
     property Caption;
     property Color;
-    property ParentColor default true;
+    property ParentColor default True;
     property Height default 30;
     property Width default 180;
     property TabOrder;

@@ -132,6 +132,7 @@ type
   TUThemeManager = class(TUCustomThemeManager);
 
 function GetCommonThemeManager: TUCustomThemeManager;
+function SelectThemeManager(Control: TComponent): TUCustomThemeManager; overload; {$IFDEF RELEASE} inline; {$ENDIF}
 function SelectThemeManager(Control: TControl): TUCustomThemeManager; overload; {$IFDEF RELEASE} inline; {$ENDIF}
 function SelectThemeManager(Control: TMenu): TUCustomThemeManager; overload; {$IFDEF RELEASE} inline; {$ENDIF}
 function SelectAccentColor(const TM: TUCustomThemeManager; CustomAccentColor: TColor): TColor; {$IFDEF RELEASE} inline; {$ENDIF}
@@ -168,6 +169,17 @@ end;
 //  else
 //    Result := Nil;
 //end;
+
+function SelectThemeManager(Control: TComponent): TUCustomThemeManager;
+var
+  ThemedComponent: IUThemedComponent;
+begin
+  Result:=GetCommonThemeManager;
+  if TUCustomThemeManager.IsThemingAvailable(Control) then begin
+    if Supports(Control, IUThemedComponent, ThemedComponent) and (ThemedComponent <> Nil) and ThemedComponent.IsCustomThemed then
+      Result:=ThemedComponent.CustomThemeManager;
+  end;
+end;
 
 function SelectThemeManager(Control: TControl): TUCustomThemeManager;
 var

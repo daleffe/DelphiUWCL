@@ -24,6 +24,7 @@ type
     procedure SetTextKind(const Value: TUTextKind);
     procedure SetUseAccentColor(const Value: Boolean);
 
+    procedure WMNCHitTest(var Msg: TWMNCHitTest); message WM_NCHITTEST;
     procedure CMEnabledChanged(var Msg: TMessage); message CM_ENABLEDCHANGED;
 
   protected
@@ -206,6 +207,15 @@ begin
     FUseAccentColor := Value;
     UpdateTheme;
   end;
+end;
+
+procedure TUText.WMNCHitTest(var Msg: TWMNCHitTest);
+begin
+  inherited;
+  if IsDesigning then
+    Exit;
+
+  Msg.Result := HTTRANSPARENT;  //  Send event to parent
 end;
 
 procedure TUText.CMEnabledChanged(var Msg: TMessage);

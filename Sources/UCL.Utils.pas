@@ -35,6 +35,7 @@ procedure PaintBlendBitmap(const Canvas: TCanvas; DestRect: TRect; const BlendBi
 
 // OS
 function CheckMaxWin32Version(AMajor: Integer; AMinor: Integer = 0): Boolean;
+function GetTimeStamp: String;
 
 // RTTI
 function IsPropAvailable(Instance: TObject; Name: String): Boolean;
@@ -274,6 +275,12 @@ function CheckMaxWin32Version(AMajor: Integer; AMinor: Integer = 0): Boolean;
 begin
   Result := (Win32MajorVersion <= AMajor) or
             ((Win32MajorVersion = AMajor) and (Win32MinorVersion <= AMinor));
+end;
+
+function GetTimeStamp: String;
+begin
+  DateTimeToString(Result, {FormatSettings.ShortDateFormat + ' ' + }{$IF CompilerVersion > 29}FormatSettings.{$IFEND}LongTimeFormat + '.zzz', Now);
+  Result := Result + ' - ';
 end;
 
 function IsPropAvailable(Instance: TObject; Name: String): Boolean;

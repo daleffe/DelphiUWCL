@@ -32,6 +32,7 @@ type
     FMin: Integer;
     FMax: Integer;
     FValue: Integer;
+    FShowCenter: Boolean;
 
     // Events
     FOnChange: TNotifyEvent;
@@ -49,12 +50,14 @@ type
     procedure SetMin(const Value: Integer);
     procedure SetMax(const Value: Integer);
     procedure SetValue(const Value: Integer);
+    procedure SetShowCenter(const Value: Boolean);
 
     // Messages
     procedure CMEnabledChanged(var Msg: TMessage); message CM_ENABLEDCHANGED;
     procedure CMMouseEnter(var Msg: TMessage); message CM_MOUSEENTER;
     procedure CMMouseLeave(var Msg: TMessage); message CM_MOUSELEAVE;
 
+    procedure WMNCHitTest(var Msg: TWMNCHitTest); message WM_NCHITTEST;
     procedure WMLButtonDown(var Msg: TWMLButtonDown); message WM_LBUTTONDOWN;
     procedure WMMouseMove(var Msg: TWMMouseMove); message WM_MOUSEMOVE;
     procedure WMLButtonUp(var Msg: TWMLButtonUp); message WM_LBUTTONUP;
@@ -81,6 +84,7 @@ type
     property Min: Integer read FMin write SetMin default 0;
     property Max: Integer read FMax write SetMax default 100;
     property Value: Integer read FValue write SetValue default 0;
+    property ShowCenter: Boolean read FShowCenter write SetShowCenter default False;
 
     // Events
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
@@ -105,7 +109,7 @@ uses
 constructor TUGraphicSlider.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  ControlStyle := ControlStyle - [csDoubleClicks];
+//  ControlStyle := ControlStyle - [csDoubleClicks];
 
   //  New properties
   LCurWidth := 8;
@@ -121,6 +125,7 @@ begin
   FMin := 0;
   FMax := 100;
   FValue := 0;
+  FShowCenter := False;
 
   FBackColor := TUThemeFocusableControlStateColors.Create;
   FBackColor.Assign(SLIDER_BACK);
@@ -286,19 +291,58 @@ begin
   end;
 end;
 
+procedure TUGraphicSlider.SetShowCenter(const Value: Boolean);
+begin
+  if Value <> FShowCenter then begin
+    FShowCenter := Value;
+    Repaint;
+  end;
+end;
+
 procedure TUGraphicSlider.Paint;
+var
+  LCenter: Integer;
+  LSize: Integer;
 begin
 //  inherited;
 
-  //  Paint active part
+  if Orientation = oHorizontal then begin
+    LCenter := -1 + (Width div 2);
+    LSize := Height div 5;
+  end
+  else begin
+    LCenter := -1 + (Height div 2);
+    LSize := Width div 5;
+  end;
+  if LSize < 2 then
+    LSize := 2;
+
+  // Paint active part
   Canvas.Brush.Handle := CreateSolidBrushWithAlpha(LAccentColor, 255);
   Canvas.FillRect(LActiveRect);
 
-  //  Paint normal part
+  // Paint normal part
   Canvas.Brush.Handle := CreateSolidBrushWithAlpha(LBackColor, 255);
   Canvas.FillRect(LNormalRect);
 
-  //  Paint cursor
+  // Paint center if enabled
+  if ShowCenter then begin
+    Canvas.Brush.Handle := CreateSolidBrushWithAlpha(GetTextColorFromBackground(LBackColor), 255);
+    if Orientation = oHorizontal then begin
+      Canvas.MoveTo(LCenter, 0); // top
+      Canvas.LineTo(LCenter, LSize);
+      Canvas.MoveTo(LCenter, Height - LSize); // bottom
+      Canvas.LineTo(LCenter, Height);
+    end
+    else begin
+      Canvas.MoveTo(0, LCenter); // left
+      Canvas.LineTo(LSize, LCenter);
+      Canvas.MoveTo(Width - LSize, LCenter); // right
+      Canvas.LineTo(Width, LCenter);
+    end;
+  end;
+
+  // Paint cursor
   Canvas.Pen.Color := LCurColor;
   Canvas.Brush.Handle := CreateSolidBrushWithAlpha(LCurColor, 255);
   Canvas.RoundRect(LCurRect, LCurCorner, LCurCorner);
@@ -337,6 +381,9 @@ end;
 
 procedure TUGraphicSlider.CMMouseEnter(var Msg: TMessage);
 begin
+//  if Assigned(Parent) and (Parent is TUCustomControl) then
+//    Parent.Perform(Msg.Msg, Msg.WParam, Msg.LParam);
+
   if not Enabled then
     Exit;
   //
@@ -351,6 +398,16 @@ begin
   //
   ControlState := csNone;
   inherited;
+end;
+
+procedure TUGraphicSlider.WMNCHitTest(var Msg: TWMNCHitTest);
+begin
+  inherited;
+  if IsDesigning then
+    Exit;
+
+  if not FIsSliding then
+    Msg.Result := HTTRANSPARENT;  //  Send event to parent
 end;
 
 procedure TUGraphicSlider.WMLButtonDown(var Msg: TWMLButtonDown);
@@ -390,6 +447,9 @@ procedure TUGraphicSlider.WMMouseMove(var Msg: TWMMouseMove);
 var
   TempValue: Integer;
 begin
+  if Assigned(Parent) and (Parent is TUCustomControl) then
+    Parent.Invalidate;
+
   if not Enabled then
     Exit;
 
