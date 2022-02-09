@@ -307,8 +307,8 @@ type
     procedure WndProc(var Message: TMessage); override;
   end;
 
-var
-  WmMessageToString: TWmMessageToString;
+//var
+//  WmMessageToString: TWmMessageToString;
 
 function GetTimeStamp: String;
 begin
@@ -2684,7 +2684,7 @@ var
   LPopupList: TPopupList;
 
 initialization
-  WmMessageToString := TWmMessageToString.Create;
+//  WmMessageToString := TWmMessageToString.Create;
   if not ModuleIsPackage and not (PopupList is TUPopupList) then begin
     LPopupList := TUPopupList.Create;
     //LPopupList.Assign(PopupList);
@@ -2701,6 +2701,6 @@ finalization
     PopupList := LPopupList;
     LPopupList := Nil;
   end;
-  FreeAndNil(WmMessageToString);
+//  FreeAndNil(WmMessageToString);
 
 end.
