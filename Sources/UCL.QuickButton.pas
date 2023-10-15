@@ -473,8 +473,8 @@ procedure TUQuickButton.WMLButtonDown(var Msg: TWMLButtonDown);
 begin
   if Enabled then begin
     ButtonState := csPress;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUQuickButton.WMLButtonUp(var Msg: TWMLButtonUp);
@@ -539,16 +539,16 @@ procedure TUQuickButton.CMMouseEnter(var Msg: TMessage);
 begin
   if Enabled then begin
     ButtonState := csHover;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUQuickButton.CMMouseLeave(var Msg: TMessage);
 begin
   if Enabled then begin
     ButtonState := csNone;
-    inherited;
   end;
+  inherited;
 end;
 
 end.

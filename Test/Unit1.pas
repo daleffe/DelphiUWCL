@@ -18,7 +18,12 @@ uses
   UCL.SymbolButton,
   UCL.Separator,
   UCL.ScrollBox,
-  Menus, ImgList, ActnList, AdvPreviewMenu, AdvMenus, UCL.ItemButton;
+  Menus,
+  ImgList,
+  ImageList,
+  ActnList,
+  Actions,
+  UCL.ItemButton;
 
 type
   TForm1 = class(TUForm)
@@ -159,16 +164,6 @@ type
     mnuLanguage: TMenuItem;
     PomocMenu: TMenuItem;
     Oprogramie1: TMenuItem;
-    AdvPopupMenu1: TAdvPopupMenu;
-    AdvMainMenu1: TAdvMainMenu;
-    test1: TMenuItem;
-    thisisatest1: TMenuItem;
-    theseconditem1: TMenuItem;
-    N9: TMenuItem;
-    fourthitem1: TMenuItem;
-    AdvMenuStyler1: TAdvMenuStyler;
-    somesubmenu1: TMenuItem;
-    seconditem1: TMenuItem;
     UScrollBox1: TUScrollBox;
     UItemButton1: TUItemButton;
     UItemButton2: TUItemButton;

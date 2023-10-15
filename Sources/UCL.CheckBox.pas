@@ -463,8 +463,8 @@ begin
   if Enabled then begin
     if not Focused and CanFocus then
       SetFocus;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUCheckBox.WMLButtonUp(var Msg: TWMLButtonUp);
@@ -491,16 +491,16 @@ procedure TUCheckBox.CMMouseEnter(var Msg: TMessage);
 begin
   if Enabled then begin
     Invalidate;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUCheckBox.CMMouseLeave(var Msg: TMessage);
 begin
   if Enabled then begin
     Invalidate;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUCheckBox.CMEnabledChanged(var Msg: TMessage);

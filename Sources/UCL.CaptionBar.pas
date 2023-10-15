@@ -544,13 +544,10 @@ end;
 
 procedure TUCaptionBar.WMEraseBkgnd(var Msg: TWmEraseBkgnd);
 begin
-  Msg.Result := 1;
+  Msg.Result := 1; // eat inherited stuff
 end;
 
 procedure TUCaptionBar.WMLButtonDblClk(var Msg: TWMLButtonDblClk);
-var
-  ParentForm: TCustomForm;
-  Restore: Boolean;
 
   procedure SetMaximizeButtonCaption(const IsNormal: Boolean; const NormalCaption, RestoreCaption: String);
   var
@@ -573,6 +570,9 @@ var
     end;
   end;
 
+var
+  ParentForm: TCustomForm;
+  Restore: Boolean;
 begin
   inherited;
   if IsDesigning then

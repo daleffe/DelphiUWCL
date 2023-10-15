@@ -212,16 +212,16 @@ procedure TUHyperLink.WMLButtonDblClk(var Msg: TWMLButtonDblClk);
 begin
   if Enabled then begin
     ButtonState := csPress;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUHyperLink.WMLButtonDown(var Msg: TWMLButtonDown);
 begin
   if Enabled then begin
     ButtonState := csPress;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUHyperLink.WMLButtonUp(var Msg: TWMLButtonUp);
@@ -230,24 +230,24 @@ begin
     if OpenLink then
       ShellExecute(0, 'open', PWideChar(URL), '', '', SW_SHOWNORMAL);
     ButtonState := csHover;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUHyperLink.CMMouseEnter(var Msg: TMessage);
 begin
   if Enabled then begin
     ButtonState := csHover;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUHyperLink.CMMouseLeave(var Msg: TMessage);
 begin
   if Enabled then begin
     ButtonState := csNone;
-    inherited;
   end;
+  inherited;
 end;
 
 //  GROUP PROPERTY CHANGED

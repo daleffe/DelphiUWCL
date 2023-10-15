@@ -798,16 +798,16 @@ procedure TUItemButton.WMLButtonDblClk(var Msg: TWMLButtonDblClk);
 begin
   if Enabled then begin
     ButtonState := csPress;
-    inherited;
   end;
+  inherited;
 end;
 }
 procedure TUItemButton.WMLButtonDown(var Msg: TWMLButtonDown);
 begin
   if Enabled then begin
     ButtonState := csPress;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUItemButton.WMLButtonUp(var Msg: TWMLButtonUp);
@@ -879,32 +879,32 @@ procedure TUItemButton.WMSetFocus(var Msg: TWMSetFocus);
 begin
   if Enabled then begin
     ButtonState := csFocused;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUItemButton.WMKillFocus(var Msg: TWMKillFocus);
 begin
   if Enabled then begin
     ButtonState := csNone;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUItemButton.CMMouseEnter(var Msg: TMessage);
 begin
   if Enabled then begin
     ButtonState := csHover;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUItemButton.CMMouseLeave(var Msg: TMessage);
 begin
   if Enabled then begin
     ButtonState := csNone;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUItemButton.CMEnabledChanged(var Msg: TMessage);

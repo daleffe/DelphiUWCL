@@ -96,6 +96,7 @@ object Form1: TForm1
     Color = 3355443
     ParentColor = False
     TabOrder = 1
+    StyleElements = []
     ThemeManager = UThemeManager1
     AniSet.AniKind = akOut
     AniSet.AniFunctionKind = afkQuartic
@@ -123,6 +124,7 @@ object Form1: TForm1
     Color = 2039583
     ParentColor = False
     TabOrder = 2
+    StyleElements = []
     ThemeManager = UThemeManager1
     AniSet.AniKind = akOut
     AniSet.AniFunctionKind = afkCubic
@@ -137,7 +139,7 @@ object Form1: TForm1
     object UItemButton1: TUItemButton
       Left = 0
       Top = 760
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -163,7 +165,7 @@ object Form1: TForm1
     object UItemButton2: TUItemButton
       Left = 0
       Top = 720
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -189,7 +191,7 @@ object Form1: TForm1
     object UItemButton3: TUItemButton
       Left = 0
       Top = 680
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -215,7 +217,7 @@ object Form1: TForm1
     object UItemButton4: TUItemButton
       Left = 0
       Top = 640
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -241,7 +243,7 @@ object Form1: TForm1
     object UItemButton5: TUItemButton
       Left = 0
       Top = 600
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -267,7 +269,7 @@ object Form1: TForm1
     object UItemButton6: TUItemButton
       Left = 0
       Top = 560
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -293,7 +295,7 @@ object Form1: TForm1
     object UItemButton7: TUItemButton
       Left = 0
       Top = 520
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -319,7 +321,7 @@ object Form1: TForm1
     object UItemButton8: TUItemButton
       Left = 0
       Top = 480
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -345,7 +347,7 @@ object Form1: TForm1
     object UItemButton9: TUItemButton
       Left = 0
       Top = 440
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -371,7 +373,7 @@ object Form1: TForm1
     object UItemButton10: TUItemButton
       Left = 0
       Top = 400
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -397,7 +399,7 @@ object Form1: TForm1
     object UItemButton11: TUItemButton
       Left = 0
       Top = 360
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -423,7 +425,7 @@ object Form1: TForm1
     object UItemButton12: TUItemButton
       Left = 0
       Top = 320
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -449,7 +451,7 @@ object Form1: TForm1
     object UItemButton13: TUItemButton
       Left = 0
       Top = 280
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -475,7 +477,7 @@ object Form1: TForm1
     object UItemButton14: TUItemButton
       Left = 0
       Top = 240
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -501,7 +503,7 @@ object Form1: TForm1
     object UItemButton15: TUItemButton
       Left = 0
       Top = 200
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -527,7 +529,7 @@ object Form1: TForm1
     object UItemButton16: TUItemButton
       Left = 0
       Top = 160
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -553,7 +555,7 @@ object Form1: TForm1
     object UItemButton17: TUItemButton
       Left = 0
       Top = 120
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -579,7 +581,7 @@ object Form1: TForm1
     object UItemButton18: TUItemButton
       Left = 0
       Top = 80
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -605,7 +607,7 @@ object Form1: TForm1
     object UItemButton19: TUItemButton
       Left = 0
       Top = 40
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -631,7 +633,7 @@ object Form1: TForm1
     object UItemButton20: TUItemButton
       Left = 0
       Top = 0
-      Width = 276
+      Width = 287
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -653,8 +655,6 @@ object Form1: TForm1
       RightIcon = #59198
       CustomActiveColor = clNone
       Caption = 'UItemButton1'
-      ExplicitLeft = 3
-      ExplicitTop = 6
     end
   end
   object UThemeManager1: TUThemeManager
@@ -748,7 +748,7 @@ object Form1: TForm1
     Left = 456
     Top = 112
     Bitmap = {
-      494C01012C003100E80014001400FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01012C003100040014001400FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000050000000F00000000100200000000000002C
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -3774,102 +3774,5 @@ object Form1: TForm1
         Action = InfoAct
       end
     end
-  end
-  object AdvPopupMenu1: TAdvPopupMenu
-    Version = '2.5.3.1'
-    Left = 328
-    Top = 208
-  end
-  object AdvMainMenu1: TAdvMainMenu
-    Images = ActImgLst
-    MenuStyler = AdvMenuStyler1
-    Version = '2.5.3.1'
-    Left = 240
-    Top = 208
-    object test1: TMenuItem
-      Caption = 'test'
-      object thisisatest1: TMenuItem
-        Caption = 'this is a test'
-        ImageIndex = 1
-      end
-      object theseconditem1: TMenuItem
-        Caption = 'the second item'
-        ImageIndex = 3
-        object somesubmenu1: TMenuItem
-          Caption = 'some submenu'
-        end
-        object seconditem1: TMenuItem
-          Caption = 'second item'
-        end
-      end
-      object N9: TMenuItem
-        Caption = '-'
-      end
-      object fourthitem1: TMenuItem
-        Caption = 'fourth item'
-        ImageIndex = 10
-      end
-    end
-  end
-  object AdvMenuStyler1: TAdvMenuStyler
-    AntiAlias = aaNone
-    Background.Position = bpCenter
-    SelectedItem.Font.Charset = DEFAULT_CHARSET
-    SelectedItem.Font.Color = clWindowText
-    SelectedItem.Font.Height = -12
-    SelectedItem.Font.Name = 'Segoe UI'
-    SelectedItem.Font.Style = []
-    SelectedItem.NotesFont.Charset = DEFAULT_CHARSET
-    SelectedItem.NotesFont.Color = clWindowText
-    SelectedItem.NotesFont.Height = -9
-    SelectedItem.NotesFont.Name = 'Segoe UI'
-    SelectedItem.NotesFont.Style = []
-    RootItem.Font.Charset = DEFAULT_CHARSET
-    RootItem.Font.Color = clMenuText
-    RootItem.Font.Height = -12
-    RootItem.Font.Name = 'Segoe UI'
-    RootItem.Font.Style = []
-    Glyphs.SubMenu.Data = {
-      5A000000424D5A000000000000003E0000002800000004000000070000000100
-      0100000000001C0000000000000000000000020000000200000000000000FFFF
-      FF0070000000300000001000000000000000100000003000000070000000}
-    Glyphs.Check.Data = {
-      7E000000424D7E000000000000003E0000002800000010000000100000000100
-      010000000000400000000000000000000000020000000200000000000000FFFF
-      FF00FFFF0000FFFF0000FFFF0000FFFF0000FDFF0000F8FF0000F07F0000F23F
-      0000F71F0000FF8F0000FFCF0000FFEF0000FFFF0000FFFF0000FFFF0000FFFF
-      0000}
-    Glyphs.Radio.Data = {
-      7E000000424D7E000000000000003E0000002800000010000000100000000100
-      010000000000400000000000000000000000020000000200000000000000FFFF
-      FF00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FC3F0000F81F0000F81F
-      0000F81F0000F81F0000FC3F0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF
-      0000}
-    SideBar.Font.Charset = DEFAULT_CHARSET
-    SideBar.Font.Color = clWhite
-    SideBar.Font.Height = -19
-    SideBar.Font.Name = 'Tahoma'
-    SideBar.Font.Style = [fsBold, fsItalic]
-    SideBar.Image.Position = bpCenter
-    SideBar.Background.Position = bpCenter
-    SideBar.SplitterColorTo = clBlack
-    Separator.GradientType = gtBoth
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clMenuText
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = []
-    NotesFont.Charset = DEFAULT_CHARSET
-    NotesFont.Color = clGray
-    NotesFont.Height = -9
-    NotesFont.Name = 'Segoe UI'
-    NotesFont.Style = []
-    ButtonAppearance.CaptionFont.Charset = DEFAULT_CHARSET
-    ButtonAppearance.CaptionFont.Color = clWindowText
-    ButtonAppearance.CaptionFont.Height = -11
-    ButtonAppearance.CaptionFont.Name = 'Segoe UI'
-    ButtonAppearance.CaptionFont.Style = []
-    Left = 88
-    Top = 208
   end
 end

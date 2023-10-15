@@ -473,8 +473,8 @@ begin
   if Enabled then begin
     if not Focused and CanFocus then
       SetFocus;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TURadioButton.WMLButtonUp(var Msg: TWMLButtonUp);
@@ -501,16 +501,16 @@ procedure TURadioButton.CMMouseEnter(var Msg: TMessage);
 begin
   if Enabled then begin
     Invalidate;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TURadioButton.CMMouseLeave(var Msg: TMessage);
 begin
   if Enabled then begin
     Invalidate;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TURadioButton.CMEnabledChanged(var Msg: TMessage);
