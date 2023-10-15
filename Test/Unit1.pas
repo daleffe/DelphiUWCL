@@ -18,7 +18,7 @@ uses
   UCL.SymbolButton,
   UCL.Separator,
   UCL.ScrollBox,
-  Menus, ImgList, ActnList, AdvPreviewMenu, AdvMenus;
+  Menus, ImgList, ActnList, AdvPreviewMenu, AdvMenus, UCL.ItemButton;
 
 type
   TForm1 = class(TUForm)
@@ -169,6 +169,27 @@ type
     AdvMenuStyler1: TAdvMenuStyler;
     somesubmenu1: TMenuItem;
     seconditem1: TMenuItem;
+    UScrollBox1: TUScrollBox;
+    UItemButton1: TUItemButton;
+    UItemButton2: TUItemButton;
+    UItemButton3: TUItemButton;
+    UItemButton4: TUItemButton;
+    UItemButton5: TUItemButton;
+    UItemButton6: TUItemButton;
+    UItemButton7: TUItemButton;
+    UItemButton8: TUItemButton;
+    UItemButton9: TUItemButton;
+    UItemButton10: TUItemButton;
+    UItemButton11: TUItemButton;
+    UItemButton12: TUItemButton;
+    UItemButton13: TUItemButton;
+    UItemButton14: TUItemButton;
+    UItemButton15: TUItemButton;
+    UItemButton16: TUItemButton;
+    UItemButton17: TUItemButton;
+    UItemButton18: TUItemButton;
+    UItemButton19: TUItemButton;
+    UItemButton20: TUItemButton;
     procedure FormCreate(Sender: TObject);
   private
   public

@@ -220,7 +220,12 @@ begin
 
   // Disabled
   if not Enabled then begin
-    BackColor := BUTTON_BACK.GetColor(TM.ThemeUsed, csDisabled);
+    if Transparent then begin
+      ParentColor := True;
+      BackColor := Color;
+    end
+    else
+      BackColor := BUTTON_BACK.GetColor(TM.ThemeUsed, csDisabled);
     BorderColor := BackColor;
     TextColor := clGray;
     DetailColor := clGray;

@@ -109,6 +109,554 @@ object Form1: TForm1
     BackColor.DarkColor = 3355443
     ScrollOrientation = oHorizontal
   end
+  object UScrollBox1: TUScrollBox
+    Left = 512
+    Top = 92
+    Width = 293
+    Height = 247
+    HorzScrollBar.Tracking = True
+    VertScrollBar.Tracking = True
+    Align = alRight
+    BevelEdges = []
+    BevelInner = bvNone
+    BevelOuter = bvNone
+    Color = 2039583
+    ParentColor = False
+    TabOrder = 2
+    ThemeManager = UThemeManager1
+    AniSet.AniKind = akOut
+    AniSet.AniFunctionKind = afkCubic
+    AniSet.DelayStartTime = 0
+    AniSet.Duration = 120
+    AniSet.Step = 10
+    AniSet.Queue = True
+    BackColor.Enabled = False
+    BackColor.Color = clBlack
+    BackColor.LightColor = 15132390
+    BackColor.DarkColor = 2039583
+    object UItemButton1: TUItemButton
+      Left = 0
+      Top = 760
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 1
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton2: TUItemButton
+      Left = 0
+      Top = 720
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 2
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton3: TUItemButton
+      Left = 0
+      Top = 680
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 3
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton4: TUItemButton
+      Left = 0
+      Top = 640
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 4
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton5: TUItemButton
+      Left = 0
+      Top = 600
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 5
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton6: TUItemButton
+      Left = 0
+      Top = 560
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 6
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton7: TUItemButton
+      Left = 0
+      Top = 520
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 7
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton8: TUItemButton
+      Left = 0
+      Top = 480
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 8
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton9: TUItemButton
+      Left = 0
+      Top = 440
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 9
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton10: TUItemButton
+      Left = 0
+      Top = 400
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 10
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton11: TUItemButton
+      Left = 0
+      Top = 360
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 11
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton12: TUItemButton
+      Left = 0
+      Top = 320
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 12
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton13: TUItemButton
+      Left = 0
+      Top = 280
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 13
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton14: TUItemButton
+      Left = 0
+      Top = 240
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 14
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton15: TUItemButton
+      Left = 0
+      Top = 200
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 15
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton16: TUItemButton
+      Left = 0
+      Top = 160
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 16
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton17: TUItemButton
+      Left = 0
+      Top = 120
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 17
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton18: TUItemButton
+      Left = 0
+      Top = 80
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 18
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton19: TUItemButton
+      Left = 0
+      Top = 40
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 19
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+    end
+    object UItemButton20: TUItemButton
+      Left = 0
+      Top = 0
+      Width = 276
+      ThemeManager = UThemeManager1
+      Align = alTop
+      DragCursor = crDefault
+      TabOrder = 20
+      IconFont.Charset = DEFAULT_CHARSET
+      IconFont.Color = clWindowText
+      IconFont.Height = -20
+      IconFont.Name = 'Segoe MDL2 Assets'
+      IconFont.Style = []
+      DetailFont.Charset = DEFAULT_CHARSET
+      DetailFont.Color = clWindowText
+      DetailFont.Height = -11
+      DetailFont.Name = 'Tahoma'
+      DetailFont.Style = []
+      ObjectsVisible = [iokNone, iokCheckBox, iokLeftIcon, iokText, iokDetail, iokRightIcon]
+      LeftIcon = #57347
+      Text = 'Text'
+      Detail = 'Detail'
+      RightIcon = #59198
+      CustomActiveColor = clNone
+      Caption = 'UItemButton1'
+      ExplicitLeft = 3
+      ExplicitTop = 6
+    end
+  end
   object UThemeManager1: TUThemeManager
     Theme = ttDark
     AccentColor = 6318152
@@ -197,10 +745,10 @@ object Form1: TForm1
     DrawingStyle = dsTransparent
     Height = 20
     Width = 20
-    Left = 600
-    Top = 152
+    Left = 456
+    Top = 112
     Bitmap = {
-      494C01012C003100E00014001400FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01012C003100E80014001400FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000050000000F00000000100200000000000002C
       0100000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2699,7 +3247,7 @@ object Form1: TForm1
   end
   object ActList: TActionList
     Images = ActImgLst
-    Left = 600
+    Left = 456
     Top = 208
     object NewAct: TAction
       Tag = -3
@@ -3003,8 +3551,8 @@ object Form1: TForm1
   end
   object MainMenu2: TMainMenu
     Images = ActImgLst
-    Left = 512
-    Top = 184
+    Left = 456
+    Top = 160
     object PlikMenu: TMenuItem
       AutoHotkeys = maManual
       Caption = 'Plik'
@@ -3229,7 +3777,7 @@ object Form1: TForm1
   end
   object AdvPopupMenu1: TAdvPopupMenu
     Version = '2.5.3.1'
-    Left = 384
+    Left = 328
     Top = 208
   end
   object AdvMainMenu1: TAdvMainMenu

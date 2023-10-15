@@ -90,7 +90,8 @@ type
     destructor Destroy; override;
     // IUThemedComponent
     procedure UpdateTheme; override;
-
+    //
+    procedure Click; override;
   published
     property BackColors: TUThemeButtonStateColorSet read FBackColors write SetBackColors;
     property BorderColors: TUThemeButtonStateColorSet read FBorderColors write SetBorderColors;
@@ -503,6 +504,16 @@ begin
     FButtonState := csNone;
   UpdateColors;
   Invalidate;
+end;
+
+procedure TUButton.Click;
+//var
+//  Form: TCustomForm;
+begin
+//  Form := GetParentForm(Self);
+//  if Form <> Nil then
+//    Form.ModalResult := ModalResult;
+  inherited Click;
 end;
 
 procedure TUButton.CMDialogKey(var Msg: TWMKey);

@@ -37,9 +37,13 @@ type
   TUScrollBox = class(TScrollBox, IUThemedComponent, IUIDEAware)
   private var
     MiniSB: TUMiniScrollBar;
+    MINI_SB_SIZE: Byte;
     MINI_SB_THICKNESS: Byte;
     MINI_SB_MARGIN: Byte;
     MINI_SB_COLOR: TColor;
+    MINI_SB_THICKNESS_HOVERED: Byte;
+    MINI_SB_MARGIN_HOVERED: Byte;
+    MINI_SB_COLOR_HOVERED: TColor;
 
   private
     FThemeManager: TUThemeManager;
@@ -64,6 +68,7 @@ type
     procedure ScrollBar_OnTimer(Sender: TObject);
 
     // Messages
+    procedure WMEraseBkgnd(var Message: TWmEraseBkgnd); message WM_ERASEBKGND;
     procedure WMSize(var Msg: TWMSize); message WM_SIZE;
     procedure WMMouseMove(var Msg: TWMMouseMove); message WM_MOUSEMOVE;
 //    procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
@@ -86,6 +91,7 @@ type
     function IsDesigning: Boolean; inline;
 
     function CanShowMiniSB(var SB: TControlScrollBar): Boolean; virtual;
+    function GetClientRect: TRect; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -157,9 +163,15 @@ begin
   FThemeManager := Nil;
 
   //  Internal
+  MINI_SB_SIZE := 6;
+
   MINI_SB_THICKNESS := 2;
   MINI_SB_MARGIN := 3;
   MINI_SB_COLOR := $7A7A7A;
+
+  MINI_SB_THICKNESS_HOVERED := 4;
+  MINI_SB_MARGIN_HOVERED := 1;
+  MINI_SB_COLOR_HOVERED := $EAEAEA;
 
   //  Parent properties
   BevelEdges:=[];
@@ -347,12 +359,37 @@ begin
     Result := False;
 end;
 
+function TUScrollBox.GetClientRect: TRect;
+//var
+//  scroll_size_x, scroll_size_y: Integer;
+//  SB: TControlScrollBar;
+begin
+  Result.Left := 0;
+  Result.Top := 0;
+  Result.Right := Width;
+  Result.Bottom := Height;
+
+  if FScrollBarStyle = sbsMini then begin
+//    scroll_size_x := GetSystemMetrics(SM_CXVSCROLL); // get system scrolls size for vertical scroll
+//    scroll_size_y := GetSystemMetrics(SM_CYHSCROLL); // get system scrolls size for horizontal scroll
+
+    // reserve space for scroll - allways
+    if (ScrollOrientation = oVertical){ and CanShowMiniSB(SB)} then
+      Dec(Result.Right, MINI_SB_SIZE)
+    else if (ScrollOrientation = oHorizontal){ and CanShowMiniSB(SB)} then
+      Dec(Result.Bottom, MINI_SB_SIZE);
+  end;
+end;
+
 procedure TUScrollBox.ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND});
 begin
   inherited;
-  MINI_SB_THICKNESS := MulDiv(MINI_SB_THICKNESS, M, D);
-  MINI_SB_MARGIN := MulDiv(MINI_SB_MARGIN, M, D);
-  FLengthPerStep := MulDiv(FLengthPerStep, M, D);
+  MINI_SB_SIZE              := MulDiv(MINI_SB_SIZE, M, D);
+  MINI_SB_THICKNESS         := MulDiv(MINI_SB_THICKNESS, M, D);
+  MINI_SB_MARGIN            := MulDiv(MINI_SB_MARGIN, M, D);
+  MINI_SB_THICKNESS_HOVERED := MulDiv(MINI_SB_THICKNESS_HOVERED, M, D);
+  MINI_SB_MARGIN_HOVERED    := MulDiv(MINI_SB_MARGIN_HOVERED, M, D);
+  FLengthPerStep            := MulDiv(FLengthPerStep, M, D);
 end;
 //  UTILS
 
@@ -380,9 +417,9 @@ begin
   ThumbPos := Round(ControlSize * SB.Position / SB.Range);
 
   if ScrollOrientation = oVertical then
-    (MiniSB as TControl).SetBounds(Width - MINI_SB_MARGIN - MINI_SB_THICKNESS, ThumbPos, MINI_SB_THICKNESS, ThumbSize)
+    (MiniSB as TControl).SetBounds(Width - MINI_SB_SIZE + 1, ThumbPos, MINI_SB_THICKNESS, ThumbSize)
   else
-    (MiniSB as TControl).SetBounds(ThumbPos, Height - MINI_SB_MARGIN - MINI_SB_THICKNESS, ThumbSize, MINI_SB_THICKNESS);
+    (MiniSB as TControl).SetBounds(ThumbPos, Height - MINI_SB_SIZE + 1, ThumbSize, MINI_SB_THICKNESS);
 end;
 
 procedure TUScrollBox.SetMiniSBVisible(IsVisible: Boolean);
@@ -398,6 +435,19 @@ begin
 end;
 
 //  MESSAGES
+
+procedure TUScrollBox.WMEraseBkgnd(var Message: TWmEraseBkgnd);
+begin
+  // simplified version of TWinControl.WMEraseBkgnd
+  if Assigned(Parent) and (csParentBackground in ControlStyle) then
+    inherited
+  else begin
+    if not FDoubleBuffered or (TMessage(Message).wParam = TMessage(Message).lParam) then
+      FillRect(Message.DC, Rect(0, 0, Width, Height), Brush.Handle);
+  end;
+
+  Message.Result := 1;
+end;
 
 procedure TUScrollBox.WMNCHitTest(var Msg: TWMNCHitTest);
 
@@ -422,7 +472,7 @@ begin
     P := ScreenToClient(P);
     BorderSpace:=5;
     if MiniSB.Visible then
-      BorderSpace := MINI_SB_MARGIN
+      BorderSpace := MINI_SB_MARGIN + 1
     else if ParentForm is TUForm then
       BorderSpace:=TUFormAccess(ParentForm).GetBorderSpace(bsDefault);
     //  Send event to parent

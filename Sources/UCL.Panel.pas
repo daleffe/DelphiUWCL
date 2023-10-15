@@ -19,6 +19,7 @@ type
   TUPanel = class(TUCustomPanel)
   private
     FBackColor: TUThemeControlColorSet;
+    FUpdateEvent: TNotifyEvent;
 
     procedure SetBackColor(Value: TUThemeControlColorSet);
 
@@ -29,6 +30,7 @@ type
     procedure WMNCHitTest(var Msg: TWMNCHitTest); message WM_NCHITTEST;
 
   protected
+    procedure DoUpdate; virtual;
 
   public
     constructor Create(AOwner: TComponent); override;
@@ -44,6 +46,8 @@ type
     property BevelOuter default bvNone;
     property ParentColor default False;
     property ParentBackground default False;
+    //
+    property OnUpdate: TNotifyEvent read FUpdateEvent write FUpdateEvent;
   end;
 
 implementation
@@ -76,6 +80,8 @@ begin
   FBackColor := TUThemeControlColorSet.Create;
   FBackColor.Assign(PANEL_BACK);
   FBackColor.OnChange := ColorsChange;
+
+  UpdateTheme;
 end;
 
 destructor TUPanel.Destroy;
@@ -87,6 +93,12 @@ end;
 procedure TUPanel.SetBackColor(Value: TUThemeControlColorSet);
 begin
   FBackColor.Assign(Value);
+end;
+
+procedure TUPanel.DoUpdate;
+begin
+  if Assigned(FUpdateEvent) then
+    FUpdateEvent(Self);
 end;
 
 //  THEME
@@ -108,6 +120,7 @@ begin
 
   //  Repaint
   //  Do not repaint, because it does not override Paint method
+  DoUpdate;
 end;
 
 procedure TUPanel.WMNCHitTest(var Msg: TWMNCHitTest);

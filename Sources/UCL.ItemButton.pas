@@ -230,7 +230,7 @@ begin
   FObjectsVisible := [iokNone, iokLeftIcon, iokText, iokDetail];
 
   FIsChecked := False;
-  FLeftIcon := UF_CHECKBOX_OUTLINE;
+  FLeftIcon := UF_LIKE;
   FText := 'Text';
   FDetail := 'Detail';
   FRightIcon := UF_CHECKMARK;
@@ -910,6 +910,8 @@ end;
 procedure TUItemButton.CMEnabledChanged(var Msg: TMessage);
 begin
   inherited;
+  if AcceptControls then
+    NotifyControls(CM_ENABLEDCHANGED);
   if not Enabled then
     FButtonState := csDisabled
   else

@@ -165,7 +165,7 @@ var
   TM: TUCustomThemeManager;
 begin
   TM := SelectThemeManager(Self);
-  if not Enabled then begin
+  if not Enabled or ((Parent <> Nil) and not Parent.Enabled) then begin
     if TM.ThemeUsed = utLight then
       LAccentColor := $CCCCCC
     else
@@ -264,7 +264,7 @@ end;
 
 procedure TUGraphicSlider.SetMin(const Value: Integer);
 begin
-  if Value <> FMin then begin
+  if (Value <> FMin) and (Value < FMax) then begin
     FMin := Value;
     UpdateRects;
     Repaint;
@@ -273,7 +273,7 @@ end;
 
 procedure TUGraphicSlider.SetMax(const Value: Integer);
 begin
-  if Value <> FMax then begin
+  if (Value <> FMax) and (Value > FMin) then begin
     FMax := Value;
     UpdateRects;
     Repaint;
@@ -284,10 +284,15 @@ procedure TUGraphicSlider.SetValue(const Value: Integer);
 begin
   if Value <> FValue then begin
     FValue := Value;
-    if Assigned(FOnChange) then
-      FOnChange(Self);
+    if FValue < FMin then
+      FValue := FMin
+    else if FValue > FMax then
+      FValue := FMax;
+    //
     UpdateRects;
     Repaint;
+    if Assigned(FOnChange) then
+      FOnChange(Self);
   end;
 end;
 
@@ -373,7 +378,7 @@ end;
 procedure TUGraphicSlider.CMEnabledChanged(var Msg: TMessage);
 begin
   inherited;
-  if not Enabled then
+  if not Enabled or ((Parent <> Nil) and not Parent.Enabled) then
     ControlState := csDisabled
   else
     ControlState := csNone;
