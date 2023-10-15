@@ -368,7 +368,7 @@ begin
   end;
 end;
 
-procedure TUForm.ChangeScale(M, D: Integer);
+procedure TUForm.ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND});
 begin
   inherited ChangeScale(M, D{$IF CompilerVersion > 29}, isDpiChange{$IFEND});
   DoChangeScale(M, D);

@@ -17,3 +17,6 @@ Bin/Demo.exe
 *.drc
 *.dcu
 *.zip
+/Sources/old
+*.bak
+*.dklang

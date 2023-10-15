@@ -425,16 +425,16 @@ begin
     if CanFocus and not Focused then
       SetFocus;
     ButtonState := csFocused;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUButton.WMKillFocus(var Msg: TWMKillFocus);
 begin
   if Enabled then begin
     ButtonState := csNone;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUButton.WMLButtonDown(var Msg: TWMLButtonDown);
@@ -443,8 +443,8 @@ begin
     if AllowFocus then
       SetFocus;
     ButtonState := csPress;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUButton.WMLButtonUp(var Msg: TWMLButtonUp);
@@ -459,8 +459,8 @@ begin
       ButtonState := csHover
     else
       ButtonState := csNone;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUButton.WMMouseMove(var Msg: TWMMouseMove);
@@ -474,8 +474,8 @@ procedure TUButton.CMMouseEnter(var Msg: TMessage);
 begin
   if Enabled then begin
     ButtonState := csHover;
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUButton.CMMouseLeave(var Msg: TMessage);
@@ -490,9 +490,8 @@ begin
       ButtonState := csNone // No focus, no border
     else
       ButtonState := csFocused; // Keep focus border
-
-    inherited;
   end;
+  inherited;
 end;
 
 procedure TUButton.CMEnabledChanged(var Msg: TMessage);

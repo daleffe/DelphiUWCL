@@ -345,6 +345,11 @@ end;
 
 {$IFEND}
 {$ENDREGION}
+{$IF CompilerVersion > 30}
+uses
+  SysUtils,
+  CommCtrl;
+{$IFEND}
 
 { TCustomImageListHelper }
 

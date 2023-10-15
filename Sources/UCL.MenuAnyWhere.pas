@@ -14,9 +14,8 @@ uses
   ComCtrls,
 {$IF CompilerVersion > 29}
   UITypes,
-{$ELSE}
-  ImgList,
 {$IFEND}
+  ImgList,
   UCL.Classes,
   UCL.Types,
   UCL.Utils,
