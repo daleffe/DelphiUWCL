@@ -182,7 +182,22 @@ begin
 {$IF CompilerVersion > 29}
   StyleElements:=[];
 {$IFEND}
+  VertScrollBar.ButtonSize:=0;
+  VertScrollBar.Increment:=8;
+  VertScrollBar.Margin:=0;
+  VertScrollBar.Position:=0;
+  VertScrollBar.Range:=0;
+  VertScrollBar.Size:=0;
+  VertScrollBar.ThumbSize:=0;
   VertScrollBar.Tracking := True;
+  //
+  HorzScrollBar.ButtonSize:=0;
+  HorzScrollBar.Increment:=8;
+  HorzScrollBar.Margin:=0;
+  HorzScrollBar.Position:=0;
+  HorzScrollBar.Range:=0;
+  HorzScrollBar.Size:=0;
+  HorzScrollBar.ThumbSize:=0;
   HorzScrollBar.Tracking := True;
 
   //  Fields
@@ -368,7 +383,7 @@ begin
   Result.Top := 0;
   Result.Right := Width;
   Result.Bottom := Height;
-
+(*
   if FScrollBarStyle = sbsMini then begin
 //    scroll_size_x := GetSystemMetrics(SM_CXVSCROLL); // get system scrolls size for vertical scroll
 //    scroll_size_y := GetSystemMetrics(SM_CYHSCROLL); // get system scrolls size for horizontal scroll
@@ -379,6 +394,7 @@ begin
     else if (ScrollOrientation = oHorizontal){ and CanShowMiniSB(SB)} then
       Dec(Result.Bottom, MINI_SB_SIZE);
   end;
+*)  
 end;
 
 procedure TUScrollBox.ChangeScale(M, D: Integer{$IF CompilerVersion > 29}; isDpiChange: Boolean{$IFEND});
@@ -412,6 +428,9 @@ begin
     ControlSize := Height
   else
     ControlSize := Width;
+
+  if SB.Range = 0 then
+    Exit;
 
   ThumbSize := Round(ControlSize * ControlSize / SB.Range);
   ThumbPos := Round(ControlSize * SB.Position / SB.Range);

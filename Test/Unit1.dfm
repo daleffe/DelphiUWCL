@@ -90,6 +90,7 @@ object Form1: TForm1
     HorzScrollBar.Tracking = True
     VertScrollBar.Tracking = True
     Align = alTop
+    AutoScroll = False
     BevelEdges = []
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -116,8 +117,10 @@ object Form1: TForm1
     Width = 293
     Height = 247
     HorzScrollBar.Tracking = True
+    VertScrollBar.Range = 800
     VertScrollBar.Tracking = True
     Align = alRight
+    AutoScroll = False
     BevelEdges = []
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -658,7 +661,6 @@ object Form1: TForm1
     end
   end
   object UThemeManager1: TUThemeManager
-    Theme = ttDark
     AccentColor = 6318152
     Left = 240
     Top = 104

@@ -23,9 +23,11 @@ object formAppList: TformAppList
     Top = 32
     Width = 440
     Height = 90
+    HorzScrollBar.Range = 777
     HorzScrollBar.Tracking = True
     VertScrollBar.Tracking = True
     Align = alTop
+    AutoScroll = False
     BevelEdges = []
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -33,6 +35,7 @@ object formAppList: TformAppList
     Color = 2039583
     ParentColor = False
     TabOrder = 0
+    StyleElements = []
     AniSet.AniKind = akOut
     AniSet.AniFunctionKind = afkCubic
     AniSet.DelayStartTime = 0
@@ -48,7 +51,7 @@ object formAppList: TformAppList
       Left = 555
       Top = 0
       Width = 111
-      Height = 73
+      Height = 90
       Align = alLeft
       TabOrder = 1
       SymbolFont.Charset = DEFAULT_CHARSET
@@ -71,7 +74,7 @@ object formAppList: TformAppList
       Left = 666
       Top = 0
       Width = 111
-      Height = 73
+      Height = 90
       Align = alLeft
       TabOrder = 2
       SymbolFont.Charset = DEFAULT_CHARSET
@@ -94,7 +97,7 @@ object formAppList: TformAppList
       Left = 333
       Top = 0
       Width = 111
-      Height = 73
+      Height = 90
       Align = alLeft
       TabOrder = 3
       SymbolFont.Charset = DEFAULT_CHARSET
@@ -117,7 +120,7 @@ object formAppList: TformAppList
       Left = 444
       Top = 0
       Width = 111
-      Height = 73
+      Height = 90
       Align = alLeft
       TabOrder = 4
       SymbolFont.Charset = DEFAULT_CHARSET
@@ -140,7 +143,7 @@ object formAppList: TformAppList
       Left = 111
       Top = 0
       Width = 111
-      Height = 73
+      Height = 90
       Align = alLeft
       TabOrder = 5
       SymbolFont.Charset = DEFAULT_CHARSET
@@ -163,7 +166,7 @@ object formAppList: TformAppList
       Left = 0
       Top = 0
       Width = 111
-      Height = 73
+      Height = 90
       Align = alLeft
       TabOrder = 6
       SymbolFont.Charset = DEFAULT_CHARSET
@@ -188,7 +191,7 @@ object formAppList: TformAppList
       Left = 222
       Top = 0
       Width = 111
-      Height = 73
+      Height = 90
       Align = alLeft
       TabOrder = 7
       SymbolFont.Charset = DEFAULT_CHARSET
@@ -212,12 +215,15 @@ object formAppList: TformAppList
     Left = 0
     Top = 0
     Width = 440
+    Height = 32
     Caption = '   App list'
+    DoubleBuffered = True
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Segoe UI'
     Font.Style = []
+    ParentDoubleBuffered = False
     ParentFont = False
     TabOrder = 1
     BackColors.Enabled = False
@@ -226,10 +232,49 @@ object formAppList: TformAppList
     BackColors.DarkColor = 2829099
     BackColors.FocusedLightColor = 14120960
     BackColors.FocusedDarkColor = clBlue
+    MenuController.ButtonWidth = 0
+    MenuController.ButtonHeight = 0
+    MenuController.Transparent = False
+    MenuController.Font.Charset = DEFAULT_CHARSET
+    MenuController.Font.Color = clWindowText
+    MenuController.Font.Height = -12
+    MenuController.Font.Name = 'Segoe UI'
+    MenuController.Font.Style = []
+    MenuController.ButtonBackColors.Enabled = False
+    MenuController.ButtonBackColors.LightColor = 15921906
+    MenuController.ButtonBackColors.LightHover = 14120960
+    MenuController.ButtonBackColors.LightDisabled = clGray
+    MenuController.ButtonBackColors.DarkColor = 2829099
+    MenuController.ButtonBackColors.DarkHover = 1525760
+    MenuController.ButtonBackColors.DarkDisabled = clGray
+    MenuController.ButtonTextColors.Enabled = False
+    MenuController.ButtonTextColors.LightColor = clBlack
+    MenuController.ButtonTextColors.LightHover = clWhite
+    MenuController.ButtonTextColors.LightDisabled = clGray
+    MenuController.ButtonTextColors.DarkColor = clWhite
+    MenuController.ButtonTextColors.DarkHover = clWhite
+    MenuController.ButtonTextColors.DarkDisabled = clGray
+    MenuController.MenuBorderColors.Enabled = False
+    MenuController.MenuBorderColors.Color = clDefault
+    MenuController.MenuBorderColors.LightColor = clBlack
+    MenuController.MenuBorderColors.DarkColor = clSilver
+    MenuController.MenuBackColors.Enabled = False
+    MenuController.MenuBackColors.LightColor = clWhite
+    MenuController.MenuBackColors.LightHover = clHighlight
+    MenuController.MenuBackColors.LightDisabled = clGray
+    MenuController.MenuBackColors.DarkColor = clBlack
+    MenuController.MenuBackColors.DarkHover = clHighlight
+    MenuController.MenuBackColors.DarkDisabled = clGray
+    MenuController.MenuTextColors.Enabled = False
+    MenuController.MenuTextColors.LightColor = clBlack
+    MenuController.MenuTextColors.LightHover = clBlack
+    MenuController.MenuTextColors.LightDisabled = clGray
+    MenuController.MenuTextColors.DarkColor = clWhite
+    MenuController.MenuTextColors.DarkHover = clWhite
+    MenuController.MenuTextColors.DarkDisabled = clGray
     object buttonWinClose: TUQuickButton
       Left = 395
       Top = 0
-      Hint = 'Close'
       Align = alRight
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
@@ -239,6 +284,10 @@ object formAppList: TformAppList
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
+      BackColors.Enabled = False
+      BackColors.Color = clBlack
+      BackColors.LightColor = 13619151
+      BackColors.DarkColor = 3947580
       ButtonStyle = qbsQuit
       Caption = #57610
       ExplicitLeft = 815
@@ -246,7 +295,6 @@ object formAppList: TformAppList
     object buttonWinMin: TUQuickButton
       Left = 350
       Top = 0
-      Hint = 'Minimize'
       Align = alRight
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
@@ -256,6 +304,10 @@ object formAppList: TformAppList
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
+      BackColors.Enabled = False
+      BackColors.Color = clBlack
+      BackColors.LightColor = 13619151
+      BackColors.DarkColor = 3947580
       ButtonStyle = qbsMin
       Caption = #57608
       ExplicitLeft = 710
@@ -267,14 +319,17 @@ object formAppList: TformAppList
     Width = 440
     Height = 478
     HorzScrollBar.Tracking = True
+    VertScrollBar.Range = 1200
     VertScrollBar.Tracking = True
     Align = alClient
+    AutoScroll = False
     BevelEdges = []
     BevelInner = bvNone
     BevelOuter = bvNone
     Color = 2039583
     ParentColor = False
     TabOrder = 2
+    StyleElements = []
     AniSet.AniKind = akOut
     AniSet.AniFunctionKind = afkCubic
     AniSet.DelayStartTime = 0
@@ -288,7 +343,7 @@ object formAppList: TformAppList
     object UItemButton1: TUItemButton
       Left = 0
       Top = 1160
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 1
@@ -312,7 +367,7 @@ object formAppList: TformAppList
     object UItemButton2: TUItemButton
       Left = 0
       Top = 1080
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 2
@@ -336,7 +391,7 @@ object formAppList: TformAppList
     object UItemButton3: TUItemButton
       Left = 0
       Top = 1040
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 3
@@ -360,7 +415,7 @@ object formAppList: TformAppList
     object UItemButton4: TUItemButton
       Left = 0
       Top = 1000
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 4
@@ -384,7 +439,7 @@ object formAppList: TformAppList
     object UItemButton5: TUItemButton
       Left = 0
       Top = 960
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 5
@@ -408,7 +463,7 @@ object formAppList: TformAppList
     object UItemButton6: TUItemButton
       Left = 0
       Top = 920
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 6
@@ -432,7 +487,7 @@ object formAppList: TformAppList
     object UItemButton7: TUItemButton
       Left = 0
       Top = 1120
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 7
@@ -456,7 +511,7 @@ object formAppList: TformAppList
     object UItemButton8: TUItemButton
       Left = 0
       Top = 680
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 8
@@ -480,7 +535,7 @@ object formAppList: TformAppList
     object UItemButton9: TUItemButton
       Left = 0
       Top = 720
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 9
@@ -504,7 +559,7 @@ object formAppList: TformAppList
     object UItemButton10: TUItemButton
       Left = 0
       Top = 760
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 10
@@ -528,7 +583,7 @@ object formAppList: TformAppList
     object UItemButton11: TUItemButton
       Left = 0
       Top = 800
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 11
@@ -552,7 +607,7 @@ object formAppList: TformAppList
     object UItemButton12: TUItemButton
       Left = 0
       Top = 840
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 12
@@ -576,7 +631,7 @@ object formAppList: TformAppList
     object UItemButton13: TUItemButton
       Left = 0
       Top = 880
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 13
@@ -600,7 +655,7 @@ object formAppList: TformAppList
     object UItemButton14: TUItemButton
       Left = 0
       Top = 440
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 14
@@ -624,7 +679,7 @@ object formAppList: TformAppList
     object UItemButton15: TUItemButton
       Left = 0
       Top = 480
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 15
@@ -648,7 +703,7 @@ object formAppList: TformAppList
     object UItemButton16: TUItemButton
       Left = 0
       Top = 520
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 16
@@ -672,7 +727,7 @@ object formAppList: TformAppList
     object UItemButton17: TUItemButton
       Left = 0
       Top = 560
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 17
@@ -696,7 +751,7 @@ object formAppList: TformAppList
     object UItemButton18: TUItemButton
       Left = 0
       Top = 600
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 18
@@ -720,7 +775,7 @@ object formAppList: TformAppList
     object UItemButton19: TUItemButton
       Left = 0
       Top = 640
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 19
@@ -744,7 +799,7 @@ object formAppList: TformAppList
     object UItemButton20: TUItemButton
       Left = 0
       Top = 200
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 20
@@ -768,7 +823,7 @@ object formAppList: TformAppList
     object UItemButton21: TUItemButton
       Left = 0
       Top = 240
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 21
@@ -792,7 +847,7 @@ object formAppList: TformAppList
     object UItemButton22: TUItemButton
       Left = 0
       Top = 280
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 22
@@ -816,7 +871,7 @@ object formAppList: TformAppList
     object UItemButton23: TUItemButton
       Left = 0
       Top = 320
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 23
@@ -840,7 +895,7 @@ object formAppList: TformAppList
     object UItemButton24: TUItemButton
       Left = 0
       Top = 360
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 24
@@ -864,7 +919,7 @@ object formAppList: TformAppList
     object UItemButton25: TUItemButton
       Left = 0
       Top = 400
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 25
@@ -888,7 +943,7 @@ object formAppList: TformAppList
     object UItemButton26: TUItemButton
       Left = 0
       Top = 0
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 26
@@ -912,7 +967,7 @@ object formAppList: TformAppList
     object UItemButton27: TUItemButton
       Left = 0
       Top = 40
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 27
@@ -936,7 +991,7 @@ object formAppList: TformAppList
     object UItemButton28: TUItemButton
       Left = 0
       Top = 80
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 28
@@ -960,7 +1015,7 @@ object formAppList: TformAppList
     object UItemButton29: TUItemButton
       Left = 0
       Top = 120
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 29
@@ -984,7 +1039,7 @@ object formAppList: TformAppList
     object UItemButton30: TUItemButton
       Left = 0
       Top = 160
-      Width = 423
+      Width = 440
       Align = alTop
       DragCursor = crDefault
       TabOrder = 30

@@ -12,9 +12,9 @@ uses
   Types,
   Windows,
   Messages,
-{$IF CompilerVersion > 29}
+{.$IF CompilerVersion > 29}
   ImageList,
-{$IFEND}
+{.$IFEND}
   Graphics,
   Controls,
   Forms,
@@ -56,13 +56,6 @@ uses
 
 type
   TformDemo = class(TUForm)
-    drawerNavigation: TUPanel;
-    buttonOpenMenu: TUSymbolButton;
-    buttonMenuSettings: TUSymbolButton;
-    buttonMenuProfile: TUSymbolButton;
-    buttonMenuSave: TUSymbolButton;
-    buttonMenuOpen: TUSymbolButton;
-    buttonMenuRate: TUSymbolButton;
     captionBarMain: TUCaptionBar;
     dialogSelectColor: TColorDialog;
     panelRibbon: TUScrollBox;
@@ -162,6 +155,13 @@ type
     UGraphicSlider1: TUGraphicSlider;
     UItemButton1: TUItemButton;
     ImageList1: TImageList;
+    drawerNavigation: TUPanel;
+    buttonOpenMenu: TUSymbolButton;
+    buttonMenuSettings: TUSymbolButton;
+    buttonMenuProfile: TUSymbolButton;
+    buttonMenuSave: TUSymbolButton;
+    buttonMenuOpen: TUSymbolButton;
+    buttonMenuRate: TUSymbolButton;
     procedure buttonReloadSettingsClick(Sender: TObject);
     procedure buttonAniToRightClick(Sender: TObject);
     procedure buttonRandomProgressClick(Sender: TObject);
