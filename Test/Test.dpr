@@ -5,6 +5,8 @@ program Test;
 {$IFEND}
 
 uses
+  madListHardware,
+  madListProcesses,
   madExcept,
   madLinkDisAsm,
   madListModules,

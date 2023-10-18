@@ -68,7 +68,7 @@ type
     procedure ScrollBar_OnTimer(Sender: TObject);
 
     // Messages
-    procedure WMEraseBkgnd(var Message: TWmEraseBkgnd); message WM_ERASEBKGND;
+//    procedure WMEraseBkgnd(var Message: TWmEraseBkgnd); message WM_ERASEBKGND;
     procedure WMSize(var Msg: TWMSize); message WM_SIZE;
     procedure WMMouseMove(var Msg: TWMMouseMove); message WM_MOUSEMOVE;
 //    procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
@@ -455,18 +455,18 @@ end;
 
 //  MESSAGES
 
-procedure TUScrollBox.WMEraseBkgnd(var Message: TWmEraseBkgnd);
-begin
-  // simplified version of TWinControl.WMEraseBkgnd
-  if Assigned(Parent) and (csParentBackground in ControlStyle) then
-    inherited
-  else begin
-    if not FDoubleBuffered or (TMessage(Message).wParam = TMessage(Message).lParam) then
-      FillRect(Message.DC, Rect(0, 0, Width, Height), Brush.Handle);
-  end;
-
-  Message.Result := 1;
-end;
+//procedure TUScrollBox.WMEraseBkgnd(var Message: TWmEraseBkgnd);
+//begin
+//  // simplified version of TWinControl.WMEraseBkgnd
+//  if Assigned(Parent) and (csParentBackground in ControlStyle) then
+//    inherited
+//  else begin
+//    if not FDoubleBuffered or (TMessage(Message).wParam = TMessage(Message).lParam) then
+//      FillRect(Message.DC, Rect(0, 0, Width, Height), Brush.Handle);
+//  end;
+//
+//  Message.Result := 1;
+//end;
 
 procedure TUScrollBox.WMNCHitTest(var Msg: TWMNCHitTest);
 
