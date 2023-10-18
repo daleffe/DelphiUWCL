@@ -178,15 +178,14 @@ end;
 
 { MAIN CLASS }
 
-constructor TIntAni.Create(aStartValue: Integer; aDeltaValue: Integer;
-  aSyncProc: TAniSyncProc; aDoneProc: TAniDoneProc);
+constructor TIntAni.Create(aStartValue: Integer; aDeltaValue: Integer; aSyncProc: TAniSyncProc; aDoneProc: TAniDoneProc);
 begin
   inherited Create(True);
-  FreeOnTerminate := true;
+  FreeOnTerminate := False;
 
   //  Internal
   CurrentValue := 0;
-  AniFunction := nil;
+  AniFunction := Nil;
 
   //  AniSet
   FAniSet := TIntAniSet.Create;

@@ -57,6 +57,11 @@ type
     FMaxScrollCount: Integer;
     FMouseInControl: Boolean;
     FScrollBarTimer: TTimer;
+    //
+    // Internally used variables
+    Animation: TIntAni;
+    ScrollBar: TControlScrollBar;
+    ScrollSign: Integer;
 
     // Setters
     procedure SetBackColor(Value: TUThemeControlColorSet);
@@ -91,6 +96,7 @@ type
     function IsDesigning: Boolean; inline;
 
     function CanShowMiniSB(var SB: TControlScrollBar): Boolean; virtual;
+    procedure CreateAnimationThread(const SyncProc: TAniSyncProc; const DoneProc: TAniDoneProc); virtual;
     function GetClientRect: TRect; override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -220,6 +226,10 @@ begin
   //  Custom AniSet
   FAniSet := TIntAniSet.Create;
   FAniSet.QuickAssign(akOut, afkCubic, 0, 120, 10, True);
+  // Internal variables
+  Animation:= Nil;
+  ScrollBar:=Nil;
+  ScrollSign:=0;
 
   FBackColor := TUThemeControlColorSet.Create;
   FBackColor.Assign(SCROLLBOX_BACK);
@@ -227,13 +237,21 @@ begin
 
   FScrollBarTimer := TTimer.Create(Nil);
   FScrollBarTimer.Enabled := False;
-  FScrollBarTimer.Interval := 1000;
+  FScrollBarTimer.Interval := 5000;
   FScrollBarTimer.OnTimer := ScrollBar_OnTimer;
 
   if GetCommonThemeManager <> Nil then
     GetCommonThemeManager.Connect(Self);
 
 //  UpdateTheme;
+end;
+
+procedure TUScrollBox.CreateAnimationThread(const SyncProc: TAniSyncProc; const DoneProc: TAniDoneProc);
+begin
+  if Animation = Nil then begin
+    Animation := TIntAni.Create(1, +LengthPerStep, SyncProc, DoneProc);
+    Animation.AniSet.Assign(Self.AniSet);
+  end;
 end;
 
 procedure TUScrollBox.CreateParams(var Params: TCreateParams);
@@ -252,6 +270,8 @@ var
 begin
   FScrollBarTimer.Enabled := False;
   MiniSB.Free;
+  if Assigned(Animation) then
+    Animation.Free;
   FAniSet.Free;
   FBackColor.Free;
   FScrollBarTimer.Free;
@@ -593,10 +613,6 @@ begin
 end;
 
 procedure TUScrollBox.CMMouseWheel(var Msg: TWMMouseWheel);
-var
-  SB: TControlScrollBar;
-  Ani: TIntAni;
-  Sign: Integer;
 begin
   inherited;
 
@@ -613,9 +629,9 @@ begin
   end;
 
   if ScrollOrientation = oVertical then
-    SB := VertScrollBar
-  else 
-    SB := HorzScrollBar;
+    ScrollBar := VertScrollBar
+  else
+    ScrollBar := HorzScrollBar;
   
   //  Scroll by touchpad
   if (Abs(Msg.WheelDelta) < 100) or IsDesigning then begin
@@ -623,7 +639,7 @@ begin
       Msg.WheelDelta := 10 * Msg.WheelDelta div Abs(Msg.WheelDelta);
 
     DisableAlign;
-    SB.Position := SB.Position - Msg.WheelDelta;
+    ScrollBar.Position := ScrollBar.Position - Msg.WheelDelta;
     if ScrollBarStyle = sbsMini then
       UpdateMiniSB;
     EnableAlign;
@@ -640,41 +656,39 @@ begin
     end;
 
     Inc(FScrollCount);
-    Sign := Msg.WheelDelta div Abs(Msg.WheelDelta);
+    ScrollSign := Msg.WheelDelta div Abs(Msg.WheelDelta);
 
-    Ani := TIntAni.Create(1, +LengthPerStep, nil, nil);
-    Ani.AniSet.Assign(Self.AniSet);
-
-    if ScrollBarStyle = sbsMini then begin
-      Ani.OnSync := 
-        procedure (V: Integer)
-        begin
-          SB.Position := SB.Position - V * Sign;
+    CreateAnimationThread(
+      procedure (V: Integer)
+      begin
+        ScrollBar.Position := ScrollBar.Position - V * ScrollSign;
+        if ScrollBarStyle = sbsMini then
           UpdateMiniSB;
-        end;
-    end
-    else begin
-      Ani.OnSync :=
-        procedure (V: Integer)
-        begin
-          SB.Position := SB.Position - V * Sign;
-        end;
-    end;
-
-    Ani.OnDone :=
+      end
+    ,
       procedure
       begin
         if ScrollBarStyle <> sbsFull then
           SetOldSBVisible(False);
         Dec(FScrollCount);
         if FScrollCount <= 0 then begin
+          Animation.WaitFor;
+          Animation.Suspend;
           FScrollCount := 0;
           EnableAlign;
           Mouse.Capture := 0;
           FScrollBarTimer.Enabled := True;
+        end
+        else begin
+          Animation.WaitFor;
+          Animation.Suspend;
+          Animation.Start;
         end;
-      end;
-    Ani.Start;
+      end
+    );
+
+    if Animation.Suspended then
+      Animation.Start;
   end;
 end;
 
