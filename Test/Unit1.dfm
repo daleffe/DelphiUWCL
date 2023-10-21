@@ -100,12 +100,6 @@ object Form1: TForm1
     TabStop = True
     StyleElements = []
     ThemeManager = UThemeManager1
-    AniSet.AniKind = akOut
-    AniSet.AniFunctionKind = afkQuartic
-    AniSet.DelayStartTime = 0
-    AniSet.Duration = 120
-    AniSet.Step = 6
-    AniSet.Queue = True
     BackColor.Enabled = True
     BackColor.Color = clBlack
     BackColor.LightColor = 14342874
@@ -118,7 +112,6 @@ object Form1: TForm1
     Width = 293
     Height = 247
     HorzScrollBar.Tracking = True
-    VertScrollBar.Position = 553
     VertScrollBar.Range = 800
     VertScrollBar.Tracking = True
     Align = alRight
@@ -131,19 +124,13 @@ object Form1: TForm1
     TabOrder = 2
     StyleElements = []
     ThemeManager = UThemeManager1
-    AniSet.AniKind = akOut
-    AniSet.AniFunctionKind = afkCubic
-    AniSet.DelayStartTime = 0
-    AniSet.Duration = 120
-    AniSet.Step = 10
-    AniSet.Queue = True
     BackColor.Enabled = False
     BackColor.Color = clBlack
     BackColor.LightColor = 15132390
     BackColor.DarkColor = 2039583
     object UItemButton1: TUItemButton
       Left = 0
-      Top = 207
+      Top = 760
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -169,7 +156,7 @@ object Form1: TForm1
     end
     object UItemButton2: TUItemButton
       Left = 0
-      Top = 167
+      Top = 720
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -195,7 +182,7 @@ object Form1: TForm1
     end
     object UItemButton3: TUItemButton
       Left = 0
-      Top = 127
+      Top = 680
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -221,7 +208,7 @@ object Form1: TForm1
     end
     object UItemButton4: TUItemButton
       Left = 0
-      Top = 87
+      Top = 640
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -247,7 +234,7 @@ object Form1: TForm1
     end
     object UItemButton5: TUItemButton
       Left = 0
-      Top = 47
+      Top = 600
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -273,7 +260,7 @@ object Form1: TForm1
     end
     object UItemButton6: TUItemButton
       Left = 0
-      Top = 7
+      Top = 560
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -299,7 +286,7 @@ object Form1: TForm1
     end
     object UItemButton7: TUItemButton
       Left = 0
-      Top = -33
+      Top = 520
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -325,7 +312,7 @@ object Form1: TForm1
     end
     object UItemButton8: TUItemButton
       Left = 0
-      Top = -73
+      Top = 480
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -351,7 +338,7 @@ object Form1: TForm1
     end
     object UItemButton9: TUItemButton
       Left = 0
-      Top = -113
+      Top = 440
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -377,7 +364,7 @@ object Form1: TForm1
     end
     object UItemButton10: TUItemButton
       Left = 0
-      Top = -153
+      Top = 400
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -403,7 +390,7 @@ object Form1: TForm1
     end
     object UItemButton11: TUItemButton
       Left = 0
-      Top = -193
+      Top = 360
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -429,7 +416,7 @@ object Form1: TForm1
     end
     object UItemButton12: TUItemButton
       Left = 0
-      Top = -233
+      Top = 320
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -455,7 +442,7 @@ object Form1: TForm1
     end
     object UItemButton13: TUItemButton
       Left = 0
-      Top = -273
+      Top = 280
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -481,7 +468,7 @@ object Form1: TForm1
     end
     object UItemButton14: TUItemButton
       Left = 0
-      Top = -313
+      Top = 240
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -507,7 +494,7 @@ object Form1: TForm1
     end
     object UItemButton15: TUItemButton
       Left = 0
-      Top = -353
+      Top = 200
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -533,7 +520,7 @@ object Form1: TForm1
     end
     object UItemButton16: TUItemButton
       Left = 0
-      Top = -393
+      Top = 160
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -559,7 +546,7 @@ object Form1: TForm1
     end
     object UItemButton17: TUItemButton
       Left = 0
-      Top = -433
+      Top = 120
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -585,7 +572,7 @@ object Form1: TForm1
     end
     object UItemButton18: TUItemButton
       Left = 0
-      Top = -473
+      Top = 80
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -611,7 +598,7 @@ object Form1: TForm1
     end
     object UItemButton19: TUItemButton
       Left = 0
-      Top = -513
+      Top = 40
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop
@@ -637,7 +624,7 @@ object Form1: TForm1
     end
     object UItemButton20: TUItemButton
       Left = 0
-      Top = -553
+      Top = 0
       Width = 293
       ThemeManager = UThemeManager1
       Align = alTop

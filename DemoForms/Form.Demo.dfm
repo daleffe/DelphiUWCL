@@ -288,12 +288,6 @@ object formDemo: TformDemo
     ParentColor = False
     TabOrder = 1
     StyleElements = []
-    AniSet.AniKind = akOut
-    AniSet.AniFunctionKind = afkQuartic
-    AniSet.DelayStartTime = 0
-    AniSet.Duration = 120
-    AniSet.Step = 6
-    AniSet.Queue = True
     BackColor.Enabled = True
     BackColor.Color = clBlack
     BackColor.LightColor = 14342874
@@ -536,7 +530,6 @@ object formDemo: TformDemo
     ParentColor = True
     ShowCaption = False
     TabOrder = 3
-    ExplicitWidth = 1000
     object textTitle: TUText
       Left = 390
       Top = 10
@@ -1581,7 +1574,6 @@ object formDemo: TformDemo
       BackColor.Color = clWhite
       BackColor.LightColor = 15132390
       BackColor.DarkColor = 2039583
-      ExplicitLeft = 8
       object buttonOpenMenu: TUSymbolButton
         Left = 0
         Top = 0
@@ -1752,12 +1744,6 @@ object formDemo: TformDemo
     ParentColor = False
     TabOrder = 2
     StyleElements = []
-    AniSet.AniKind = akOut
-    AniSet.AniFunctionKind = afkCubic
-    AniSet.DelayStartTime = 0
-    AniSet.Duration = 120
-    AniSet.Step = 10
-    AniSet.Queue = True
     BackColor.Enabled = False
     BackColor.Color = clBlack
     BackColor.LightColor = 15132390

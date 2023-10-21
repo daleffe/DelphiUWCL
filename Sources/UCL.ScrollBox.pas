@@ -17,7 +17,8 @@ uses
   UCL.Types,
   UCL.Colors,
   UCL.ThemeManager,
-  UCL.IntAnimation,
+  UCL.Threading,
+//  UCL.IntAnimation,
   UCL.Utils;
 
 type
@@ -47,7 +48,7 @@ type
 
   private
     FThemeManager: TUThemeManager;
-    FAniSet: TIntAniSet;
+    //FAniSet: TIntAniSet;
     FBackColor: TUThemeControlColorSet;
 
     FScrollCount: Integer;
@@ -59,9 +60,10 @@ type
     FScrollBarTimer: TTimer;
     //
     // Internally used variables
-    Animation: TIntAni;
+    Animation: TControlThread;
     ScrollBar: TControlScrollBar;
     ScrollSign: Integer;
+    ScrollLines: Integer;
 
     // Setters
     procedure SetBackColor(Value: TUThemeControlColorSet);
@@ -96,7 +98,7 @@ type
     function IsDesigning: Boolean; inline;
 
     function CanShowMiniSB(var SB: TControlScrollBar): Boolean; virtual;
-    procedure CreateAnimationThread(const SyncProc: TAniSyncProc; const DoneProc: TAniDoneProc); virtual;
+    procedure CreateAnimationThread(const SyncProc: TControlThreadSyncProc; const DoneProc: TControlThreadDoneProc); virtual;
     function GetClientRect: TRect; override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -113,7 +115,7 @@ type
 
   published
     property ThemeManager: TUThemeManager read FThemeManager write SetThemeManager;
-    property AniSet: TIntAniSet read FAniSet write FAniSet;
+    //property AniSet: TIntAniSet read FAniSet write FAniSet;
     property BackColor: TUThemeControlColorSet read FBackColor write SetBackColor;
 
     property ScrollCount: Integer read FScrollCount;
@@ -129,7 +131,8 @@ implementation
 
 uses
   SysUtils,
-  UCL.Form;
+  UCL.Form,
+  UCL.SystemSettings;
 
 type
   TUFormAccess = class(TUForm);
@@ -224,12 +227,13 @@ begin
   MiniSB.Color := MINI_SB_COLOR;
 
   //  Custom AniSet
-  FAniSet := TIntAniSet.Create;
-  FAniSet.QuickAssign(akOut, afkCubic, 0, 120, 10, True);
+//  FAniSet := TIntAniSet.Create;
+//  FAniSet.QuickAssign(akOut, afkCubic, 0, 120, 10, True);
   // Internal variables
   Animation:= Nil;
   ScrollBar:=Nil;
   ScrollSign:=0;
+  ScrollLines:=GetMouseScrollLinesNumber;
 
   FBackColor := TUThemeControlColorSet.Create;
   FBackColor.Assign(SCROLLBOX_BACK);
@@ -246,11 +250,11 @@ begin
 //  UpdateTheme;
 end;
 
-procedure TUScrollBox.CreateAnimationThread(const SyncProc: TAniSyncProc; const DoneProc: TAniDoneProc);
+procedure TUScrollBox.CreateAnimationThread(const SyncProc: TControlThreadSyncProc; const DoneProc: TControlThreadDoneProc);
 begin
   if Animation = Nil then begin
-    Animation := TIntAni.Create(1, +LengthPerStep, SyncProc, DoneProc);
-    Animation.AniSet.Assign(Self.AniSet);
+    Animation := TControlThread.Create(0, +LengthPerStep, SyncProc, DoneProc);
+    //Animation.AniSet.Assign(Self.AniSet);
   end;
 end;
 
@@ -270,9 +274,12 @@ var
 begin
   FScrollBarTimer.Enabled := False;
   MiniSB.Free;
-  if Assigned(Animation) then
+  if Assigned(Animation) then begin
+    Animation.Terminate;
+    Animation.WaitFor;
     Animation.Free;
-  FAniSet.Free;
+  end;
+  //FAniSet.Free;
   FBackColor.Free;
   FScrollBarTimer.Free;
   TM:=SelectThemeManager(Self);
@@ -655,40 +662,42 @@ begin
       Mouse.Capture := Handle;
     end;
 
-    Inc(FScrollCount);
+    Inc(FScrollCount, ScrollLines * (Abs(Msg.WheelDelta) div WHEEL_DELTA));
     ScrollSign := Msg.WheelDelta div Abs(Msg.WheelDelta);
 
     CreateAnimationThread(
-      procedure (V: Integer)
+      function (V: Integer): Boolean
       begin
+        Result:=True; // do not break loop
         ScrollBar.Position := ScrollBar.Position - V * ScrollSign;
         if ScrollBarStyle = sbsMini then
           UpdateMiniSB;
+        Dec(FScrollCount);
+        if FScrollCount <= 0 then begin
+          //Result:=False; // break loop
+          FScrollCount := 0;
+          EnableAlign;
+          Mouse.Capture := 0;
+          FScrollBarTimer.Enabled := True;
+          Animation.Suspend;
+        end;
+        Sleep(10);
       end
     ,
       procedure
       begin
         if ScrollBarStyle <> sbsFull then
           SetOldSBVisible(False);
-        Dec(FScrollCount);
-        if FScrollCount <= 0 then begin
-          Animation.WaitFor;
-          Animation.Suspend;
-          FScrollCount := 0;
-          EnableAlign;
-          Mouse.Capture := 0;
-          FScrollBarTimer.Enabled := True;
-        end
-        else begin
-          Animation.WaitFor;
-          Animation.Suspend;
-          Animation.Start;
-        end;
+        //Animation.Suspend;
+        FScrollCount := 0;
+        EnableAlign;
+        Mouse.Capture := 0;
+        FScrollBarTimer.Enabled := True;
       end
     );
 
     if Animation.Suspended then
-      Animation.Start;
+      Animation.Resume;
   end;
 end;
 

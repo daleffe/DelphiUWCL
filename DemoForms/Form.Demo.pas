@@ -288,8 +288,9 @@ begin
   Delta := MulDiv(210, PPI, 96);
 
   Ani := TIntAni.Create(buttonRunning.Left, Delta,
-    procedure (V: Integer)
+    function (V: Integer): Boolean
     begin
+      Result:=True; // do not break loop
       buttonRunning.Left := V;
     end,
     procedure
@@ -308,8 +309,9 @@ begin
   Delta := -MulDiv(210, PPI, 96);
 
   Ani := TIntAni.Create(buttonRunning.Left, Delta,
-    procedure (V: Integer)
+    function (V: Integer): Boolean
     begin
+      Result:=True; // do not break loop
       buttonRunning.Left := V;
     end,
     procedure
@@ -334,8 +336,9 @@ begin
     Delta := -MulDiv(180, PPI, 96); //  Close
 
   Ani := TIntAni.Create(drawerNavigation.Width, Delta,
-    procedure (V: Integer)
+    function (V: Integer): Boolean
     begin
+      Result:=True; // do not break loop
       drawerNavigation.Width := V;
     end, nil);
   Ani.AniSet.QuickAssign(akOut, afkQuartic, 0, 200, 30);
@@ -355,8 +358,9 @@ begin
     Delta := -boxSettings.Width; //  Close
 
   Ani := TIntAni.Create(boxSettings.Width, Delta,
-    procedure (V: Integer)
+    function (V: Integer): Boolean
     begin
+      Result:=True; // do not break loop
       boxSettings.Width := V;
     end,
     procedure

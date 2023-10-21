@@ -136,9 +136,10 @@ begin
   end;
 
   Ani := TIntAni.Create(Form.ClientHeight, -Form.ClientHeight,
-    procedure (Value: Integer)
+    function (V: Integer): Boolean
     begin
-      Form.Height := Value;
+      Result:=True; // do not break loop
+      Form.Height := V;
     end,
     procedure
     begin
@@ -317,9 +318,10 @@ begin
 
   //  Animation
   Ani := TIntAni.Create(0, TotalItemsHeight + 2 * Spacing,
-    procedure (Value: Integer)
+    function (V: Integer): Boolean
     begin
-      Form.ClientHeight := Value;
+      Result:=True; // do not break loop
+      Form.ClientHeight := V;
     end, nil);
   Ani.AniSet.Assign(Self.AniSet);
   Ani.Start;

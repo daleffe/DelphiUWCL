@@ -55,7 +55,7 @@ uses
   Messages,
   DwmApi,
   UxTheme,
-//  UITypes,
+  UITypes,
   UCL.Classes,
   UCL.Types,
   UCL.Utils;

@@ -7,15 +7,16 @@ interface
 {$IFEND}
 
 uses
-  Classes
-{$IF CompilerVersion > 29}
-  , Threading
-{$IFEND}
+  Classes,
+  UCL.Threading
+//{$IF CompilerVersion > 29}
+//  , Threading
+//{$IFEND}
   ;
 
 type
-  TAniSyncProc = reference to procedure (V: Integer);
-  TAniDoneProc = reference to procedure;
+  TAniSyncProc = TControlThreadSyncProc;
+  TAniDoneProc = TControlThreadDoneProc;
   TAniFunction = reference to function (P: Single): Single;
 
   TAniKind = (akIn, akOut, akInOut);
@@ -27,57 +28,43 @@ type
   );
 
   TIntAniSet = class(TPersistent)
-    private
-      FAniKind: TAniKind;
-      FAniFunctionKind: TAniFunctionKind;
-      FDelayStartTime: Cardinal;
-      FDuration: Cardinal;
-      FStep: Cardinal;
-      FQueue: Boolean;
-    public
-      constructor Create;
-      procedure Assign(Source: TPersistent); override;
-      procedure QuickAssign(AniKind: TAniKind; AniFunctionKind: TAniFunctionKind; Delay, Duration, Step: Cardinal; Queue: Boolean = False);
-    published
-      property AniKind: TAniKind read FAniKind write FAniKind;
-      property AniFunctionKind: TAniFunctionKind read FAniFunctionKind write FAniFunctionKind;
-      property DelayStartTime: Cardinal read FDelayStartTime write FDelayStartTime;
-      property Duration: Cardinal read FDuration write FDuration;
-      property Step: Cardinal read FStep write FStep;
-      property Queue: Boolean read FQueue write FQueue default False;
+  private
+    FAniKind: TAniKind;
+    FAniFunctionKind: TAniFunctionKind;
+    FDelayStartTime: Cardinal;
+    FDuration: Cardinal;
+    FStep: Cardinal;
+    FQueue: Boolean;
+  public
+    constructor Create;
+    procedure Assign(Source: TPersistent); override;
+    procedure QuickAssign(AniKind: TAniKind; AniFunctionKind: TAniFunctionKind; Delay, Duration, Step: Cardinal; Queue: Boolean = False);
+  published
+    property AniKind: TAniKind read FAniKind write FAniKind;
+    property AniFunctionKind: TAniFunctionKind read FAniFunctionKind write FAniFunctionKind;
+    property DelayStartTime: Cardinal read FDelayStartTime write FDelayStartTime;
+    property Duration: Cardinal read FDuration write FDuration;
+    property Step: Cardinal read FStep write FStep;
+    property Queue: Boolean read FQueue write FQueue default False;
   end;
 
-  TIntAni = class(TThread)
-    var CurrentValue: Integer;
+  TIntAni = class(TControlThread)
+  private
+    var AniFunction: TAniFunction;
 
-    private
-      var AniFunction: TAniFunction;
+    FAniSet: TIntAniSet;
 
-      FOnSync: TAniSyncProc;
-      FOnDone: TAniDoneProc;
-      FAniSet: TIntAniSet;
-      FStartValue: Integer;
-      FDeltaValue: Integer;
+  protected
+    function UpdateFunction: Boolean; override;
 
-      function UpdateFunction: Boolean;
-      procedure UpdateControl;
-      procedure DoneControl;
+    procedure Execute; override;
 
-    protected
-      procedure Execute; override;
+  public
+    constructor Create(aStartValue, aDeltaValue: Integer; aSyncProc: TAniSyncProc; aDoneProc: TAniDoneProc); override;
+    destructor Destroy; override;
 
-    public
-      constructor Create(aStartValue, aDeltaValue: Integer; aSyncProc: TAniSyncProc; aDoneProc: TAniDoneProc);
-      destructor Destroy; override;
-
-      //  Events
-      property OnSync: TAniSyncProc read FOnSync write FOnSync;
-      property OnDone: TAniDoneProc read FOnDone write FOnDone;
-
-      //  Properties
-      property AniSet: TIntAniSet read FAniSet write FAniSet;
-      property StartValue: Integer read FStartValue write FStartValue default 0;
-      property DeltaValue: Integer read FDeltaValue write FDeltaValue default 0;
+    //  Properties
+    property AniSet: TIntAniSet read FAniSet write FAniSet;
   end;
 
 implementation
@@ -91,7 +78,7 @@ uses
 
 function TIntAni.UpdateFunction: Boolean;
 begin
-  Result := true;
+  Result := True;
   case AniSet.AniKind of
     akIn:
       case AniSet.AniFunctionKind of
@@ -116,7 +103,7 @@ begin
         afkCircle:
           AniFunction := TIntAniCollection.Circle_In;
         else
-          Result := false;
+          Result := False;
       end;
 
     akOut:
@@ -142,7 +129,7 @@ begin
         afkCircle:
           AniFunction := TIntAniCollection.Circle_Out;
         else
-          Result := false;
+          Result := False;
       end;
 
     akInOut:
@@ -168,11 +155,11 @@ begin
         afkCircle:
           AniFunction := TIntAniCollection.Circle_InOut;
         else
-          Result := false;
+          Result := False;
       end;
 
     else
-      Result := false;
+      Result := False;
   end;
 end;
 
@@ -180,25 +167,24 @@ end;
 
 constructor TIntAni.Create(aStartValue: Integer; aDeltaValue: Integer; aSyncProc: TAniSyncProc; aDoneProc: TAniDoneProc);
 begin
-  inherited Create(True);
-  FreeOnTerminate := False;
-
   //  Internal
-  CurrentValue := 0;
   AniFunction := Nil;
 
   //  AniSet
   FAniSet := TIntAniSet.Create;
   FAniSet.QuickAssign(akOut, afkLinear, 0, 200, 20);
 
-  //  Fields
-  FStartValue := aStartValue;
-  FDeltaValue := aDeltaValue;
-  FOnSync := aSyncProc;
-  FOnDone := aDoneProc;
+  inherited Create(aStartValue, aDeltaValue, aSyncProc, aDoneProc);
+  FreeOnTerminate := True;
 
   //  Finish
   UpdateFunction;
+end;
+
+destructor TIntAni.Destroy;
+begin
+  FAniSet.Free;
+  inherited;
 end;
 
 procedure TIntAni.Execute;
@@ -248,24 +234,6 @@ begin
 //    Queue(Nil, DoneControl)
 //  else
     Synchronize(DoneControl);
-end;
-
-destructor TIntAni.Destroy;
-begin
-  FAniSet.Free;
-  inherited;
-end;
-
-procedure TIntAni.DoneControl;
-begin
-  if Assigned(FOnDone) then
-    FOnDone();
-end;
-
-procedure TIntAni.UpdateControl;
-begin
-  if Assigned(FOnSync) then
-    FOnSync(CurrentValue);
 end;
 
 { TIntAniSet }

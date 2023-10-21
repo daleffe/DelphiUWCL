@@ -236,8 +236,9 @@ begin
     Exit;
 
   Ani := TIntAni.Create(FValue, Value - FValue,
-    procedure (V: Integer)
+    function (V: Integer): Boolean
     begin
+      Result:=True; // do not break loop
       Self.Value := V;
     end, Nil);
   Ani.AniSet.Assign(Self.AniSet);

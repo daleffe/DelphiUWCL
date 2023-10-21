@@ -36,12 +36,6 @@ object formAppList: TformAppList
     ParentColor = False
     TabOrder = 0
     StyleElements = []
-    AniSet.AniKind = akOut
-    AniSet.AniFunctionKind = afkCubic
-    AniSet.DelayStartTime = 0
-    AniSet.Duration = 120
-    AniSet.Step = 10
-    AniSet.Queue = True
     BackColor.Enabled = False
     BackColor.Color = clBlack
     BackColor.LightColor = 15132390
@@ -330,12 +324,6 @@ object formAppList: TformAppList
     ParentColor = False
     TabOrder = 2
     StyleElements = []
-    AniSet.AniKind = akOut
-    AniSet.AniFunctionKind = afkCubic
-    AniSet.DelayStartTime = 0
-    AniSet.Duration = 120
-    AniSet.Step = 10
-    AniSet.Queue = True
     BackColor.Enabled = False
     BackColor.Color = clBlack
     BackColor.LightColor = 15132390

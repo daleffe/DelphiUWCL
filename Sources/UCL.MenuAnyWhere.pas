@@ -45,13 +45,13 @@ type
   TUMenuButton = class(TGraphicControl)
   private
     FDown: Boolean;
-    FImageIndex: TImageIndex; // UITypes
+    FImageIndex: UITypes.TImageIndex; // UITypes
     FMenuItem: TMenuItem;
     FUpdateCount: Integer;
     FMouseInClient: Boolean;
     function  GetIndex: Integer;
     procedure SetDown(Value: Boolean);
-    procedure SetImageIndex(Value: TImageIndex);
+    procedure SetImageIndex(Value: UITypes.TImageIndex);
     procedure SetMenuItem(Value: TMenuItem);
     procedure CMHitTest(var Message: TCMHitTest); message CM_HITTEST;
     procedure CMMouseEnter(var Message: TMessage); message CM_MOUSEENTER;
@@ -85,7 +85,7 @@ type
 //    property DragMode;
     property Enabled;
     property Height stored False;
-    property ImageIndex: TImageIndex read FImageIndex write SetImageIndex default -1;
+    property ImageIndex: UITypes.TImageIndex read FImageIndex write SetImageIndex default -1;
     property MenuItem: TMenuItem read FMenuItem write SetMenuItem;
 //    property ParentShowHint;
 //    property PopupMenu;
@@ -463,8 +463,9 @@ end;
 function MenuWindowProc(Wnd: HWND; uMsg: Integer; WParam: WPARAM; LParam: LPARAM): LRESULT; stdcall;
 var
   OldWndProc: Integer;
-  Canvas: TCanvas;
-  R, WindowRect: TRect;
+//  Canvas: TCanvas;
+//  R,
+//  WindowRect: TRect;
 begin
   if uMsg = WM_ERASEBKGND then begin
     Result := 1;
@@ -906,7 +907,7 @@ var
   WMInitMenuPopup: TWMInitMenuPopup;
   DrawItemStruct: TDrawItemStruct;
   Menu: TPopupMenu;
-  MenuWindow: HWND;
+//  MenuWindow: HWND;
 begin
 //  if (WmMessageToString <> Nil) and (Message.Msg <> WM_ENTERIDLE) then
 //    OutputDebugString(PChar(GetTimeStamp + 'TUPopupList.WndProc: ' + WmMessageToString.MsgToString(Message)));
@@ -1308,7 +1309,7 @@ begin
   end;
 end;
 
-procedure TUMenuButton.SetImageIndex(Value: TImageIndex);
+procedure TUMenuButton.SetImageIndex(Value: UITypes.TImageIndex);
 begin
   if FImageIndex <> Value then begin
     FImageIndex := Value;
@@ -1631,15 +1632,15 @@ const
   LeftArrowKey: array[Boolean] of Word = (VK_RIGHT, VK_LEFT);
 var
   P: TPoint;
-  R: TRect;
+//  R: TRect;
   Target: TControl;
   Item: Integer;
   FindKind: TFindItemKind;
   ParentMenu: TMenu;
   closeMenu: Boolean;
-  Canvas: TCanvas;
-  SaveIndex: Integer;
-  DC: HDC;
+//  Canvas: TCanvas;
+//  SaveIndex: Integer;
+//  DC: HDC;
 begin
   if LastMenuItem <> Nil then begin
     ParentMenu := LastMenuItem.GetParentMenu;
@@ -2535,7 +2536,10 @@ begin
   if FControl <> Nil then
     TM := SelectThemeManager(FControl)
   else if TMenu <> Nil then
-    TM := SelectThemeManager(FMenu);
+    TM := SelectThemeManager(FMenu)
+  else
+    TM := GetCommonThemeManager;
+  //
   AccentColor := SelectAccentColor(TM, clNone);
 
   ButtonBackColor := ButtonBackColors.GetColor(TM.ThemeUsed, csNone);

@@ -26,6 +26,7 @@ object formLoginDialog: TformLoginDialog
     HorzScrollBar.Tracking = True
     VertScrollBar.Tracking = True
     Align = alClient
+    AutoScroll = False
     BevelEdges = []
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -35,12 +36,7 @@ object formLoginDialog: TformLoginDialog
     Padding.Bottom = 50
     ParentColor = False
     TabOrder = 0
-    AniSet.AniKind = akOut
-    AniSet.AniFunctionKind = afkQuartic
-    AniSet.DelayStartTime = 0
-    AniSet.Duration = 250
-    AniSet.Step = 25
-    AniSet.Queue = True
+    StyleElements = []
     BackColor.Enabled = False
     BackColor.Color = clBlack
     BackColor.LightColor = 15132390
@@ -224,6 +220,7 @@ object formLoginDialog: TformLoginDialog
       ParentFont = False
       BevelOuter = bvNone
       Color = clBlack
+      PopupMenu = popupEdit
       TabOrder = 0
       BorderThickness = 1
       BackColor.Enabled = False
@@ -253,6 +250,7 @@ object formLoginDialog: TformLoginDialog
       ParentFont = False
       BevelOuter = bvNone
       Color = clBlack
+      PopupMenu = popupEdit
       TabOrder = 1
       BorderThickness = 1
       BackColor.Enabled = False
@@ -278,8 +276,8 @@ object formLoginDialog: TformLoginDialog
       Margins.Right = 0
       Margins.Bottom = 20
       Align = alTop
-      ParentFont = False
       BevelOuter = bvNone
+      PopupMenu = popupEdit
       TabOrder = 2
       BorderThickness = 1
       BackColor.Enabled = False
@@ -301,12 +299,15 @@ object formLoginDialog: TformLoginDialog
     Left = 0
     Top = 0
     Width = 410
+    Height = 32
     Caption = '   Login'
+    DoubleBuffered = True
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Segoe UI'
     Font.Style = []
+    ParentDoubleBuffered = False
     ParentFont = False
     TabOrder = 1
     BackColors.Enabled = False
@@ -315,10 +316,49 @@ object formLoginDialog: TformLoginDialog
     BackColors.DarkColor = 2829099
     BackColors.FocusedLightColor = 14120960
     BackColors.FocusedDarkColor = clBlue
+    MenuController.ButtonWidth = 0
+    MenuController.ButtonHeight = 0
+    MenuController.Transparent = False
+    MenuController.Font.Charset = DEFAULT_CHARSET
+    MenuController.Font.Color = clWindowText
+    MenuController.Font.Height = -12
+    MenuController.Font.Name = 'Segoe UI'
+    MenuController.Font.Style = []
+    MenuController.ButtonBackColors.Enabled = False
+    MenuController.ButtonBackColors.LightColor = 15921906
+    MenuController.ButtonBackColors.LightHover = 14120960
+    MenuController.ButtonBackColors.LightDisabled = clGray
+    MenuController.ButtonBackColors.DarkColor = 2829099
+    MenuController.ButtonBackColors.DarkHover = 1525760
+    MenuController.ButtonBackColors.DarkDisabled = clGray
+    MenuController.ButtonTextColors.Enabled = False
+    MenuController.ButtonTextColors.LightColor = clBlack
+    MenuController.ButtonTextColors.LightHover = clWhite
+    MenuController.ButtonTextColors.LightDisabled = clGray
+    MenuController.ButtonTextColors.DarkColor = clWhite
+    MenuController.ButtonTextColors.DarkHover = clWhite
+    MenuController.ButtonTextColors.DarkDisabled = clGray
+    MenuController.MenuBorderColors.Enabled = False
+    MenuController.MenuBorderColors.Color = clDefault
+    MenuController.MenuBorderColors.LightColor = clBlack
+    MenuController.MenuBorderColors.DarkColor = clSilver
+    MenuController.MenuBackColors.Enabled = False
+    MenuController.MenuBackColors.LightColor = clWhite
+    MenuController.MenuBackColors.LightHover = clHighlight
+    MenuController.MenuBackColors.LightDisabled = clGray
+    MenuController.MenuBackColors.DarkColor = clBlack
+    MenuController.MenuBackColors.DarkHover = clHighlight
+    MenuController.MenuBackColors.DarkDisabled = clGray
+    MenuController.MenuTextColors.Enabled = False
+    MenuController.MenuTextColors.LightColor = clBlack
+    MenuController.MenuTextColors.LightHover = clBlack
+    MenuController.MenuTextColors.LightDisabled = clGray
+    MenuController.MenuTextColors.DarkColor = clWhite
+    MenuController.MenuTextColors.DarkHover = clWhite
+    MenuController.MenuTextColors.DarkDisabled = clGray
     object buttonAppQuit: TUQuickButton
       Left = 365
       Top = 0
-      Hint = 'Close'
       Align = alRight
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -328,13 +368,16 @@ object formLoginDialog: TformLoginDialog
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
+      BackColors.Enabled = False
+      BackColors.Color = clBlack
+      BackColors.LightColor = 13619151
+      BackColors.DarkColor = 3947580
       ButtonStyle = qbsQuit
       Caption = #57606
     end
     object buttonAppMinimized: TUQuickButton
       Left = 320
       Top = 0
-      Hint = 'Minimize'
       Align = alRight
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -344,13 +387,16 @@ object formLoginDialog: TformLoginDialog
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
+      BackColors.Enabled = False
+      BackColors.Color = clBlack
+      BackColors.LightColor = 13619151
+      BackColors.DarkColor = 3947580
       ButtonStyle = qbsMin
       Caption = #59192
     end
     object buttonAppTheme: TUQuickButton
       Left = 275
       Top = 0
-      Hint = 'Switch theme'
       Align = alRight
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -361,6 +407,10 @@ object formLoginDialog: TformLoginDialog
       ParentShowHint = False
       ShowHint = True
       OnClick = buttonAppThemeClick
+      BackColors.Enabled = False
+      BackColors.Color = clBlack
+      BackColors.LightColor = 13619151
+      BackColors.DarkColor = 3947580
       Caption = #59144
     end
   end

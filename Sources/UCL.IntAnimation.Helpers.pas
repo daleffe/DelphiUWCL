@@ -44,8 +44,9 @@ var
   Ani: TIntAni;
 begin
   Ani := TIntAni.Create(StartValue, DeltaValue,
-    procedure (V: Integer)
+    function (V: Integer): Boolean
     begin
+      Result:=True; // do not break loop
       SetPropValue(AniProperty, V);
     end, OnDone);
   Ani.AniSet.QuickAssign(AniKind, AniFunctionKind, 0, Duration, Step);

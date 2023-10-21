@@ -13,6 +13,7 @@ function IsColorOnSurfaceEnabled: Boolean;
 function IsAppsUseDarkTheme: Boolean;
 function IsSystemUseDarkTheme: Boolean;
 function IsTransparencyEnabled: Boolean;
+function GetMouseScrollLinesNumber: Integer;
 
 type
   TWindowRoundedCornerType = (
@@ -151,6 +152,11 @@ begin
   finally
     R.Free;
   end;
+end;
+
+function GetMouseScrollLinesNumber: Integer;
+begin
+  SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, @Result, 0);
 end;
 
 function  GetWindowRoundedCornerPreference(const Value: TWindowRoundedCornerType): Cardinal;

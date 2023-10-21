@@ -422,8 +422,9 @@ begin
       Delta := FCaptionHeight - Height;
 
     Ani := TIntAni.Create(Height, Delta,
-      procedure (V: Integer)
+      function (V: Integer): Boolean
       begin
+        Result:=True; // do not break loop
         Height := V;
       end, Nil);
     Ani.AniSet.QuickAssign(akOut, afkQuartic, 0, 120, 12);
