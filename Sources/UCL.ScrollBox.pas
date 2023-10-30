@@ -58,9 +58,10 @@ type
     FMaxScrollCount: Integer;
     FMouseInControl: Boolean;
     FScrollBarTimer: TTimer;
+    FScrollBarHideTimer: TTimer;
     //
     // Internally used variables
-    Animation: TControlThread;
+    //Animation: TControlThread;
     ScrollBar: TControlScrollBar;
     ScrollSign: Integer;
     ScrollLines: Integer;
@@ -73,6 +74,7 @@ type
     // Child events
     procedure ColorsChange(Sender: TObject);
     procedure ScrollBar_OnTimer(Sender: TObject);
+    procedure ScrollBarHide_OnTimer(Sender: TObject);
 
     // Messages
 //    procedure WMEraseBkgnd(var Message: TWmEraseBkgnd); message WM_ERASEBKGND;
@@ -98,7 +100,7 @@ type
     function IsDesigning: Boolean; inline;
 
     function CanShowMiniSB(var SB: TControlScrollBar): Boolean; virtual;
-    procedure CreateAnimationThread(const SyncProc: TControlThreadSyncProc; const DoneProc: TControlThreadDoneProc); virtual;
+    //procedure CreateAnimationThread(const SyncProc: TControlThreadSyncProc; const DoneProc: TControlThreadDoneProc); virtual;
     function GetClientRect: TRect; override;
   public
     constructor Create(AOwner: TComponent); override;
@@ -230,7 +232,7 @@ begin
 //  FAniSet := TIntAniSet.Create;
 //  FAniSet.QuickAssign(akOut, afkCubic, 0, 120, 10, True);
   // Internal variables
-  Animation:= Nil;
+  //Animation:= Nil;
   ScrollBar:=Nil;
   ScrollSign:=0;
   ScrollLines:=GetMouseScrollLinesNumber;
@@ -241,8 +243,13 @@ begin
 
   FScrollBarTimer := TTimer.Create(Nil);
   FScrollBarTimer.Enabled := False;
-  FScrollBarTimer.Interval := 5000;
+  FScrollBarTimer.Interval := 10;
   FScrollBarTimer.OnTimer := ScrollBar_OnTimer;
+
+  FScrollBarHideTimer := TTimer.Create(Nil);
+  FScrollBarHideTimer.Enabled := False;
+  FScrollBarHideTimer.Interval := 5000;
+  FScrollBarHideTimer.OnTimer := ScrollBarHide_OnTimer;
 
   if GetCommonThemeManager <> Nil then
     GetCommonThemeManager.Connect(Self);
@@ -250,13 +257,13 @@ begin
 //  UpdateTheme;
 end;
 
-procedure TUScrollBox.CreateAnimationThread(const SyncProc: TControlThreadSyncProc; const DoneProc: TControlThreadDoneProc);
-begin
-  if Animation = Nil then begin
-    Animation := TControlThread.Create(0, +LengthPerStep, SyncProc, DoneProc);
-    //Animation.AniSet.Assign(Self.AniSet);
-  end;
-end;
+//procedure TUScrollBox.CreateAnimationThread(const SyncProc: TControlThreadSyncProc; const DoneProc: TControlThreadDoneProc);
+//begin
+//  if Animation = Nil then begin
+//    Animation := TControlThread.Create(0, +LengthPerStep, SyncProc, DoneProc);
+//    //Animation.AniSet.Assign(Self.AniSet);
+//  end;
+//end;
 
 procedure TUScrollBox.CreateParams(var Params: TCreateParams);
 begin
@@ -273,15 +280,17 @@ var
   TM: TUCustomThemeManager;
 begin
   FScrollBarTimer.Enabled := False;
+  FScrollBarHideTimer.Enabled := False;
   MiniSB.Free;
-  if Assigned(Animation) then begin
-    Animation.Terminate;
-    Animation.WaitFor;
-    Animation.Free;
-  end;
+//  if Assigned(Animation) then begin
+//    Animation.Terminate;
+//    Animation.WaitFor;
+//    Animation.Free;
+//  end;
   //FAniSet.Free;
   FBackColor.Free;
   FScrollBarTimer.Free;
+  FScrollBarHideTimer.Free;
   TM:=SelectThemeManager(Self);
   TM.Disconnect(Self);
   inherited;
@@ -569,12 +578,12 @@ end;
 procedure TUScrollBox.WMMouseMove(var Msg: TWMMouseMove);
 begin
   if FMouseInControl and (ScrollBarStyle = sbsMini) and not MiniSB.Visible then begin
-    FScrollBarTimer.Enabled := False;
+    FScrollBarHideTimer.Enabled := False;
     if ScrollBarStyle <> sbsFull then
       SetOldSBVisible(False);
     if ScrollBarStyle = sbsMini then
       SetMiniSBVisible(True);
-    FScrollBarTimer.Enabled := MiniSB.Visible;
+    FScrollBarHideTimer.Enabled := MiniSB.Visible;
   end;
 
   inherited;
@@ -593,7 +602,7 @@ begin
 
 //  if not FMouseInControl and PtInRect(GetClientRect, ScreenToClient(Mouse.CursorPos)) then
   FMouseInControl := True;
-  FScrollBarTimer.Enabled := True;
+  FScrollBarHideTimer.Enabled := True;
 
   if ScrollBarStyle <> sbsFull then
     SetOldSBVisible(False);
@@ -607,7 +616,7 @@ procedure TUScrollBox.CMMouseLeave(var Msg: TMessage);
 begin
   if not PtInRect(GetClientRect, ScreenToClient(Mouse.CursorPos)) then begin
     FMouseInControl := False;
-    FScrollBarTimer.Enabled := False;
+    FScrollBarHideTimer.Enabled := False;
   end;
 
   if (ScrollBarStyle = sbsMini) and not FMouseInControl then begin
@@ -639,7 +648,7 @@ begin
     ScrollBar := VertScrollBar
   else
     ScrollBar := HorzScrollBar;
-  
+
   //  Scroll by touchpad
   if (Abs(Msg.WheelDelta) < 100) or IsDesigning then begin
     if IsDesigning then
@@ -654,8 +663,8 @@ begin
   end
   //  Scroll by mouse
   else begin
-    if FScrollCount >= MaxScrollCount then 
-      Exit;
+//    if FScrollCount >= MaxScrollCount then
+//      Exit;
 
     if FScrollCount = 0 then begin
       DisableAlign;
@@ -664,7 +673,8 @@ begin
 
     Inc(FScrollCount, ScrollLines * (Abs(Msg.WheelDelta) div WHEEL_DELTA));
     ScrollSign := Msg.WheelDelta div Abs(Msg.WheelDelta);
-
+    FScrollBarTimer.Enabled := True;
+(*
     CreateAnimationThread(
       function (V: Integer): Boolean
       begin
@@ -698,6 +708,7 @@ begin
 
     if Animation.Suspended then
       Animation.Resume;
+*)
   end;
 end;
 
@@ -732,9 +743,39 @@ begin
     Exit;
   end;
 
+  ScrollBar.Position := ScrollBar.Position - 10 * ScrollSign;
+  if ScrollBarStyle = sbsMini then
+    UpdateMiniSB;
+  Dec(FScrollCount);
+  if FScrollCount <= 0 then begin
+    FScrollBarTimer.Enabled := False;
+    FScrollCount := 0;
+    EnableAlign;
+    Mouse.Capture := 0;
+    FScrollBarHideTimer.Enabled := True;
+  end;
+
+//        if ScrollBarStyle <> sbsFull then
+//          SetOldSBVisible(False);
+//        FScrollCount := 0;
+//        EnableAlign;
+//        Mouse.Capture := 0;
+//        FScrollBarTimer.Enabled := True;
+
+end;
+
+procedure TUScrollBox.ScrollBarHide_OnTimer(Sender: TObject);
+var
+  LForm: TCustomForm;
+begin
+  FScrollBarHideTimer.Enabled := False;
+
+  LForm := GetParentForm(Self);
+  if (LForm <> Nil) and (LForm is TUForm) and not TUForm(LForm).IsActive then
+    Exit;
+
   if FMouseInControl and (ScrollBarStyle = sbsMini) and MiniSB.Visible then
     SetMiniSBVisible(False);
-  FScrollBarTimer.Enabled := False;
 end;
 
 end.
