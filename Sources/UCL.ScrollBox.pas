@@ -106,6 +106,8 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     //
+    procedure AfterConstruction; override;
+    //
     procedure SetOldSBVisible(IsVisible: Boolean);
     procedure UpdateMiniSB;
     procedure SetMiniSBVisible(IsVisible: Boolean);
@@ -193,23 +195,6 @@ begin
 {$IF CompilerVersion > 29}
   StyleElements:=[];
 {$IFEND}
-  VertScrollBar.ButtonSize:=0;
-  VertScrollBar.Increment:=8;
-  VertScrollBar.Margin:=0;
-  VertScrollBar.Position:=0;
-  VertScrollBar.Range:=0;
-  VertScrollBar.Size:=0;
-  VertScrollBar.ThumbSize:=0;
-  VertScrollBar.Tracking := True;
-  //
-  HorzScrollBar.ButtonSize:=0;
-  HorzScrollBar.Increment:=8;
-  HorzScrollBar.Margin:=0;
-  HorzScrollBar.Position:=0;
-  HorzScrollBar.Range:=0;
-  HorzScrollBar.Size:=0;
-  HorzScrollBar.ThumbSize:=0;
-  HorzScrollBar.Tracking := True;
 
   //  Fields
   FScrollCount := 0;
@@ -251,9 +236,6 @@ begin
   FScrollBarHideTimer.Interval := 5000;
   FScrollBarHideTimer.OnTimer := ScrollBarHide_OnTimer;
 
-  if GetCommonThemeManager <> Nil then
-    GetCommonThemeManager.Connect(Self);
-
 //  UpdateTheme;
 end;
 
@@ -294,6 +276,32 @@ begin
   TM:=SelectThemeManager(Self);
   TM.Disconnect(Self);
   inherited;
+end;
+
+procedure TUScrollBox.AfterConstruction;
+begin
+  inherited;
+
+  VertScrollBar.ButtonSize:=0;
+  VertScrollBar.Increment:=8;
+  VertScrollBar.Margin:=0;
+  //VertScrollBar.Position:=0;
+  //VertScrollBar.Range:=0;
+  //VertScrollBar.Size:=0;
+  VertScrollBar.ThumbSize:=0;
+  VertScrollBar.Tracking := True;
+  //
+  HorzScrollBar.ButtonSize:=0;
+  HorzScrollBar.Increment:=8;
+  HorzScrollBar.Margin:=0;
+  //HorzScrollBar.Position:=0;
+  //HorzScrollBar.Range:=0;
+  //HorzScrollBar.Size:=0;
+  HorzScrollBar.ThumbSize:=0;
+  HorzScrollBar.Tracking := True;
+
+  if GetCommonThemeManager <> Nil then
+    GetCommonThemeManager.Connect(Self);
 end;
 
 function TUScrollBox.IsCreating: Boolean;

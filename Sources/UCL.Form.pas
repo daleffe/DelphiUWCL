@@ -987,12 +987,20 @@ end;
 procedure TUForm.CMMouseEnter(var Msg: TMessage);
 begin
   inherited;
+
+  if Parent <> Nil then
+    Msg.Result := Parent.Perform(Msg.Msg, Msg.WParam, Msg.LParam);
+
   UpdateBorder;
 end;
 
 procedure TUForm.CMMouseLeave(var Msg: TMessage);
 begin
   inherited;
+
+  if Parent <> Nil then
+    Msg.Result := Parent.Perform(Msg.Msg, Msg.WParam, Msg.LParam);
+
   UpdateBorder;
 end;
 {$ENDREGION}

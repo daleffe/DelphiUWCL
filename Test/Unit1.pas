@@ -23,7 +23,8 @@ uses
   ImageList,
   ActnList,
   Actions,
-  UCL.ItemButton;
+  UCL.ItemButton,
+  UCL.Panel;
 
 type
   TForm1 = class(TUForm)
@@ -185,6 +186,8 @@ type
     UItemButton18: TUItemButton;
     UItemButton19: TUItemButton;
     UItemButton20: TUItemButton;
+    UPanel1: TUPanel;
+    UScrollBox2: TUScrollBox;
     procedure FormCreate(Sender: TObject);
   private
   public
@@ -198,7 +201,8 @@ implementation
 {$R *.dfm}
 
 uses
-  UCL.SystemSettings;
+  UCL.SystemSettings,
+  Unit3;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
@@ -209,6 +213,13 @@ begin
   TM := SelectThemeManager(Self);
 //  TM.Theme := ttDark;
   TM.UseColorOnBorder := True;
+  //
+  //
+  Form3:=TForm3.Create(Self);
+  Form3.BorderStyle:=bsNone;
+  Form3.Parent:=UScrollBox2;
+  Form3.Align:=alTop;
+  Form3.Show;
 end;
 
 end.

@@ -106,22 +106,65 @@ object Form1: TForm1
     BackColor.DarkColor = 3355443
     ScrollOrientation = oHorizontal
   end
-  object UScrollBox1: TUScrollBox
-    Left = 512
+  object UPanel1: TUPanel
+    Left = 504
     Top = 92
-    Width = 293
+    Width = 301
+    Height = 247
+    ThemeManager = UThemeManager1
+    Align = alRight
+    Caption = 'UPanel1'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    ShowCaption = False
+    TabOrder = 2
+    BackColor.Enabled = False
+    BackColor.Color = clBlack
+    BackColor.LightColor = 15132390
+    BackColor.DarkColor = 2039583
+    object UScrollBox2: TUScrollBox
+      Left = 0
+      Top = 0
+      Width = 301
+      Height = 247
+      HorzScrollBar.Tracking = True
+      VertScrollBar.Tracking = True
+      Align = alClient
+      BevelEdges = []
+      BevelInner = bvNone
+      BevelOuter = bvNone
+      Color = 2039583
+      ParentColor = False
+      TabOrder = 0
+      StyleElements = []
+      ThemeManager = UThemeManager1
+      BackColor.Enabled = False
+      BackColor.Color = clBlack
+      BackColor.LightColor = 15132390
+      BackColor.DarkColor = 2039583
+    end
+  end
+  object UScrollBox1: TUScrollBox
+    Left = 0
+    Top = 92
+    Width = 301
     Height = 247
     HorzScrollBar.Tracking = True
     VertScrollBar.Range = 800
     VertScrollBar.Tracking = True
-    Align = alRight
+    Align = alLeft
     AutoScroll = False
     BevelEdges = []
     BevelInner = bvNone
     BevelOuter = bvNone
     Color = 2039583
     ParentColor = False
-    TabOrder = 2
+    TabOrder = 3
+    Visible = False
     StyleElements = []
     ThemeManager = UThemeManager1
     BackColor.Enabled = False
@@ -131,7 +174,7 @@ object Form1: TForm1
     object UItemButton1: TUItemButton
       Left = 0
       Top = 760
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -157,7 +200,7 @@ object Form1: TForm1
     object UItemButton2: TUItemButton
       Left = 0
       Top = 720
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -183,7 +226,7 @@ object Form1: TForm1
     object UItemButton3: TUItemButton
       Left = 0
       Top = 680
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -209,7 +252,7 @@ object Form1: TForm1
     object UItemButton4: TUItemButton
       Left = 0
       Top = 640
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -235,7 +278,7 @@ object Form1: TForm1
     object UItemButton5: TUItemButton
       Left = 0
       Top = 600
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -261,7 +304,7 @@ object Form1: TForm1
     object UItemButton6: TUItemButton
       Left = 0
       Top = 560
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -287,7 +330,7 @@ object Form1: TForm1
     object UItemButton7: TUItemButton
       Left = 0
       Top = 520
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -313,7 +356,7 @@ object Form1: TForm1
     object UItemButton8: TUItemButton
       Left = 0
       Top = 480
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -339,7 +382,7 @@ object Form1: TForm1
     object UItemButton9: TUItemButton
       Left = 0
       Top = 440
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -365,7 +408,7 @@ object Form1: TForm1
     object UItemButton10: TUItemButton
       Left = 0
       Top = 400
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -391,7 +434,7 @@ object Form1: TForm1
     object UItemButton11: TUItemButton
       Left = 0
       Top = 360
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -417,7 +460,7 @@ object Form1: TForm1
     object UItemButton12: TUItemButton
       Left = 0
       Top = 320
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -443,7 +486,7 @@ object Form1: TForm1
     object UItemButton13: TUItemButton
       Left = 0
       Top = 280
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -469,7 +512,7 @@ object Form1: TForm1
     object UItemButton14: TUItemButton
       Left = 0
       Top = 240
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -495,7 +538,7 @@ object Form1: TForm1
     object UItemButton15: TUItemButton
       Left = 0
       Top = 200
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -521,7 +564,7 @@ object Form1: TForm1
     object UItemButton16: TUItemButton
       Left = 0
       Top = 160
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -547,7 +590,7 @@ object Form1: TForm1
     object UItemButton17: TUItemButton
       Left = 0
       Top = 120
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -573,7 +616,7 @@ object Form1: TForm1
     object UItemButton18: TUItemButton
       Left = 0
       Top = 80
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -599,7 +642,7 @@ object Form1: TForm1
     object UItemButton19: TUItemButton
       Left = 0
       Top = 40
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault
@@ -625,7 +668,7 @@ object Form1: TForm1
     object UItemButton20: TUItemButton
       Left = 0
       Top = 0
-      Width = 293
+      Width = 301
       ThemeManager = UThemeManager1
       Align = alTop
       DragCursor = crDefault

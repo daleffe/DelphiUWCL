@@ -28,9 +28,14 @@ type
     FCaptionBarHeight: Integer;
     FAllowMove: Boolean;
     FParent: TWinControl;
+    FTransparentValue: SmallInt; // percent; -1 - default, 0-100%
 
     //  Setters
     procedure SetOverlayType(const Value: TUOverlayType);
+    procedure SetTransparentValue(const Value: SmallInt);
+
+    // Internal
+    procedure SetTransparent;
 
     //  Messages
     procedure WM_NCHitTest(var Msg: TWMNCHitTest); message WM_NCHITTEST;
@@ -43,6 +48,7 @@ type
     property OverlayType: TUOverlayType read FOverlayType write SetOverlayType default otNone;
     property CaptionBarHeight: Integer read FCaptionBarHeight write FCaptionBarHeight default 32;
     property AllowMove: Boolean read FAllowMove write FAllowMove default True;
+    property TransparentPercent: SmallInt read FTransparentValue write SetTransparentValue;
   end;
 
 implementation
@@ -51,6 +57,9 @@ uses
   Themes,
   Dwmapi,
   UCL.Utils;
+
+const
+  DefaultAlphaBlendValue = 180;
 
 { TUFormOverlay }
 
@@ -65,6 +74,7 @@ begin
   FCaptionBarHeight := 32;
   FAllowMove := True;
   FParent := Nil;
+  FTransparentValue := -1;
 
   BorderStyle := bsNone;
   Color := $FFFFFF;
@@ -73,7 +83,7 @@ begin
   Visible := False;
 
   AlphaBlend := False;
-  AlphaBlendValue := 150;
+  AlphaBlendValue := DefaultAlphaBlendValue;
 end;
 
 procedure TUFormOverlay.AssignToForm(Form: TForm);
@@ -137,7 +147,8 @@ begin
       end;
 
       otTransparent: begin
-        AlphaBlendValue := 150;
+        //AlphaBlendValue := 220;
+        SetTransparent;
         AlphaBlend := True;
         //UpdateLayeredWindowIndirect
         Visible := True;
@@ -152,6 +163,28 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TUFormOverlay.SetTransparentValue(const Value: SmallInt);
+begin
+  if Value <> FTransparentValue then begin
+    FTransparentValue := Value;
+
+    if FTransparentValue < -1 then
+      FTransparentValue := -1
+    else if FTransparentValue > 100 then
+      FTransparentValue := 100;
+  end;
+  //
+  SetTransparent;
+end;
+
+procedure TUFormOverlay.SetTransparent;
+begin
+  if FTransparentValue = -1 then
+    AlphaBlendValue := DefaultAlphaBlendValue
+  else
+    AlphaBlendValue := 255 - Round(255 * (FTransparentValue / 100));
 end;
 
 procedure TUFormOverlay.WM_NCHitTest(var Msg: TWMNCHitTest);

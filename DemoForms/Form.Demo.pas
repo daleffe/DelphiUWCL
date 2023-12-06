@@ -419,6 +419,7 @@ end;
 
 procedure TformDemo.buttonBlurFormClick(Sender: TObject);
 begin
+  Overlay.TransparentPercent := 15;
   if OverlayType = otNone then
     OverlayType := otTransparent
   else
