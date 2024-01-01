@@ -13,7 +13,8 @@ uses
   UCL.Classes,
   UCL.Types,
   UCL.Utils,
-  UCL.Graphics;
+  UCL.Graphics,
+  UCL.ControlColors;
 
 type
   TUItemButton = class;
@@ -33,6 +34,7 @@ type
     CheckBoxRect, LeftIconRect, RightIconRect, DetailRect, TextRect: TRect;
 
   private
+    FCustomColors: TUItemButtonColorSet;
     FObjectSelected: TUItemObjectKind;
     FButtonState: TUControlState;
     FLeftIconKind: TUImageKind;
@@ -59,7 +61,7 @@ type
     FLeftIconWidth: Integer;
     FRightIconWidth: Integer;
 
-    FCustomActiveColor: TColor;
+    //FCustomActiveColor: TColor;
     FTransparent: Boolean;
     FIsToggleButton: Boolean;
     FIsToggled: Boolean;
@@ -76,6 +78,7 @@ type
     procedure DoToggle;
 
     // Setters
+    procedure SetCustomColors(Value: TUItemButtonColorSet);
     procedure SetAcceptControls(const Value: Boolean);
     procedure SetCheckType(const Value: TUItemButtonCheckType);
     procedure SetBorderThickness(Value: Integer);
@@ -93,7 +96,7 @@ type
     procedure SetRightIcon(Const Value: String);
 
     procedure SetAlignSpace(const Value: Integer);
-    procedure SetCustomActiveColor(const Value: TColor);
+    //procedure SetCustomActiveColor(const Value: TColor);
     procedure SetTransparent(const Value: Boolean);
     procedure SetLeftIconKind(const Value: TUImageKind);
     procedure SetRightIconKind(const Value: TUImageKind);
@@ -109,6 +112,9 @@ type
     procedure CMMouseEnter(var Msg: TMessage); message CM_MOUSEENTER;
     procedure CMMouseLeave(var Msg: TMessage); message CM_MOUSELEAVE;
     procedure CMEnabledChanged(var Msg: TMessage); message CM_ENABLEDCHANGED;
+
+    // Childs property change events
+    procedure ColorsChange(Sender: TObject);
 
   protected
     procedure Paint; override;
@@ -135,6 +141,7 @@ type
     property ObjectSelected: TUItemObjectKind read FObjectSelected default iokNone;
 
   published
+    property CustomColors: TUItemButtonColorSet read FCustomColors write SetCustomColors;
     property AcceptControls: Boolean read FAcceptControls write SetAcceptControls default False;
 
     property BorderThickness: Integer read FBorderThickness write SetBorderThickness default -1;
@@ -167,7 +174,7 @@ type
 
     // Additional
     property AlignSpace: Integer read FAlignSpace write SetAlignSpace default 5;
-    property CustomActiveColor: TColor read FCustomActiveColor write SetCustomActiveColor;
+    //property CustomActiveColor: TColor read FCustomActiveColor write SetCustomActiveColor;
     property Transparent: Boolean read FTransparent write SetTransparent default False;
     property LeftIconKind: TUImageKind read FLeftIconKind write SetLeftIconKind default ikFontIcon;
     property RightIconKind: TUImageKind read FRightIconKind write SetRightIconKind default ikFontIcon;
@@ -178,7 +185,7 @@ type
 
     property Caption;
 //    property Color;
-    property TabStop default true;
+    property TabStop default True;
     property Height default 40;
     property Width default 250;
 
@@ -192,7 +199,8 @@ uses
   SysUtils,
   UCL.ThemeManager,
   UCL.Colors,
-  UCL.FontIcons;
+  UCL.FontIcons,
+  UCL.ColorTypes;
 
 { TUItemButton }
 
@@ -202,6 +210,10 @@ constructor TUItemButton.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   ControlStyle := ControlStyle - [csDoubleClicks];
+
+  FCustomColors := TUItemButtonColorSet.Create(Self);
+  FCustomColors.Assign(Item_Button_Colors);
+  FCustomColors.OnChange := ColorsChange;
 
   FAcceptControls := False;
   FBorderThickness := -1;
@@ -241,7 +253,7 @@ begin
 
   FAlignSpace := 5;
 //  FCustomActiveColor := $D77800;
-  FCustomActiveColor := clNone;
+  //FCustomActiveColor := clNone;
   FTransparent := False;
   FLeftIconKind := ikFontIcon;
   FRightIconKind := ikFontIcon;
@@ -323,50 +335,53 @@ var
 begin
   TM:=SelectThemeManager(Self);
 
+  TM.Colors.ItemButtonColors.GetColors(ButtonState, FCustomColors, BackColor, BorderColor, TextColor, DetailColor, ActiveColor);
+
   if Transparent then begin
     ParentColor := True;
     BackColor := Color;
-  end
-  else
-    BackColor := BUTTON_BACK.GetColor(TM.ThemeUsed, ButtonState);
+    TextColor := GetTextColorFromBackground(Color);
+  end;
 
   //  Transparent enabled
-  if ButtonState = csNone then begin
-    TextColor := GetTextColorFromBackground(Color);
-    DetailColor := $808080;
-  end
+//  if ButtonState = csNone then begin
+//    TextColor := GetTextColorFromBackground(Color);
+//    //DetailColor := $808080;
+//  end
   //  Highlight enabled
-  else if (IsToggleButton and IsToggled) and (ButtonState in [csNone, csHover, csFocused]) then begin
+//  else
+  if (IsToggleButton and IsToggled) and (ButtonState in [csNone, csHover, csFocused]) then begin
     BackColor := TM.AccentColor;
     TextColor := GetTextColorFromBackground(BackColor);
-    DetailColor := clSilver;
+    //DetailColor := clSilver;
   end
   else if (ButtonState = csPress) and (csPrintClient in ControlState) then begin
     BackColor := TM.AccentColor;
     TextColor := GetTextColorFromBackground(BackColor);
-    DetailColor := clSilver;
+    //DetailColor := clSilver;
   end
-  else if ButtonState = csDisabled then begin
-    TextColor := clGray;
-    DetailColor := clSilver;
-  end
+//  else if ButtonState = csDisabled then begin
+//    TextColor := clGray;
+//    DetailColor := clSilver;
+//  end
   //  Default colors
   else begin
     if IsToggled then
-      BackColor := TM.AccentColor
-    else
-      BackColor := BUTTON_BACK.GetColor(TM.ThemeUsed, ButtonState);
+      BackColor := TM.AccentColor;
+    //else
+      //BackColor := BUTTON_BACK.GetColor(TM.ThemeUsed, ButtonState);
+      //TM.Colors.ItemButtonColors.GetColors(ButtonState, FCustomColors, BackColor, BorderColor, TextColor);
     //TextColor := BUTTON_TEXT.GetColor(TempTheme, ButtonState);
     TextColor := GetTextColorFromBackground(BackColor);
-    DetailColor := $808080;
+    //DetailColor := $808080;
   end;
   //
-  BorderColor := BackColor;
-  if (ButtonState in [csHover, csFocused]) then
-    BorderColor := $AAAAAA;
+//  BorderColor := BackColor;
+//  if (ButtonState in [csHover, csFocused]) then
+//    BorderColor := $AAAAAA;
   //  Active color
-  if not TM.UseSystemAccentColor and (CustomActiveColor <> clNone) then
-    ActiveColor := CustomActiveColor
+  if not TM.UseSystemAccentColor and TM.Colors.ItemButtonColors.AllowCustomColors and CustomColors.ActiveColors.Enabled then
+    ActiveColor := CustomColors.ActiveColors.GetColor(TM.ThemeUsed, ButtonState)
   else
     ActiveColor := TM.AccentColor;
 end;
@@ -462,6 +477,11 @@ begin
 end;
 
 //  SETTERS
+
+procedure TUItemButton.SetCustomColors(Value: TUItemButtonColorSet);
+begin
+  FCustomColors.Assign(Value);
+end;
 
 procedure TUItemButton.SetAcceptControls(const Value: Boolean);
 begin
@@ -618,14 +638,14 @@ begin
   end;
 end;
 
-procedure TUItemButton.SetCustomActiveColor(const Value: TColor);
-begin
-  if Value <> FCustomActiveColor then begin
-    FCustomActiveColor := Value;
-    UpdateColors;
-    Repaint;
-  end;
-end;
+//procedure TUItemButton.SetCustomActiveColor(const Value: TColor);
+//begin
+//  if Value <> FCustomActiveColor then begin
+//    FCustomActiveColor := Value;
+//    UpdateColors;
+//    Repaint;
+//  end;
+//end;
 
 procedure TUItemButton.SetTransparent(const Value: Boolean);
 begin
@@ -917,6 +937,12 @@ begin
   else
     FButtonState := csNone;
   UpdateTheme;
+end;
+
+procedure TUItemButton.ColorsChange(Sender: TObject);
+begin
+  UpdateColors;
+  Invalidate;
 end;
 
 end.

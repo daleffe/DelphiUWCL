@@ -13,6 +13,7 @@ object Form1: TForm1
   Font.Style = []
   OldCreateOrder = False
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object UCaptionBar1: TUCaptionBar
@@ -694,6 +695,39 @@ object Form1: TForm1
   end
   object UThemeManager1: TUThemeManager
     AccentColor = 6318152
+    Colors.ButtonColors.BackColors.Enabled = False
+    Colors.ButtonColors.BackColors.LightColor = clBlack
+    Colors.ButtonColors.BackColors.LightHover = clBlack
+    Colors.ButtonColors.BackColors.LightPress = clBlack
+    Colors.ButtonColors.BackColors.LightDisabled = clBlack
+    Colors.ButtonColors.BackColors.LightFocused = clBlack
+    Colors.ButtonColors.BackColors.DarkColor = clBlack
+    Colors.ButtonColors.BackColors.DarkHover = clBlack
+    Colors.ButtonColors.BackColors.DarkPress = clBlack
+    Colors.ButtonColors.BackColors.DarkDisabled = clBlack
+    Colors.ButtonColors.BackColors.DarkFocused = clBlack
+    Colors.ButtonColors.BorderColors.Enabled = False
+    Colors.ButtonColors.BorderColors.LightColor = clBlack
+    Colors.ButtonColors.BorderColors.LightHover = clBlack
+    Colors.ButtonColors.BorderColors.LightPress = clBlack
+    Colors.ButtonColors.BorderColors.LightDisabled = clBlack
+    Colors.ButtonColors.BorderColors.LightFocused = clBlack
+    Colors.ButtonColors.BorderColors.DarkColor = clBlack
+    Colors.ButtonColors.BorderColors.DarkHover = clBlack
+    Colors.ButtonColors.BorderColors.DarkPress = clBlack
+    Colors.ButtonColors.BorderColors.DarkDisabled = clBlack
+    Colors.ButtonColors.BorderColors.DarkFocused = clBlack
+    Colors.ButtonColors.TextColors.Enabled = False
+    Colors.ButtonColors.TextColors.LightColor = clBlack
+    Colors.ButtonColors.TextColors.LightHover = clBlack
+    Colors.ButtonColors.TextColors.LightPress = clBlack
+    Colors.ButtonColors.TextColors.LightDisabled = clGray
+    Colors.ButtonColors.TextColors.LightFocused = clBlack
+    Colors.ButtonColors.TextColors.DarkColor = clWhite
+    Colors.ButtonColors.TextColors.DarkHover = clWhite
+    Colors.ButtonColors.TextColors.DarkPress = clWhite
+    Colors.ButtonColors.TextColors.DarkDisabled = clGray
+    Colors.ButtonColors.TextColors.DarkFocused = clWhite
     Left = 240
     Top = 104
   end

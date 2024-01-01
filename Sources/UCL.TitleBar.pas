@@ -53,7 +53,8 @@ uses
   SysUtils,
   Types,
   UCL.ThemeManager,
-  UCL.Colors;
+  UCL.Colors,
+  UCL.Types;
 
 { TUTitleBar }
 

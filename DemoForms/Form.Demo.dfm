@@ -1753,7 +1753,7 @@ object formDemo: TformDemo
       AlignWithMargins = True
       Left = 15
       Top = 5
-      Width = 220
+      Width = 71
       Height = 28
       Margins.Left = 0
       Margins.Top = 0
@@ -1769,13 +1769,12 @@ object formDemo: TformDemo
       ParentFont = False
       Layout = tlCenter
       TextKind = tkHeading
-      ExplicitWidth = 71
     end
     object entryAppTheme: TUText
       AlignWithMargins = True
       Left = 15
       Top = 43
-      Width = 220
+      Width = 68
       Height = 17
       Margins.Left = 0
       Margins.Top = 5
@@ -1791,13 +1790,12 @@ object formDemo: TformDemo
       ParentFont = False
       Layout = tlCenter
       TextKind = tkEntry
-      ExplicitWidth = 68
     end
     object entryUserProfile: TUText
       AlignWithMargins = True
       Left = 15
       Top = 240
-      Width = 220
+      Width = 69
       Height = 17
       Margins.Left = 0
       Margins.Top = 10
@@ -1812,7 +1810,6 @@ object formDemo: TformDemo
       Font.Style = []
       ParentFont = False
       TextKind = tkEntry
-      ExplicitWidth = 69
     end
     object imgAvatar: TImage
       Left = 15
@@ -1905,7 +1902,7 @@ object formDemo: TformDemo
       AlignWithMargins = True
       Left = 15
       Top = 474
-      Width = 220
+      Width = 50
       Height = 17
       Margins.Left = 0
       Margins.Top = 10
@@ -1920,13 +1917,12 @@ object formDemo: TformDemo
       Font.Style = []
       ParentFont = False
       TextKind = tkEntry
-      ExplicitWidth = 50
     end
     object desAccountHint: TUText
       AlignWithMargins = True
       Left = 15
       Top = 673
-      Width = 220
+      Width = 198
       Height = 30
       Margins.Left = 0
       Margins.Top = 5
@@ -1942,13 +1938,12 @@ object formDemo: TformDemo
       ParentFont = False
       WordWrap = True
       TextKind = tkDescription
-      ExplicitWidth = 198
     end
     object entryStorage: TUText
       AlignWithMargins = True
       Left = 15
       Top = 646
-      Width = 220
+      Width = 76
       Height = 17
       Margins.Left = 0
       Margins.Top = 10
@@ -1963,13 +1958,12 @@ object formDemo: TformDemo
       Font.Style = []
       ParentFont = False
       TextKind = tkEntry
-      ExplicitWidth = 76
     end
     object desStorageHint: TUText
       AlignWithMargins = True
       Left = 15
       Top = 768
-      Width = 220
+      Width = 186
       Height = 30
       Margins.Left = 0
       Margins.Top = 0
@@ -1985,13 +1979,12 @@ object formDemo: TformDemo
       ParentFont = False
       WordWrap = True
       TextKind = tkDescription
-      ExplicitWidth = 186
     end
     object headingAbout: TUText
       AlignWithMargins = True
       Left = 15
       Top = 828
-      Width = 220
+      Width = 55
       Height = 28
       Margins.Left = 0
       Margins.Top = 20
@@ -2006,13 +1999,12 @@ object formDemo: TformDemo
       Font.Style = []
       ParentFont = False
       TextKind = tkHeading
-      ExplicitWidth = 55
     end
     object desAppVersion: TUText
       AlignWithMargins = True
       Left = 15
       Top = 906
-      Width = 220
+      Width = 84
       Height = 15
       Margins.Left = 0
       Margins.Top = 0
@@ -2028,13 +2020,12 @@ object formDemo: TformDemo
       ParentFont = False
       WordWrap = True
       TextKind = tkDescription
-      ExplicitWidth = 84
     end
     object desFlashVersion: TUText
       AlignWithMargins = True
       Left = 15
       Top = 926
-      Width = 220
+      Width = 119
       Height = 15
       Margins.Left = 0
       Margins.Top = 0
@@ -2050,13 +2041,12 @@ object formDemo: TformDemo
       ParentFont = False
       WordWrap = True
       TextKind = tkDescription
-      ExplicitWidth = 119
     end
     object desChromiumVersion: TUText
       AlignWithMargins = True
       Left = 15
       Top = 946
-      Width = 220
+      Width = 126
       Height = 15
       Margins.Left = 0
       Margins.Top = 0
@@ -2072,13 +2062,12 @@ object formDemo: TformDemo
       ParentFont = False
       WordWrap = True
       TextKind = tkDescription
-      ExplicitWidth = 126
     end
     object linkEmbarcadero: TUHyperLink
       AlignWithMargins = True
       Left = 15
       Top = 966
-      Width = 220
+      Width = 104
       Height = 13
       Margins.Left = 0
       Margins.Top = 0
@@ -2104,7 +2093,6 @@ object formDemo: TformDemo
       TextColors.DarkDisabled = clGray
       TextColors.DarkFocused = 14120960
       URL = 'https://example.com/'
-      ExplicitWidth = 104
     end
     object separatorLastBox: TUSeparator
       Left = 15

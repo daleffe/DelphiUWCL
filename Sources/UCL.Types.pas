@@ -7,6 +7,7 @@ interface
 {$IFEND}
 
 uses
+  Classes,
 {$IF CompilerVersion <= 30}
   Windows,
   Forms,
@@ -106,6 +107,23 @@ const
   EmptyRect: TRect = (Left: 0; Top: 0; Right: 0; Bottom: 0);
 
 type
+  TUTheme = (utLight, utDark); // system theme
+  TUThemeType = (ttSystem, ttLight, ttDark, ttCustomLight, ttCustomDark); // user selected theme
+
+{$REGION 'TUBaseThemeManager'}
+  TUBaseThemeManager = class abstract(TComponent)
+  protected
+    FTheme: TUThemeType;
+
+    procedure SetTheme(Value: TUThemeType); virtual; abstract;
+
+  public
+    function ThemeUsed: TUTheme; virtual; abstract;
+
+    property Theme: TUThemeType read FTheme write SetTheme default ttSystem;
+  end;
+{$ENDREGION}
+
   TUOrientation = (oHorizontal, oVertical);
 
   TUDirection = (dLeft, dTop, dRight, dBottom);

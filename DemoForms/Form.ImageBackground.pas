@@ -59,6 +59,9 @@ implementation
 
 {$R *.dfm}
 
+uses
+  UCL.Types;
+
 procedure TformImageBackground.FormCreate(Sender: TObject);
 begin
 //  EnableBlur(Handle, 3);

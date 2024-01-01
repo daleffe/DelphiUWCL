@@ -72,7 +72,11 @@ contains
   UCL.DragReorder in 'Sources\UCL.DragReorder.pas',
   UCL.GraphicSlider in 'Sources\UCL.GraphicSlider.pas',
   UCL.MenuAnyWhere in 'Sources\UCL.MenuAnyWhere.pas',
-  UCL.Threading in 'Sources\UCL.Threading.pas';
+  UCL.Threading in 'Sources\UCL.Threading.pas',
+  UCL.ManagerColors in 'Sources\UCL.ManagerColors.pas',
+  UCL.ControlColors in 'Sources\UCL.ControlColors.pas',
+  UCL.ColorTypes in 'Sources\UCL.ColorTypes.pas',
+  UCL.ColorUtils in 'Sources\UCL.ColorUtils.pas';
 
 end.
 

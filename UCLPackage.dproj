@@ -113,6 +113,10 @@
         <DCCReference Include="Sources\UCL.GraphicSlider.pas"/>
         <DCCReference Include="Sources\UCL.MenuAnyWhere.pas"/>
         <DCCReference Include="Sources\UCL.Threading.pas"/>
+        <DCCReference Include="Sources\UCL.ManagerColors.pas"/>
+        <DCCReference Include="Sources\UCL.ControlColors.pas"/>
+        <DCCReference Include="Sources\UCL.ColorTypes.pas"/>
+        <DCCReference Include="Sources\UCL.ColorUtils.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -177,6 +181,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\UCLPackage.bpl" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>UCLPackage.bpl</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\UCLPackage.bpl" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>UCLPackage.bpl</RemoteName>
@@ -185,12 +195,6 @@
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx64\libcgsqlite3.dylib" Class="DependencyModule">
                     <Platform Name="OSX64">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\UCLPackage.bpl" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>UCLPackage.bpl</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

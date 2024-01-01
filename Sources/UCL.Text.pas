@@ -58,6 +58,7 @@ uses
 {$IF CompilerVersion > 29}
   UITypes,
 {$IFEND}
+  UCL.Types,
   UCL.Utils,
   UCL.Colors;
 

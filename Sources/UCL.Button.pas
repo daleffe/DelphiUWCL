@@ -19,7 +19,8 @@ uses
   UCL.Types,
   UCL.Utils,
   UCL.Graphics,
-  UCL.Colors;
+  UCL.Colors,
+  UCL.ControlColors;
 
 type
   TUButton = class(TUCustomControl)
@@ -28,9 +29,10 @@ type
     ImgRect, TextRect: TRect;
 
   private
-    FBackColors: TUThemeButtonStateColorSet;
-    FBorderColors: TUThemeButtonStateColorSet;
-    FTextColors: TUThemeButtonStateColorSet;
+    FCustomColors: TUButtonColorSet;
+//    FBackColors: TUThemeButtonStateColorSet;
+//    FBorderColors: TUThemeButtonStateColorSet;
+//    FTextColors: TUThemeButtonStateColorSet;
 
     FBorderThickness: Integer;
     FButtonState: TUControlState;
@@ -48,9 +50,10 @@ type
     procedure UpdateRects;
 
     // Setters
-    procedure SetBackColors(Value: TUThemeButtonStateColorSet);
-    procedure SetBorderColors(Value: TUThemeButtonStateColorSet);
-    procedure SetTextColors(Value: TUThemeButtonStateColorSet);
+    procedure SetCustomColors(Value: TUButtonColorSet);
+//    procedure SetBackColors(Value: TUThemeButtonStateColorSet);
+//    procedure SetBorderColors(Value: TUThemeButtonStateColorSet);
+//    procedure SetTextColors(Value: TUThemeButtonStateColorSet);
     procedure SetBorderThickness(Value: Integer);
     procedure SetButtonState(const Value: TUControlState);
     procedure SetAlignment(const Value: TAlignment);
@@ -93,9 +96,10 @@ type
     //
     procedure Click; override;
   published
-    property BackColors: TUThemeButtonStateColorSet read FBackColors write SetBackColors;
-    property BorderColors: TUThemeButtonStateColorSet read FBorderColors write SetBorderColors;
-    property TextColors: TUThemeButtonStateColorSet read FTextColors write SetTextColors;
+    property CustomColors: TUButtonColorSet read FCustomColors write SetCustomColors;
+//    property BackColors: TUThemeButtonStateColorSet read FBackColors write SetBackColors;
+//    property BorderColors: TUThemeButtonStateColorSet read FBorderColors write SetBorderColors;
+//    property TextColors: TUThemeButtonStateColorSet read FTextColors write SetTextColors;
 
     property BorderThickness: Integer read FBorderThickness write SetBorderThickness default -1;
     property ButtonState: TUControlState read FButtonState write SetButtonState default csNone;
@@ -120,7 +124,8 @@ uses
 {$IF CompilerVersion > 29}
   UITypes,
 {$IFEND}
-  UCL.ThemeManager;
+  UCL.ThemeManager,
+  UCL.ColorTypes;
 
 { TUButton }
 
@@ -132,21 +137,25 @@ begin
   FBorderThickness := -1;
 
   //  New properties
-  FBackColors := TUThemeButtonStateColorSet.Create;
-  //FBackColors.SetColors(utLight, $F2F2F2, $E6E6E6, $CCCCCC, $F2F2F2, $F2F2F2);
-  FBackColors.Assign(BUTTON_BACK);
+  FCustomColors := TUButtonColorSet.Create(Self);
+  FCustomColors.Assign(Button_Colors);
+  FCustomColors.OnChange := ColorsChange;
 
-  FBorderColors := TUThemeButtonStateColorSet.Create;
-//  FBorderColors.SetColors(utLight, $F2F2F2, $E6E6E6, $CCCCCC, $F2F2F2, $F2F2F2);
-  FBorderColors.Assign(BUTTON_BORDER);
-
-  FTextColors := TUThemeButtonStateColorSet.Create;
-  FTextColors.SetColors(utLight, clBlack, clBlack, clBlack, clGray, clBlack);
-  FTextColors.SetColors(utDark, clWhite, clWhite, clWhite, clGray, clWhite);
-
-  FBackColors.OnChange   := ColorsChange;
-  FBorderColors.OnChange := ColorsChange;
-  FTextColors.OnChange   := ColorsChange;
+//  FBackColors := TUThemeButtonStateColorSet.Create;
+//  //FBackColors.SetColors(utLight, $F2F2F2, $E6E6E6, $CCCCCC, $F2F2F2, $F2F2F2);
+//  FBackColors.Assign(BUTTON_BACK);
+//
+//  FBorderColors := TUThemeButtonStateColorSet.Create;
+////  FBorderColors.SetColors(utLight, $F2F2F2, $E6E6E6, $CCCCCC, $F2F2F2, $F2F2F2);
+//  FBorderColors.Assign(BUTTON_BORDER);
+//
+//  FTextColors := TUThemeButtonStateColorSet.Create;
+//  FTextColors.SetColors(utLight, clBlack, clBlack, clBlack, clGray, clBlack);
+//  FTextColors.SetColors(utDark, clWhite, clWhite, clWhite, clGray, clWhite);
+//
+//  FBackColors.OnChange   := ColorsChange;
+//  FBorderColors.OnChange := ColorsChange;
+//  FTextColors.OnChange   := ColorsChange;
 
   FButtonState := csNone;
   FAlignment := taCenter;
@@ -169,9 +178,10 @@ end;
 
 destructor TUButton.Destroy;
 begin
-  FBackColors.Free;
-  FBorderColors.Free;
-  FTextColors.Free;
+  FCustomColors.Free;
+//  FBackColors.Free;
+//  FBorderColors.Free;
+//  FTextColors.Free;
   inherited;
 end;
 
@@ -195,10 +205,12 @@ begin
 
   // Disabled
   if not Enabled then begin
-    BackColor   := BackColors.GetColor(TM.ThemeUsed, csDisabled);
-    //BorderColor := BorderColors.GetColor(TM.ThemeUsed, csDisabled);
+    TM.Colors.ButtonColors.GetColors(csDisabled, FCustomColors, BackColor, BorderColor, TextColor);
+    //BackColor   := TM.Colors.ButtonColors.BackColors.GetColor(TM.ThemeUsed, csDisabled);
+    //BackColor   := BackColors.GetColor(TM.ThemeUsed, csDisabled);
+    ////BorderColor := BorderColors.GetColor(TM.ThemeUsed, csDisabled);
     BorderColor := BackColor;
-    TextColor   := TextColors.GetColor(TM.ThemeUsed, csDisabled);
+    //TextColor   := TextColors.GetColor(TM.ThemeUsed, csDisabled);
     Exit;
   end
   // Others
@@ -215,9 +227,10 @@ begin
     end
     // Focused
     else if AllowFocus and Focused and (ButtonState = csFocused) then begin
-      BackColor   := BackColors.GetColor(TM.ThemeUsed, ButtonState);
-      BorderColor := BorderColors.GetColor(TM.ThemeUsed, ButtonState);
-      TextColor   := TextColors.GetColor(TM.ThemeUsed, ButtonState);
+      TM.Colors.ButtonColors.GetColors(ButtonState, FCustomColors, BackColor, BorderColor, TextColor);
+      //BackColor   := BackColors.GetColor(TM.ThemeUsed, ButtonState);
+      //BorderColor := BorderColors.GetColor(TM.ThemeUsed, ButtonState);
+      //TextColor   := TextColors.GetColor(TM.ThemeUsed, ButtonState);
       Exit;
     end
     // Transparent
@@ -229,9 +242,10 @@ begin
     // Default cases
     else begin
       //  Select style
-      BackColor   := BackColors.GetColor(TM.ThemeUsed, ButtonState);
-      BorderColor := BorderColors.GetColor(TM.ThemeUsed, ButtonState);
-      TextColor   := TextColors.GetColor(TM.ThemeUsed, ButtonState);
+      TM.Colors.ButtonColors.GetColors(ButtonState, FCustomColors, BackColor, BorderColor, TextColor);
+      //BackColor   := BackColors.GetColor(TM.ThemeUsed, ButtonState);
+      //BorderColor := BorderColors.GetColor(TM.ThemeUsed, ButtonState);
+      //TextColor   := TextColors.GetColor(TM.ThemeUsed, ButtonState);
       Exit;
     end;
     TextColor := GetTextColorFromBackground(BackColor);
@@ -249,20 +263,25 @@ begin
     TextRect := Rect(0, 0, Width, Height);
 end;
 
-procedure TUButton.SetBackColors(Value: TUThemeButtonStateColorSet);
+procedure TUButton.SetCustomColors(Value: TUButtonColorSet);
 begin
-  FBackColors.Assign(Value);
+  FCustomColors.Assign(Value);
 end;
 
-procedure TUButton.SetBorderColors(Value: TUThemeButtonStateColorSet);
-begin
-  FBorderColors.Assign(Value);
-end;
-
-procedure TUButton.SetTextColors(Value: TUThemeButtonStateColorSet);
-begin
-  FTextColors.Assign(Value);
-end;
+//procedure TUButton.SetBackColors(Value: TUThemeButtonStateColorSet);
+//begin
+//  FBackColors.Assign(Value);
+//end;
+//
+//procedure TUButton.SetBorderColors(Value: TUThemeButtonStateColorSet);
+//begin
+//  FBorderColors.Assign(Value);
+//end;
+//
+//procedure TUButton.SetTextColors(Value: TUThemeButtonStateColorSet);
+//begin
+//  FTextColors.Assign(Value);
+//end;
 
 procedure TUButton.SetBorderThickness(Value: Integer);
 begin

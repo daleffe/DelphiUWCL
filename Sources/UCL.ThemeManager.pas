@@ -10,13 +10,12 @@ uses
   Graphics,
   Menus,
   Generics.Collections,
-//  UCL.Classes,
-  UCL.SystemSettings;
+  UCL.Types,
+  UCL.SystemSettings,
+  UCL.Colors,
+  UCL.ManagerColors;
 
 type
-  TUTheme = (utLight, utDark);
-  TUThemeType = (ttSystem, ttLight, ttDark);
-
   TUCustomThemeManager = class;
 
   IUThemedComponent = interface ['{C9D5D479-2F52-4BB9-8023-6EA00B5084F0}']
@@ -41,7 +40,7 @@ type
   //
   // >>> 2-09-2020; GM
   //
-  TUCustomThemeManager = class(TComponent)
+  TUCustomThemeManager = class(TUBaseThemeManager)
   private
     // System
     ISystemTheme: TUTheme;
@@ -50,7 +49,6 @@ type
 
     // Internal
     FCompList: TList<TComponent>;
-    FTheme: TUThemeType;
     FAutoUpdateControls: Boolean;
     FAccentColor: TColor;
     FColorOnBorder: TColor;
@@ -60,17 +58,23 @@ type
     FControlsBorderThickness: LongWord;
     FUseControlsBorderThickness: Boolean;
     FUseStrictControlsBorderThickness: Boolean;
+    FColors: TUManagerColors;
 
     // Events
     FOnBeforeColorLoading: TNotifyEvent;
     FOnBeforeUpdate: TNotifyEvent;
     FOnAfterUpdate: TNotifyEvent;
+
+  protected
+    // Properties
+    procedure SetTheme(Value: TUThemeType); override;
+
   private
     // Properties
-    procedure SetTheme(Value: TUThemeType);
     procedure SetAutoUpdateControls(Value: Boolean);
     procedure SetAccentColor(Value: TColor);
     procedure SetColorOnBorder(Value: TColor);
+    procedure SetColors(Value: TUManagerColors);
     procedure SetControlsBorderThickness(Value: LongWord);
     procedure SetUseSystemAccentColor(Value: Boolean);
     procedure SetUseSystemColorOnBorder(Value: Boolean);
@@ -78,6 +82,7 @@ type
     procedure SetUseControlsBorderThickness(Value: Boolean);
     procedure SetUseStrictControlsBorderThickness(Value: Boolean);
     //
+    procedure ColorsChanged(Sender: TObject);
     procedure Changed;
 
   public
@@ -89,6 +94,12 @@ type
     // Utils
     procedure Reload;
     procedure UpdateTheme;
+    function SaveToList: TStringList;
+    procedure SaveToStream(const Stream: TStream);
+    procedure SaveToFile(const FileName: String);
+    procedure LoadFromList(const List: TStringList);
+    procedure LoadFromStream(const Stream: TStream);
+    procedure LoadFromFile(const FileName: String);
 
     // Components connecting
     class function IsThemingAvailable(const Comp: TComponent): Boolean;
@@ -96,7 +107,7 @@ type
     procedure Connect(const Comp: TComponent);
     procedure Disconnect(const Comp: TComponent);
     procedure CollectAndConnectControls(const Root: TComponent);
-    function ThemeUsed: TUTheme;
+    function ThemeUsed: TUTheme; override;
 
   published
     // System
@@ -107,10 +118,10 @@ type
     property SystemColorOnBorder: Boolean read ISystemColorOnBorder stored False;
 
     // Properties
-    property Theme: TUThemeType read FTheme write SetTheme default ttSystem;
     property AutoUpdateControls: Boolean read FAutoUpdateControls write SetAutoUpdateControls default True;
     property AccentColor: TColor read FAccentColor write SetAccentColor default $D77800;
     property ColorOnBorder: TColor read FColorOnBorder write SetColorOnBorder default $000000;
+    property Colors: TUManagerColors read FColors write SetColors;
     property ControlsBorderThickness: LongWord read FControlsBorderThickness write SetControlsBorderThickness default 2;
     property UseSystemAccentColor: Boolean read FUseSystemAccentColor write SetUseSystemAccentColor default True;
     property UseSytemColorOnBorder: Boolean read FUseSystemColorOnBorder write SetUseSystemColorOnBorder default True;
@@ -269,6 +280,8 @@ begin
 //  FAccentColor := $D77800;
   FAccentColor := ISystemAccentColor;
   FColorOnBorder := $000000;
+  FColors := TUManagerColors.Create(Self);
+  FColors.OnChange := ColorsChanged;
   FUseSystemAccentColor := True;
   FUseSystemColorOnBorder := True;
   FUseColorOnBorder := True;
@@ -282,6 +295,7 @@ var
   Comp: TComponent;
   i: Integer;
 begin
+  FColors.Free;
   // If any components are connected than notify them of self-destroying
   for i:=FCompList.Count -1 downto 0 do begin
     Comp:=FCompList.Items[i];
@@ -344,6 +358,11 @@ begin
   end;
 end;
 
+procedure TUCustomThemeManager.SetColors(Value: TUManagerColors);
+begin
+  FColors.Assign(Value);
+end;
+
 procedure TUCustomThemeManager.SetControlsBorderThickness(Value: LongWord);
 begin
   if FControlsBorderThickness <> Value then begin
@@ -394,6 +413,11 @@ begin
   end;
 end;
 
+procedure TUCustomThemeManager.ColorsChanged(Sender: TObject);
+begin
+  UpdateTheme;
+end;
+
 procedure TUCustomThemeManager.Changed;
 begin
   UpdateTheme;
@@ -431,11 +455,82 @@ begin
     FOnAfterUpdate(Self);
 end;
 
+function TUCustomThemeManager.SaveToList: TStringList;
+begin
+  Result := TStringList.Create;
+  Result.Options := Result.Options - [soWriteBOM];
+  Colors.SaveTo(Result);
+end;
+
+procedure TUCustomThemeManager.SaveToStream(const Stream: TStream);
+var
+  List: TStringList;
+begin
+  List:=SaveToList;
+  try
+    Stream.Position:=0;
+    List.SaveToStream(Stream, TEncoding.UTF8);
+    Stream.Position:=0;
+  finally
+    List.Free;
+  end;
+end;
+
+procedure TUCustomThemeManager.SaveToFile(const FileName: String);
+var
+  List: TStringList;
+begin
+  List:=SaveToList;
+  try
+    List.SaveToFile(FileName, TEncoding.UTF8);
+  finally
+    List.Free;
+  end;
+end;
+
+procedure TUCustomThemeManager.LoadFromList(const List: TStringList);
+begin
+  if List <> Nil then begin
+    Colors.LoadFrom(List);
+    UpdateTheme;
+  end;
+end;
+
+procedure TUCustomThemeManager.LoadFromStream(const Stream: TStream);
+var
+  List: TStringList;
+begin
+  if Stream <> Nil then begin
+    List := TStringList.Create;
+    try
+      List.LoadFromStream(Stream, TEncoding.UTF8);
+      LoadFromList(List);
+    finally
+      List.Free;
+    end;
+  end;
+end;
+
+procedure TUCustomThemeManager.LoadFromFile(const FileName: String);
+var
+  List: TStringList;
+begin
+  if Length(FileName) > 0 then begin
+    List := TStringList.Create;
+    try
+      List.LoadFromFile(FileName, TEncoding.UTF8);
+      LoadFromList(List);
+    finally
+      List.Free;
+    end;
+  end;
+end;
+
 //  COMPONENTS CONNECTING
 
 class function TUCustomThemeManager.IsThemingAvailable(const Comp: TComponent): Boolean;
 begin
-  Result := Supports(Comp, IUThemedComponent) and IsPublishedProp(Comp, 'ThemeManager');
+  Result := (Comp <> Nil) and Supports(Comp, IUThemedComponent) and IsPublishedProp(Comp, 'ThemeManager');
 end;
 
 function TUCustomThemeManager.ConnectedComponentCount: Integer;
@@ -488,9 +583,9 @@ function TUCustomThemeManager.ThemeUsed: TUTheme;
 begin
   //if Theme = ttSystem then
   Result:=SystemTheme;
-  if Theme = ttLight then
+  if Theme in [ttLight, ttCustomLight] then
     Result:=utLight
-  else if Theme = ttDark then
+  else if Theme in [ttDark, ttCustomDark] then
     Result:=utDark;
 end;
 

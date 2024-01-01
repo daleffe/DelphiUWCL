@@ -14494,35 +14494,6 @@ object formImageBackground: TformImageBackground
     ExplicitWidth = 600
     ExplicitHeight = 340
   end
-  object sliderMain: TUSlider
-    Left = 240
-    Top = 60
-    Width = 181
-    Height = 41
-    BackColor.Enabled = False
-    BackColor.LightColor = 10066329
-    BackColor.LightHover = 6710886
-    BackColor.LightPress = 10066329
-    BackColor.LightDisabled = 10066329
-    BackColor.LightFocused = 6710886
-    BackColor.DarkColor = 6710886
-    BackColor.DarkHover = 10066329
-    BackColor.DarkPress = 6710886
-    BackColor.DarkDisabled = 6710886
-    BackColor.DarkFocused = 10066329
-    CurColor.Enabled = False
-    CurColor.LightColor = 14120960
-    CurColor.LightHover = 1513239
-    CurColor.LightPress = 13421772
-    CurColor.LightDisabled = 14120960
-    CurColor.LightFocused = 1513239
-    CurColor.DarkColor = 14120960
-    CurColor.DarkHover = 15921906
-    CurColor.DarkPress = 7763574
-    CurColor.DarkDisabled = 14120960
-    CurColor.DarkFocused = 15921906
-    Value = 45
-  end
   object entryChooseTheme: TUText
     Left = 20
     Top = 40
@@ -14589,6 +14560,36 @@ object formImageBackground: TformImageBackground
     ParentColor = False
     ParentFont = False
     Caption = 'Transparent caption bar form'
+  end
+  object sliderMain: TUSlider
+    Left = 240
+    Top = 60
+    Width = 181
+    Height = 41
+    TabOrder = 6
+    BackColor.Enabled = False
+    BackColor.LightColor = 10066329
+    BackColor.LightHover = 6710886
+    BackColor.LightPress = 10066329
+    BackColor.LightDisabled = 10066329
+    BackColor.LightFocused = 6710886
+    BackColor.DarkColor = 6710886
+    BackColor.DarkHover = 10066329
+    BackColor.DarkPress = 6710886
+    BackColor.DarkDisabled = 6710886
+    BackColor.DarkFocused = 10066329
+    CurColor.Enabled = False
+    CurColor.LightColor = 14120960
+    CurColor.LightHover = 1513239
+    CurColor.LightPress = 13421772
+    CurColor.LightDisabled = 14120960
+    CurColor.LightFocused = 1513239
+    CurColor.DarkColor = 14120960
+    CurColor.DarkHover = 15921906
+    CurColor.DarkPress = 7763574
+    CurColor.DarkDisabled = 14120960
+    CurColor.DarkFocused = 15921906
+    Value = 45
   end
   object radioSystemTheme: TURadioButton
     Left = 20

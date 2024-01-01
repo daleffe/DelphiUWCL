@@ -14,6 +14,7 @@ uses
   StdCtrls,
   ExtCtrls,
   Forms,
+  UCL.Types,
   UCL.ThemeManager;
 
 type
@@ -35,6 +36,7 @@ type
     property DragFloating: Boolean read GetDragFloating;
   end;
 *)
+
 {$REGION 'TUCustomComponent'}
   TUCustomComponent = class(TComponent, IUThemedComponent, IUIDEAware)
   protected

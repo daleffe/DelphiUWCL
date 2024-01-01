@@ -225,7 +225,9 @@ begin
       BackColor := Color;
     end
     else
-      BackColor := BUTTON_BACK.GetColor(TM.ThemeUsed, csDisabled);
+      //BackColor := BUTTON_BACK.GetColor(TM.ThemeUsed, csDisabled);
+      TM.Colors.ButtonColors.BackColors.GetColor(TM.ThemeUsed, csDisabled);
+
     BorderColor := BackColor;
     TextColor := clGray;
     DetailColor := clGray;
@@ -268,7 +270,9 @@ begin
         if IsToggled then
           BackColor := TM.AccentColor
         else
-          BackColor := BUTTON_BACK.GetColor(TM.ThemeUsed, ButtonState);
+          //BackColor := BUTTON_BACK.GetColor(TM.ThemeUsed, ButtonState);
+          TM.Colors.ButtonColors.BackColors.GetColor(TM.ThemeUsed, ButtonState);
+
         //TextColor := BUTTON_TEXT.GetColor(TempTheme, ButtonState);
         TextColor := GetTextColorFromBackground(BackColor);
         DetailColor := $808080;

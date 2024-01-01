@@ -24,7 +24,7 @@ uses
   ActnList,
   Actions,
   UCL.ItemButton,
-  UCL.Panel;
+  UCL.Panel, UCL.Types;
 
 type
   TForm1 = class(TUForm)
@@ -189,6 +189,7 @@ type
     UPanel1: TUPanel;
     UScrollBox2: TUScrollBox;
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
   public
   end;
@@ -201,6 +202,8 @@ implementation
 {$R *.dfm}
 
 uses
+  Windows,
+  RTTI,
   UCL.SystemSettings,
   Unit3;
 
@@ -213,12 +216,23 @@ begin
   TM := SelectThemeManager(Self);
 //  TM.Theme := ttDark;
   TM.UseColorOnBorder := True;
+
+  TM.SaveToFile('colors.cfg');
+  TM.LoadFromFile('colors.cfg');
   //
   //
   Form3:=TForm3.Create(Self);
   Form3.BorderStyle:=bsNone;
   Form3.Parent:=UScrollBox2;
   Form3.Align:=alTop;
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+var
+  TM: TUCustomThemeManager;
+begin
+  TM := SelectThemeManager(Self);
+  //
   Form3.Show;
 end;
 

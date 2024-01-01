@@ -70,6 +70,9 @@ implementation
 
 {$R *.dfm}
 
+uses
+  UCL.Types;
+
 procedure TformLoginDialog.buttonAppThemeClick(Sender: TObject);
 var
   TM: TUCustomThemeManager;

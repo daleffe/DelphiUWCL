@@ -114,11 +114,8 @@ uses
   Forms,
   UCL.ThemeManager,
   UCL.Colors,
-  UCL.FontIcons
-{$IF CompilerVersion < 30}
-  ,UCL.TYpes
-{$IFEND}
-  ;
+  UCL.FontIcons,
+  UCL.Types;
 
 { TUCheckBox }
 

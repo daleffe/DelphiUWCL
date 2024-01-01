@@ -201,7 +201,8 @@ uses
   Form.LoginDialog,
   Form.ImageBackground,
   Form.AppList,
-  UCL.Colors;
+  UCL.Colors,
+  UCL.Types;
 
 {$R *.dfm}
 
